@@ -1,0 +1,144 @@
+<div class="second-page-heading">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h4>Your Curated Trip Starts Here</h4>
+          <h2>Create Your Account</h2>
+          <p>Join our travel community to unlock exclusive deals, personalized recommendations, and your own list of must-see destinations around the world.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-form">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <form id="reservation-form" name="gs" method="submit" role="search" action="#">
+            <div class="row">
+              <div class="quiz-container" id="quiz">
+                <h2 id="question-title"></h2>
+                <div class="options" id="options-container"></div>
+                <div class="controls">
+                  <button onclick="prevQuestion()">⟵</button>
+                  <button onclick="nextQuestion()">⟶</button>
+                  <button onclick="skipQuiz()">Skip Quiz</button>
+                </div>
+              </div>
+             
+              <div class="col-lg-12">                        
+                  <fieldset>
+                      <button class="main-button" style="float: right; margin-bottom: 16px;">Create Account</button>
+                  </fieldset>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% block js %}   
+<script>
+  const questions = [
+    {
+      title: "What type of destination excites you most?",
+      options: [
+        { label: "Beach", image: "assets/images/quiz/beach.jpg" },
+        { label: "Mountains", image: "assets/images/country-01.jpg" },
+        { label: "City", image: "assets/images/quiz/city.jpg" },
+        { label: "Countryside", image: "assets/images/quiz/countryside.jpg" }
+      ]
+    },
+    {
+      title: "What's your ideal trip vibe?",
+      options: [
+        { label: "Relaxing", image: "assets/images/quiz/relaxing.jpg" },
+        { label: "Adventurous", image: "assets/images/quiz/adventurous.jpg" },
+        { label: "Cultural", image: "assets/images/quiz/cultural.jpg" },
+        { label: "Party-filled", image: "assets/images/quiz/party.jpg" }
+      ]
+    },
+    {
+      title: "Who do you usually travel with?",
+      options: [
+        { label: "Solo", image: "assets/images/quiz/solo.jpg" },
+        { label: "Family", image: "assets/images/quiz/family.jpg" },
+        { label: "Partner", image: "assets/images/quiz/partner.jpg" },
+        { label: "Friends", image: "assets/images/quiz/friends.jpg" }
+      ]
+      
+    },
+    {
+      title: "How do you spend a free afternoon?",
+      options: [
+        { label: "Exploring", image: "assets/images/quiz/exploring.jpg" },
+        { label: "Food and Cafes", image: "assets/images/quiz/food.jpg" },
+        { label: "Outdoors", image: "assets/images/quiz/outdoors.jpg" },
+        { label: "Museums", image: "assets/images/quiz/museum.jpg" }
+      ]
+    },
+    
+  ];
+
+  let currentIndex = 0;
+  const answers = [];
+
+  function renderQuestion() {
+    const question = questions[currentIndex];
+    document.getElementById('question-title').textContent = question.title;
+    const container = document.getElementById('options-container');
+    container.innerHTML = '';
+
+    question.options.forEach(option => {
+      const div = document.createElement('div');
+      div.className = 'option';
+      div.innerHTML = `
+        <img src="/static/${option.image}" alt="${option.label}" />
+        <span>${option.label}</span>
+      `;
+      div.onclick = () => selectOption(option.label);
+      container.appendChild(div);
+    });
+  }
+
+  function selectOption(optionLabel) {
+    answers[currentIndex] = optionLabel;
+    nextQuestion();
+  }
+
+  function nextQuestion() {
+    if (event) event.preventDefault();{
+      if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+      } else {
+        alert("Quiz complete! Answers: " + JSON.stringify(answers));
+        // Optional: redirect or process answers
+        window.location.href = "/selection"
+      }
+    }
+  }
+
+  function prevQuestion() {
+    if (event) event.preventDefault();{
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+      }
+    }
+  }
+
+  function skipQuiz() {
+    alert("Quiz skipped.");
+    if (event) event.preventDefault();
+  }
+
+  // Initial render
+  renderQuestion();
+
+</script>
+
+{% endblock%}

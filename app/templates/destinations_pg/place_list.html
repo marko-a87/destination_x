@@ -1,0 +1,201 @@
+<div class="container">
+    <div class="row">    
+            
+        <div class="place-card">
+            <div 
+                class="place-image" 
+                style="background-image:url('static/assets/images/jamaica.jpg');">
+            </div>
+        
+            <div class="place-content">
+                <div class="features">
+                    <h5 id="place-percent"> 91% Match</h5>
+                </div>
+                <h5 class="title">Kingston
+                    <span class="rating">
+                        <i class="fa-solid fa-star" style="color: #f6ce3e;"></i>
+                        4.2
+                    </span>
+                </h5>
+                <div class="features">
+                    <p>Kingston, Jamaica</p>
+                </div>
+                <div class="features">                    
+                    <button class="price">
+                        <i class="fa-solid fa-dollar-sign"></i> 
+                        <span>240.00</span>
+                    </button>             
+                    <button class="climate">
+                        <i class="fa-solid fa-cloud"></i>
+                        <span>Tropical</span>
+                    </button>
+                </div>
+                <div id="1-tag-content" class="place-tag-content"> </div>
+            </div>
+            <div class="add-button-div">
+                <i class="fa-solid fa-plus fa-xl" style="color: #447524;"></i>
+            </div>
+        </div>
+
+        <div class="place-card">
+            <div class="place-image" style="background-image: url('static/assets/images/country-01.jpg');">
+            </div>
+            <div class="place-content">
+                <div class="features">
+                    <h5 id="place-percent"> 87% Match</h5>
+                </div>
+                <h5 class="title">Yahalas Valley 
+                    <span class="rating">
+                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                        4.7
+                    </span>
+                </h5>
+                <div class="features">
+                    <p>Ontario, Canada</p>
+                </div>
+                <div class="features">                     
+                    <button class="price">
+                        <i class="fa-solid fa-dollar-sign"></i> 
+                        <span>190.00</span>
+                    </button>             
+                    <button class="climate">
+                        <i class="fa-solid fa-cloud" ></i>
+                        <span>Temperate</span>
+                    </button>
+                </div>
+                <div id="2-tag-content" class="place-tag-content"> </div>
+            </div>
+            <div class="add-button-div">
+                <i class="fa-solid fa-plus fa-xl" style="color: #447524;"></i>
+            </div>
+        </div>
+
+        <div class="place-card">
+            <div class="place-image" style="background-image: url('static/assets/images/niagara-falls.jpg');">
+            </div>    
+                <div class="place-content">
+                <div class="features">
+                    <h5 id="place-percent"> 83% Match</h5>
+                </div>
+                <h5 class="title">Niagara Falls 
+                    <span class="rating">
+                        <i class="fa-solid fa-star" style="color: #f6ce3e;"></i>
+                        4.5
+                    </span>
+                </h5>
+                <div class="features">
+                    <p>Niagra Falls, Canada</p>
+                </div>
+                <div class="features">                   
+                    <button class="price">
+                        <i class="fa-solid fa-dollar-sign"></i> 
+                        <span>325.00</span>
+                    </button>                  
+                    <button class="climate">
+                        <i class="fa-solid fa-cloud"></i>
+                        <span>Temperate</span>
+                    </button>
+                </div>
+                <div id="3-tag-content" class="place-tag-content"> </div>
+            </div>
+            <div class="add-button-div">
+                <i class="fa-solid fa-plus fa-xl" style="color: #447524;"></i>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% block js %}   
+  <script>
+
+    //Countries for Visa & Passport Dropdowns
+    const countries = [
+      "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
+      "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas",
+      "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize",
+      "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil",
+      "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
+      "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China",
+      "Colombia", "Comoros", "Congo (Congo-Brazzaville)", "Congo (Congo-Kinshasa)", 
+      "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti",
+      "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador",
+      "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji",
+      "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece",
+      "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti",
+      "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq",
+      "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan",
+      "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon",
+      "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
+      "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta",
+      "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia",
+      "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique",
+      "Myanmar (Burma)", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand",
+      "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway",
+      "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru",
+      "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda",
+      "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines",
+      "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal",
+      "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia",
+      "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan",
+      "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria",
+      "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga",
+      "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda",
+      "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America",
+      "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam",
+      "Yemen", "Zambia", "Zimbabwe"
+    ];
+
+    
+    const tag_container_1 = document.getElementById('1-tag-content');
+    const tag_container_2 = document.getElementById('2-tag-content');
+    const tag_container_3 = document.getElementById('3-tag-content');
+
+    const tags_1 = ["Beaches", "Water Sports", "Nature Exploration","Festivals"];
+    const tags_2 = ["Nature Exploration", "Markets", "Local Cuisine", "Springs"];
+    const tags_3 = ["Monuments", "Water Sports", "Nature Exploration", "Spas"];
+
+
+    // Populate the Place Tags
+    tags_1.forEach(tag => {
+      const tag_element = document.createElement("button");
+      tag_element.classList.add("place-tag");
+
+      tag_element.innerHTML = tag;
+
+      tag_container_1.appendChild(tag_element);
+    });
+    tags_2.forEach(tag => {
+      const tag_element = document.createElement("button");
+      tag_element.classList.add("place-tag");
+
+      tag_element.innerHTML = tag;
+
+      tag_container_2.appendChild(tag_element);
+    });
+    tags_3.forEach(tag => {
+      const tag_element = document.createElement("button");
+      tag_element.classList.add("place-tag");
+
+      tag_element.innerHTML = tag;
+
+      tag_container_3.appendChild(tag_element);
+    });
+
+
+    document.querySelectorAll(".place-content").forEach(function(card) {
+        card.addEventListener("click", function() {
+            window.location.href = "/details-page";
+        });
+    });
+    document.querySelectorAll(".place-image").forEach(function(card) {
+        card.addEventListener("click", function() {
+            window.location.href = "/details-page";
+        });
+    });
+
+
+  </script>
+
+{% endblock%}

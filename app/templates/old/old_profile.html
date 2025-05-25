@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div id="profile-head">
+    <img id="profile-pic" src="{{ url_for('static', filename='panther.jpeg') }}" alt=""/>
+    <h2>Black Panther</h2>
+    <div id="profile-info">
+        <p>@kingtchalla</p>
+        <p>Birnin Zana, Wakanda</p>
+        <p>{{ joined }}</p>
+    </div>
+</div>
+
+<div id="profile-body">
+    <div id="bio">
+        <p>King T'challa, the Black Panther of Wakanda. Wakanda will no longer watch 
+            from the shadows. We can not. We must not. We all know the truth: more connects 
+            us than separates us. But in times of crisis the wise build bridges, while the 
+            foolish build barriers. We must find a way to look after one another, as if we 
+            were one single tribe.
+        </p>
+    </div>
+
+    <div id="info-tiles">
+        <div class="tile">
+            <h4>8</h4>
+            <p>Posts</p>
+        </div>
+        <div class="tile">
+            <h4>28</h4>
+            <p>Following</p>
+        </div>
+        <div class="tile">
+            <h4>202k</h4>
+            <p>Followers</p>
+        </div>
+    </div>
+    <button>Follow</button>
+</div>
+{% endblock %}

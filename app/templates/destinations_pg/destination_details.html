@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <div class="dest-details">
+        
+            <button class="back-btn"><i class="fa-solid fa-left-long"></i> Recommendations </button>
+      
+            <div class="destination-container">            
+                            
+            <div class="image-container">
+                <img src="{{ url_for('static', filename='assets/images/jamaica.jpg') }}" alt="Destination" class="destination-img" />
+                
+                <div class="bottom-overlay">
+                    <div class="overlay-left">
+                        <div class="overlay-text">Kingston</div>
+                        <div class="tags">
+                            <div class="tag">Beaches</div>
+                            <div class="tag">Water Sports</div>
+                            <div class="tag">Nature Exploration</div>
+                            <div class="tag">Festivals</div>
+                        </div>
+                    </div>
+
+                    <div class="match-badge">
+                        <span>91% Match</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="description-row">                
+                <p class="description">
+                    Kingston, the capital of Jamaica, is a vibrant city nestled between the Blue Mountains and the Caribbean Sea, known for its rich cultural heritage, reggae music roots, bustling markets, and historic landmarks like the Bob Marley Museum and Devon House.
+                </p>
+                <button class="add-btn"><i class="fa-solid fa-plus"></i> Add To Trip Plan </button>
+            </div>
+
+            <div class="review-section">
+                <div id="review-heading"> 
+                    <h3> Reviews </h3>
+                        
+                    <h4 class="reviews-all-rating"> 
+                        <i class="fa-solid fa-star" style="color: #f6ce3e;"></i> 4.2 
+                    </h4>
+                </div>
+
+                <div class="review-card">
+                    <img src="{{ url_for('static', filename='assets/images/bob-marley.jpg') }}" alt="User" class="profile-pic" />
+                    <div class="review-details">
+                        <div class="review-header">
+                            <div>
+                                <p class="review-username"><strong>Bob Marlyon</strong></p>
+                                <p class="user-badge">Avid Traveler • 7 Visits</p>
+                                <span class="review-meta-left">January 5, 2025</span>
+                            </div>
+
+                            <div class="review-meta-right">
+                                <div class="stars" data-rating="5.0"></div>
+                                <button class="like-btn" aria-label="Like review"><i class="fa-regular fa-heart  fa-lg" style="color: #b92d3b;"></i></button>
+                            </div>
+                        </div>
+                        <p class="review-text">
+                            Loved every second of it! The food was so good, and the vibe of the city is just unbeatable. 
+                            Super chill people, awesome music everywhere. Can’t wait to come back again!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <img src="{{ url_for('static', filename='assets/images/cities-03.jpg') }}" alt="User" class="profile-pic" />
+                    <div class="review-details">
+                        <div class="review-header">
+                            <div>
+                                <p class="review-username"><strong>Janet Smith</strong></p>
+                                <p class="user-badge">Newbie • 2 Visits</p>
+                                <span class="review-meta-left">April 19, 2025</span>
+                            </div>
+
+                            <div class="review-meta-right">
+                                <div class="stars" data-rating="3.0"></div>
+                                <button class="like-btn" aria-label="Like review"><i class="fa-regular fa-heart  fa-lg" style="color: #b92d3b;"></i></button>
+                            </div>
+                        </div>
+                        <p class="review-text">
+                            It was alright! Some cool spots and tasty food, but it felt kinda hectic and busy in some areas. 
+                            I think I’d enjoy it more with a local guide or on a quieter day.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="review-card">
+                    <img src="{{ url_for('static', filename='assets/images/portrait-02.jpg') }}" alt="User" class="profile-pic" />
+                    <div class="review-details">
+                        <div class="review-header">
+                            <div>
+                                <p class="review-username"><strong>Alice Woods</strong></p>
+                                <p class="user-badge">Experienced • 5 Visits</p>
+                                <span class="review-meta-left">May 10, 2025</span>
+                            </div>
+
+                            <div class="review-meta-right">
+                                <div class="stars" data-rating="4.0"></div>
+                                <button class="like-btn" aria-label="Like review"><i class="fa-regular fa-heart  fa-lg" style="color: #b92d3b;"></i></button>
+                            </div>
+                        </div>
+                        <p class="review-text">
+                            Really fun trip! The nature stuff is amazing and there’s a lot to see. 
+                            Just a few things were a bit pricey or crowded. Still, totally worth the visit!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block js %}   
+  <script>
+    // Star rating display
+    document.addEventListener('DOMContentLoaded', function () {
+      const starContainers = document.querySelectorAll('.stars');
+      starContainers.forEach(container => {
+        const rating = parseFloat(container.dataset.rating);
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+          if (rating >= i) {
+            stars += '<i class="fa-solid fa-star" style="color: #f6ce3e;"></i>';
+          } else if (rating >= i - 0.5) {
+            stars += '<i class="fa-regular fa-star" style="color: #f6ce3e;"></i>'; 
+          } else {
+            stars += '<i class="fa-regular fa-star" style="color: #f6ce3e;"></i>';
+          }
+        }
+        container.innerHTML = stars;
+      });
+    });
+
+    const likeButtons = document.querySelectorAll('.like-btn');
+      likeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('liked');
+          btn.innerHTML = btn.classList.contains('liked') ? '<i class="fa-solid fa-heart fa-lg" style="color: #b92d3b;"></i>' : 
+          '<i class="fa-regular fa-heart fa-lg" style="color: #b92d3b;"></i>';
+        });
+      });
+
+    const back_btn = document.querySelector(".dest-details .back-btn");
+
+    back_btn.addEventListener("click", function() {
+        window.location.href = "/recommendations";
+    });
+  
+  </script>
+
+{% endblock%}

@@ -1,0 +1,33 @@
+/* 
+---------------------------------------------
+Footer Style
+--------------------------------------------- 
+*/
+
+@import url("base.css");
+
+footer {
+  background-color: var(--main-color);
+  text-align: center;
+  padding: 25px 0px;
+}
+
+#footer-div {
+  padding: 25px 0px;
+}
+
+footer p {
+  color: #fff;
+}
+
+footer p a {
+  color: #fff;
+  font-weight: 500;
+  transition: all .3s;
+}
+
+footer p a:hover {
+  color: #fff;
+  opacity: 0.75;
+}
+

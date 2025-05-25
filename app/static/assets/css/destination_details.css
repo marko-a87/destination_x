@@ -1,0 +1,234 @@
+@import url("base.css");
+
+
+.destination-container {
+  width: 80vw;
+  margin: 40px auto;
+  margin-bottom: 60px;
+  margin-top: 20px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 20px;
+}
+
+.destination-container .image-container {
+  position: relative;
+  width: 100%;
+}
+
+.destination-container .destination-img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 20px 20px 0 0;
+}
+
+.destination-container .bottom-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 15px 30px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
+  border-radius: 0 0 8px 8px;
+  flex-wrap: wrap;
+}
+
+.destination-container .overlay-left {
+  color: white;
+}
+
+.destination-container .overlay-text {
+  color: white;
+  font-size: 35px;
+  font-weight: bold;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+  margin-bottom: 10px;
+}
+
+.destination-container .tags {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.destination-container .tag {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 8px 18px;
+  font-size: 13px;
+  border-radius: 30px;
+  border: 1px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(2px);
+}
+
+.destination-container .match-badge {
+  color:#ffffff;
+  border-radius: 8px;
+  background-color: var(--main-color);
+  font-size: 20px;
+  padding: 9px 16px 8px 16px;
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  
+  margin-bottom: 10px;
+}
+
+.destination-container .match-badge span {
+  display: block;
+  line-height: 1.2;
+}
+
+.destination-container .description-row {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 40px 20px 40px;
+  align-items: flex-end;
+}
+
+.destination-container .description {
+  margin-top: 20px;
+  font-size: 17px;
+  padding-right: 40px;
+  text-align: left;
+  color: black;
+}
+
+.destination-container .add-btn, .dest-details .back-btn{
+  background: var(--main-color);
+  color: white;
+  border: none;
+  width: 215px;
+  margin-top: 30px;
+  padding: 8px 18px;
+  font-size: 16px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.dest-details .back-btn{
+  margin: 95px 20px 0px 20px;
+  width: 228px;
+  margin-left: 4vw;
+}
+
+.destination-container .add-btn:hover, .dest-details .back-btn:hover {
+  background-color: #355b1c;
+}
+
+.destination-container .add-btn i, .dest-details .back-btn i {
+  margin-right: 5px;
+}
+
+.destination-container .review-section {
+  margin: 40px;
+  padding-bottom: 55px;
+}
+
+.destination-container .review-card {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  border-top: 1px solid #ddd;
+  padding: 25px 0;
+}
+
+.destination-container .profile-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.destination-container .user-badge {
+  font-size: 16px;
+  color: #515050;
+  margin-top: 2px;
+}
+.destination-container .review-details {
+  flex: 1;
+}
+
+.destination-container #review-heading  {
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #ddd;
+}
+
+.destination-container #review-heading i {
+  margin: 0 0px 0 5px;
+}
+
+.destination-container #review-heading h3 {
+  font-size: 25px;
+  color: var(--main-color);
+}
+
+.destination-container .review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.destination-container .review-meta-left {
+  font-size: 15px;
+  color: #888;
+}
+
+.destination-container .review-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.destination-container .review-date {
+  color: #787777;
+  font-size: 15px;
+}
+
+.destination-container .review-username {
+  font-size: 18px;
+  color: var(--main-color);
+}
+
+.destination-container .review-text {
+  margin-top: 8px;
+  font-size: 16px;
+  color: black;
+  width: 80%;
+}
+
+.destination-container .stars {
+  color: gold;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.destination-container .like-btn {
+  cursor: pointer;
+  font-size: 20px;
+  background: none;
+  border: none;
+  padding: 4px;
+  color: #ffffff;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.destination-container .like-btn.liked {
+  color: red;
+  transform: scale(1.1);
+}
+
+.destination-container .like-btn:hover {
+  color: #e60000;
+  transform: scale(1.15);
+}
