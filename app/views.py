@@ -100,6 +100,11 @@ def signup():
     #render the signup page
     return render_template('account_actions/sign_up_base.html')
 
+@app.route('/login-test')
+def login_test():
+    """Just for testing"""
+    return render_template('account_actions/login.html')
+
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
