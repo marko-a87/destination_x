@@ -21,8 +21,6 @@ login_manager = LoginManager()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     
 
     db.init_app(app)
@@ -35,6 +33,8 @@ def create_app():
         Recommendation, hotel_amenities,UserActivityPreference,\
         UserAmenityPreference,UserPreference
     
+
+
     #initialize login manager
     login_manager.init_app(app)
     login_manager.login_view = "login"
@@ -42,5 +42,5 @@ def create_app():
 
 
 app = create_app()
-from app import views
+from app.controllers import auth_controller, home_controller,destination_controller
 
