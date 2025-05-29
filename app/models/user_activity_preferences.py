@@ -4,8 +4,9 @@ __author__ = "Akele Benjamin(620130803)"
 from .. import db
 class UserActivityPreference(db.Model):
     __tablename__ = 'user_activity_preferences'
-    user_id     = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), primary_key=True)
+    id =  db.Column(db.Integer, primary_key=True)
+    user_id     = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),nullable=False)
     priority    = db.Column(db.Integer, default=1)
 
     user     = db.relationship('User',     back_populates='activity_preferences')

@@ -23,7 +23,7 @@ from app import create_app
 from app.services.hotel_api_service import HotelAPIService
 
 
-def main():
+def add_hotels():
     # Initialize Flask app and application context
     app = create_app()
     with app.app_context():
@@ -40,6 +40,3 @@ def main():
         #  Save into the database
         service.save_hotels(parsed)
         print(f"Saved {len(parsed)} hotels to the database.")
-
-if __name__ == '__main__':
-    main()

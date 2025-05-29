@@ -52,7 +52,7 @@ class RecommendationService:
 
     def get_all_destinations(self) -> List[Country]:
         """
-        Return all countries in the database.
+        Return all the country objects in the database.
         """
         return Country.query.all()
 
@@ -82,8 +82,8 @@ class RecommendationService:
             city_list = []
             for city in city_objs:
                 activities = Activity.query.filter_by(city_id=city.id).all()
-                city_list.append({'city': city, 'activities': activities})
-            result[cid] = {'country': country, 'cities': city_list}
+                city_list.append({'city': city.name, 'activities': activities})
+            result[cid] = {'country': country.name, 'cities': city_list}
         return result
 
     def get_local_options(self, country_id: int) -> dict:

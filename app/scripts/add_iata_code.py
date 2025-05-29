@@ -17,7 +17,7 @@ from run import create_app
 from app import db
 from app.models.city import City
 
-def main():
+def add_iata_code():
     app = create_app()
     with app.app_context():
         #Init Amadeus client
@@ -53,5 +53,4 @@ def main():
         db.session.commit()
         print("Done updating IATA codes.")
 
-if __name__ == '__main__':
-    main()
+

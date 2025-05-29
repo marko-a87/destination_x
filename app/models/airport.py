@@ -17,13 +17,13 @@ class Airport(db.Model):
 
     city = db.relationship('City', back_populates='airports')
 
-    def __init__(self, indent, air_type, name, iata_code, city_id, latitutde, longitude, iso_country, iso_region):
-        self.ident = indent
+    def __init__(self, ident, air_type, name, iata_code, city_id, latitude, longitude, iso_country, iso_region):
+        self.ident = ident
         self.type = air_type
         self.name = name
         self.iata_code = iata_code
         self.city_id = city_id
-        self.latitude = latitutde
+        self.latitude = latitude
         self.longitude = longitude
         self.iso_country = iso_country
         self.iso_region = iso_region

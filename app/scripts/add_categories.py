@@ -23,7 +23,7 @@ def main():
     app = create_app()
     return app
 
-if __name__ == '__main__':
+def add_categories():
     app = main()
     with app.app_context():
         # fetch distinct category names from Activity.category field

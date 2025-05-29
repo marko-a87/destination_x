@@ -25,7 +25,7 @@ from app import create_app
 from app.services.activity_service import ActivityService
 
 
-def main():
+def add_activities():
     app = create_app()
     with app.app_context():
         service = ActivityService()
@@ -39,5 +39,3 @@ def main():
         service.save_activities(records)
         print(f"Saved {len(records)} activities to the database.")
 
-if __name__ == '__main__':
-    main()

@@ -88,6 +88,7 @@ def save_cities(city_country_list: List[Dict[str, str]]) -> None:
         else:
             city = City(name=name, country_id=country_id, latitude=lat, longitude=lng)
             db.session.add(city)
+            db.session.commit()
         print(f"[OK] City saved: {name}, {country_name} ({lat}, {lng})")
 
-    db.session.commit()
+    

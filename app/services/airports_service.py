@@ -76,7 +76,7 @@ class AirportService:
                 # Insert new record
                 airport = Airport(
                     ident         = rec['ident'],
-                    type          = rec['type'],
+                    air_type      = rec['type'],
                     name          = rec['name'],
                     iata_code     = rec['iata_code'],
                     iso_country   = rec['iso_country'],

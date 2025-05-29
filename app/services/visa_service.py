@@ -5,6 +5,7 @@ visaguide.world, extract visa information, and save it to a database."""
 
 
 __author__ = "Akele Benjamin(620130803)"
+import timeit
 import os
 import re
 import aiohttp
@@ -27,11 +28,12 @@ visa_dict = {}
 
 
 @lru_cache(maxsize=1000)
-async def fetch_html(slug: str) -> str:
+async def fetch_html(slug: str, session) -> str:
     """
     Async fetch and return raw HTML for a passport page slug.
     Slugs with ', ' get '-and-' instead of a comma, then spaces → dashes.
     """
+    
     # Normalize slug: replace comma-space with '-and-' if present
     slug_norm = slug
     if ", " in slug_norm:
@@ -40,13 +42,14 @@ async def fetch_html(slug: str) -> str:
     slug_norm = slug_norm.replace(" ", "").lower()
 
     url = f"https://visaguide.world/visa-free-countries/{slug_norm}-passport/"
+    print("Slug norm is: ",slug_norm)
     print(f"[Fetcher] Downloading {url}")
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, timeout=10) as resp:
-            resp.raise_for_status()
-            html = await resp.text()
-            print(f"[Fetcher] Completed download for {slug_norm}")
-            return html
+    # async with async_session as session:
+    async with session.get(url, timeout=30) as resp:
+        resp.raise_for_status()
+        html = await resp.text()
+        print(f"[Fetcher] Completed download for {slug_norm}")
+        return html
 
 def extract_main_html(html: str) -> str:
     """
@@ -67,7 +70,7 @@ def extract_visa_info(html: str) -> Dict[str, List[str]]:
     # Define heading patterns (regex) for each category
     section_patterns = {
         "visa_free":        re.compile(r"Where Can .* Travel Without a Visa\?", re.I),
-        "without_passport": re.compile(r"Where Can .* Go Without a Passport\?", re.I),
+        # "without_passport": re.compile(r"Where Can .* Go Without a Passport\?", re.I),
         "e_visa":           re.compile(r"What Countries Issue eVisa to .*", re.I),
         "visa_on_arrival":  re.compile(r"What Countries Issue Visa on Arrival to .*", re.I),
         "visa_required":    re.compile(r"Countries With Visa Requirements for .*", re.I),
@@ -94,8 +97,8 @@ def extract_visa_info(html: str) -> Dict[str, List[str]]:
                 data[current_key].append(country)
 
     # Merge "without_passport" entries into "visa_free"
-    if data["without_passport"]:
-        data["visa_free"].extend(data["without_passport"])
+    # if data["without_passport"]:
+    #     data["visa_free"].extend(data["without_passport"])
 
     return data
 
@@ -115,15 +118,28 @@ def save_visa_policies(origin_country_name: str,
       3. For each destination, create a new VisaPolicy with the correct flags.
       4. Commit all changes in one transaction.
     """
-    # 1) fetch origin country
+
     origin = Country.query.filter_by(name=origin_country_name).first()
     if not origin:
         raise ValueError(f"Origin country '{origin_country_name}' not found")
 
     # 2) delete old policies for this origin
     VisaPolicy.query.filter_by(origin_id=origin.id).delete()
+    
 
-    # 3) build a map of country name → id
+    # if origin_country_name in visa_data["visa_free"]:
+    #     visa_type = "visa_free"
+    # elif origin_country_name in visa_data["e_visa"]:
+    #     visa_type = "e_visa"
+    # elif origin_country_name in visa_data["visa_on_arrival"]:
+    #     visa_type = "visa_on_arrival"
+
+    # elif origin_country_name in visa_data["visa_required"]:
+    #     visa_type = "visa_required"
+    # else:
+    #     raise Exception(f"Visa policy for {origin_country_name} not found")
+
+   
     countries = Country.query.all()
     name_to_id = {c.name: c.id for c in countries}
 
@@ -139,18 +155,68 @@ def save_visa_policies(origin_country_name: str,
             print(f"[Store] ❌ Destination '{dest_name}' not found, skipping.")
             continue
 
-        policy = VisaPolicy(
-            origin_id       = origin.id,
-            destination_id  = dest_id,
-            visa_free       = dest_name in visa_data.get("visa_free", []),
-            e_visa          = dest_name in visa_data.get("e_visa", []),
-            visa_on_arrival = dest_name in visa_data.get("visa_on_arrival", []),
-            visa_required   = dest_name in visa_data.get("visa_required", [])
-        )
-        db.session.add(policy)
+        visa_free = dest_name in visa_data.get("visa_free", [])
+        e_visa = dest_name in visa_data.get("e_visa", [])
+        visa_on_arrival = dest_name in visa_data.get("visa_on_arrival", [])
+        visa_required = dest_name in visa_data.get("visa_required", [])
 
-    # 6) commit once at the end
+        if visa_free:
+            visa_type = "visa_free"
+        elif e_visa:
+            visa_type = "e_visa"
+        elif visa_on_arrival:
+            visa_type = "visa_on_arrival"
+        elif visa_required:
+            visa_type = "visa_required"
+        else:
+            raise Exception(f"Visa policy for {dest_name} not found")
+        
+        policy = VisaPolicy(origin_id=origin.id, destination_id=dest_id, visa_type=visa_type)
+        db.session.add(policy)
     db.session.commit()
+    # 1) fetch origin country
+    # origin = Country.query.filter_by(name=origin_country_name).first()
+    # if not origin:
+    #     raise ValueError(f"Origin country '{origin_country_name}' not found")
+
+    # # 2) delete old policies for this origin
+    # VisaPolicy.query.filter_by(origin_id=origin.id).delete()
+
+    # # 3) build a map of country name → id
+    # countries = Country.query.all()
+    # name_to_id = {c.name: c.id for c in countries}
+
+    # # 4) gather every destination mentioned
+    # all_destinations = set()
+    # for lst in visa_data.values():
+    #     all_destinations.update(lst)
+
+    # # 5) insert new policies
+    # for dest_name in all_destinations:
+    #     dest_id = name_to_id.get(dest_name)
+    #     if not dest_id:
+    #         print(f"[Store] ❌ Destination '{dest_name}' not found, skipping.")
+    #         continue
+
+    #     visa_free = dest_name in visa_data.get("visa_free", [])
+    #     e_visa = dest_name in visa_data.get("e_visa", [])
+    #     visa_on_arrival = dest_name in visa_data.get("visa_on_arrival", [])
+    #     visa_required = dest_name in visa_data.get("visa_required", [])
+
+
+        # policy = VisaPolicy(
+        #     origin_id       = origin.id,
+        #     destination_id  = dest_id,
+        #     visa_free       = dest_name in visa_data.get("visa_free", []),
+        #     # without_passport= dest_name in visa_data.get("without_password", []),
+        #     e_visa          = dest_name in visa_data.get("e_visa", []),
+        #     visa_on_arrival = dest_name in visa_data.get("visa_on_arrival", []),
+        #     visa_required   = dest_name in visa_data.get("visa_required", [])
+        # )
+        # db.session.add(policy)
+    
+    # 6) commit once at the end
+    # db.session.commit()
 
 def append_visa_info(country: str, filepath: str = 'visa_dict.txt'):
     """

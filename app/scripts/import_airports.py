@@ -22,7 +22,7 @@ from app import create_app
 from app.services.airports_service import AirportService
 
 
-def main():
+def add_airports():
     # Initialize Flask app and DB context
     app = create_app()
     with app.app_context():
@@ -38,7 +38,3 @@ def main():
         # Save to database
         service.save_to_db(records)
         print(f"Saved {len(records)} airports to the database.")
-
-
-if __name__ == '__main__':
-    main()

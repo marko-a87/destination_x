@@ -8,9 +8,11 @@ from flask_sqlalchemy import SQLAlchemy
 from .config import Config
 import os
 from flask_login import LoginManager
+import sys
 
 # import flask migrate here
 from flask_migrate import Migrate
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 db = SQLAlchemy()

@@ -27,7 +27,7 @@ from app.services.city_service import (
 )
 
 
-def main():
+def add_cities():
     # Create and configure the Flask app
     app = create_app()
     with app.app_context():
@@ -40,5 +40,3 @@ def main():
         print("All cities have been saved to the database.")
 
 
-if __name__ == "__main__":
-    main()

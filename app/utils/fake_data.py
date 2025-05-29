@@ -1,4 +1,4 @@
-import faker
+
 
 # from .connectDB import connect_db
 from app import app,db 

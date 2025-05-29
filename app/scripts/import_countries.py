@@ -21,8 +21,7 @@ from app import create_app, db
 from app.models.country import Country
 from app.services.restcountries_client_service import RestCountriesClient
 
-def main():
-
+def add_countries():
     app = create_app()
     with app.app_context():
         #fetch from the external API
@@ -55,6 +54,3 @@ def main():
         #commit everything in one transaction
         db.session.commit()
         print("Database has been updated with country data.")
-
-if __name__ == "__main__":
-    main()
