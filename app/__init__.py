@@ -42,5 +42,6 @@ def create_app():
 
 
 app = create_app()
-from app.controllers import auth_controller, home_controller,destination_controller
+from app.controllers import auth_controller, home_controller, destination_controller
+from app.tests import test_templates
 
