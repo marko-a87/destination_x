@@ -46,7 +46,7 @@ def signup():
         pass_hash = bcrypt.generate_password_hash(confirm_password).decode('utf-8')
         
         #Creates a user
-        user = User(email, name, pass_hash, date_of_birth, port, country_of_residence)
+        user = User(email=email, name=name, password_hash=pass_hash, date_of_birth=date_of_birth, port_of_origin=port, country_residence= country_of_residence)
 
         #Add user to database
         db.session.add(user)
@@ -75,7 +75,8 @@ def login():
         check_pass = bcrypt.check_password_hash(user.password_hash, password)
         if user and check_pass:
             login_user(user)
-            return jsonify({"Status": 200, "Message": "User logged in"})
+            return redirect(url_for('selection'))
+            # return jsonify({"Status": 200, "Message": "User logged in"})
         # return redirect(url_for('selection'))
         return jsonify({"Status": 400, "Message": "Incorrect password"})
     return render_template("account_actions/login.html")
