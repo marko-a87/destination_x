@@ -6,6 +6,7 @@ from .. import db
 from .amenity import Amenity
 from flask_bcrypt import Bcrypt
 
+
 class User(db.Model):
     __tablename__ = 'users'
     id         = db.Column(db.Integer, primary_key=True)
@@ -35,11 +36,11 @@ class User(db.Model):
 
     recommendations = db.relationship('Recommendation', back_populates='user')
     destinations    = db.relationship('Destination',    back_populates='user')
-
+    
     def __init__(self, email:str, name:str, password_hash:str, date_of_birth:str, port_of_origin:str, country_residence:str):
         self.email = email
         self.name = name
-        self.password_hash = Bcrypt.generate_password_hash(password_hash).decode('utf-8')
+        self.password_hash = password_hash
         self.date_of_birth = date_of_birth
         self.port_of_origin = port_of_origin
         self.country_residence = country_residence

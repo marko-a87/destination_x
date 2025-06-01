@@ -27,6 +27,7 @@ def recommendations():
         
         #1. Get the user preferences.
         user_preferences= UserActivityPreference.query.all()
+
         countries=  Country.query.all()
         for country in countries:
             if not country:
@@ -100,12 +101,29 @@ def recommendations():
 
 
 @login_required
-@app.route('/selection', methods=['POST'])
+@app.route('/selection', methods=['POST','GET'])
 def selection():
     """Render website's preference selection page."""
     if request.method == 'POST':
         """Getting the priority assigned to each category"""
+        
+        
+        categories = db.session.query(Category.name).all()
+        category_lst = [category[0].replace(',', '') for category in categories]
+        category_activities = {}
+        for cat in category_lst:
+            # activities_for_cat = db.session.query(Activity.name).filter_by(category= cat).all()
+            # activites_lst = [activity[0].replace(',', '') for activity in activities_for_cat] 
+            # category_activities[cat] = activites_lst
+            #allows me to get the form data for each category
+            # category_activities[cat] = request.form.get(cat_slider)
+            pass
+
+        
         budget_val = request.form.get('budget_slider')
+        beach_water_sports = request.form.get("beach_water_sports")
+        educational_workshops = request.form.get("educational_workshops")
+
         climate_weight = request.form.get('climate_slider')
         landmark_weight = request.form.get('landmark_slider')
         outdoor_exp_weight = request.form.get('outdoor_slider')
