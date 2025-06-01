@@ -1,228 +1,1000 @@
 <form action="" method="post">
 <div class="selection-input">
 
+  <div class="divider"> </div>
+
   <div class="selection-section">
-    <button class="selection-section-btn">
-        <span class="arrow">&#9662;</span> Lectures
+    <button type="button" class="selection-section-btn">
+        <span class="selection-arrow">&#9662;</span> 1. REQUIREMENTS
     </button>
     <div class="selection-section-content">
-      <p>Lecture 1: Introduction to Databases</p>
-      <p>Lecture 2: Entity-Relationship Models</p>
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> BUDGET
+        </button>
+        <div class="selection-section-content">
+
+          <div id="budget-input" class="pref-input">
+            <div id="budget-text" class="pref-text">Select Your Ideal Budget Below</div>
+            <div id="budget-input-inner" class="pref-inner">
+              <div class="slider-control">
+                <div class="amount-display">$<span id="budget-amountValue">100</span></div>
+
+                <button type="button" id="budget-decreaseBtn">−</button>
+                    
+                <input type="range" name="budget_slider" id="budget-amountSlider" min="0" max="10000" value="100" step="50">
+                    
+                <button type="button" id="budget-increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">                    
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="divider"> </div>
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> PASSPORTS
+        </button>
+        <div class="selection-section-content">
+          
+          <div id="passport-input" class="pref-input">
+            <div id="passport-text" class="pref-text">Select All Countries for Which You Hold a Valid Passport</div>
+            <div id="passport-input-inner" class="pref-selects">
+              <div id="passport-tag-selector" class="tag-selector">
+                <select id="passport-tagDropdown">
+                  <option value="" disabled selected>Select a country</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="passport-selectedTags" class="selectedTags"></div>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                    
+            <button type="button" class="selection-next">Next</button>
+          </div>
+
+        </div>
+      </div>
+
+      
+
+      <div class="divider"> </div>
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> VISAS
+        </button>
+        <div class="selection-section-content">
+
+          <div id="visa-input" class="pref-input">
+            <div id="visa-text" class="pref-text">Select All Countries for Which You Hold a Valid Visa</div>
+            <div id="visa-input-inner" class="pref-selects">
+              <div id="visa-tag-selector" class="tag-selector">
+                <select id="visa-tagDropdown">
+                  <option value="" disabled selected>Select a country</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="visa-selectedTags" class="selectedTags"></div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                    
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
     </div>
   </div>
 
   <div class="divider"> </div>
-
-  <div id="budget-input" class="pref-input">
-    <div id="budget-text" class="pref-text">BUDGET</div>
-    <div id="budget-input-inner" class="pref-inner">
-      <div class="slider-control">
-        <div class="amount-display">$<span id="budget-amountValue">100</span></div>
-
-        <button id="budget-decreaseBtn">−</button>
-            
-        <input type="range" name="budget_slider" id="budget-amountSlider" min="0" max="10000" value="100" step="50">
-            
-        <button id="budget-increaseBtn">+</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="divider"> </div>
-
-  <div id="passport-input" class="pref-input">
-    <div id="passport-text" class="pref-text">PASSPORTS</div>
-    <div id="passport-input-inner" class="pref-selects">
-      <div id="passport-tag-selector" class="tag-selector">
-        <select id="passport-tagDropdown">
-          <option value="" disabled selected>Select a tag</option>
-          <button onclick="addTag()">Add</button>
-        </select>
-
-        <div id="passport-selectedTags" class="selectedTags"></div>
-      </div>
-      
-    </div>
-  </div>
-
-  <div class="divider"> </div>
-
-  <div id="visa-input" class="pref-input">
-    <div id="visa-text" class="pref-text">VISAS</div>
-    <div id="visa-input-inner" class="pref-selects">
-      <div id="visa-tag-selector" class="tag-selector">
-        <select id="visa-tagDropdown">
-          <option value="" disabled selected>Select a tag</option>
-          <button onclick="addTag()">Add</button>
-        </select>
-
-        <div id="visa-selectedTags" class="selectedTags"></div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="divider"> </div>  
-
-  <div id="climate-input" class="pref-input">
-    <div id="climate-text" class="pref-text">CLIMATE</div>
-    <div id="climate-input-inner" class="pref-selects">
-      <div id="climate-tag-selector" class="tag-selector">
-        <select id="climate-tagDropdown">
-          <option value="" disabled selected>Select a tag</option>
-          <button onclick="addTag()">Add</button>
-        </select>
-
-        <div id="climate-selectedTags" class="selectedTags"></div>
-      </div>      
-      
-      <div class="slider-control">
-        <div ><span> Priority: </span></div>
-        <div class="amount-display"> <span id="climate-amountValue">0</span></div>
-
-        <button id="climate-decreaseBtn" class="decreaseBtn">−</button>
-            
-        <input type="range" name="climate_slider" id="climate-amountSlider" min="0" max="10" value="0" >
-            
-        <button id="climate-increaseBtn" class="increaseBtn">+</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="divider"> </div>  
-
-  <div id="land-input" class="pref-input">
-    <div id="land-text" class="pref-text">LANDMARKS</div>
-    <div id="land-input-inner" class="pref-selects">
-      <div id="landmark-tag-selector" class="tag-selector">
-        <select id="landmark-tagDropdown">
-          <option value="" disabled selected>Select a tag</option>
-          <button onclick="addTag()">Add</button>
-        </select>
-
-        <div id="landmark-selectedTags" class="selectedTags"></div>
-      </div>
-      
-      <div class="slider-control">
-        <div ><span> Priority: </span></div>
-        <div class="amount-display"> <span id="landmark-amountValue">0</span></div>
-
-        <button id="landmark-decreaseBtn" class="decreaseBtn">−</button>
-            
-        <input type="range" name="landmark_slider" id="landmark-amountSlider" min="0" max="10" value="0" >
-            
-        <button id="landmark-increaseBtn" class="increaseBtn">+</button>
-      </div>
-    </div>
-  </div>
   
-  <div class="divider"> </div>  
+  <div class="selection-section">
+    <button type="button" class="selection-section-btn">
+        <span class="selection-arrow">&#9662;</span> 2. PREFERENCES
+    </button>
+    <div class="selection-section-content">
+  
 
-  <div id="outdoor-input" class="pref-input">
-    <div id="outdoor-text" class="pref-text">OUTDOOR EXPERIENCES</div>
-    <div id="outdoor-input-inner" class="pref-selects">
-      <div id="outdoor-tag-selector" class="tag-selector">
-        <select id="outdoor-tagDropdown">
-          <option value="" disabled selected>Select a tag</option>
-          <button onclick="addTag()">Add</button>
-        </select>
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> ADVENTURE & EXTREME SPORTS
+        </button>
+        <div class="selection-section-content">
 
-        <div id="outdoor-selectedTags" class="selectedTags"></div>
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text"> Select Your Preferred Tags Below</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
       </div>
+
       
-      <div class="slider-control">
-        <div ><span> Priority: </span></div>
-        <div class="amount-display"> <span id="outdoor-amountValue">0</span></div>
-
-        <button id="outdoor-decreaseBtn" class="decreaseBtn">−</button>
-            
-        <input type="range" name="outdoor_slider" id="outdoor-amountSlider" min="0" max="10" value="0" >
-            
-        <button id="outdoor-increaseBtn" class="increaseBtn">+</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="divider"> </div>  
-
-  <div id="food-input" class="pref-input">
-    <div id="food-text" class="pref-text">FOOD & CULINARY</div>
-    <div id="food-input-inner" class="pref-selects">
-      <div id="food-tag-selector" class="tag-selector">
-        <select id="food-tagDropdown">
-          <option value="" disabled selected>Select a tag</option>
-          <button onclick="addTag()">Add</button>
-        </select>
-
-        <div id="food-selectedTags" class="selectedTags"></div>
-      </div>
+      <div class="divider"> </div>   
       
-      <div class="slider-control">
-        <div ><span> Priority: </span></div>
-        <div class="amount-display"> <span id="food-amountValue">0</span></div>
 
-        <button id="food-decreaseBtn" class="decreaseBtn">−</button>
-            
-        <input type="range" name="food_slider" id="food-amountSlider" min="0" max="10" value="0" >
-            
-        <button id="food-increaseBtn" class="increaseBtn">+</button>
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> ARTS & ENTERTAINMENT
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="divider"> </div>  
 
-  <div id="entertainment-input" class="pref-input">
-    <div id="entertainment-text" class="pref-text">ENTERTAINMENT</div>
-    <div id="entertainment-input-inner" class="pref-selects">
-      <div id="entertainment-tag-selector" class="tag-selector">
-        <select id="entertainment-tagDropdown">
-          <option value="" disabled selected>Select a tag</option>
-          <button onclick="addTag()">Add</button>
-        </select>
+      <div class="divider"> </div>  
 
-        <div id="entertainment-selectedTags" class="selectedTags"></div>
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> BEACH & WATER SPORTS
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
       </div>
+
+
+      <div class="divider"> </div>  
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> CULTURAL & HERITAGE
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="divider"> </div> 
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> EDUCATIONAL & WORKSHOPS
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="divider"> </div> 
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> FAMILY & KIDS ACTIVITIES
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
       
-      <div class="slider-control">
-        <div ><span> Priority: </span></div>
-        <div class="amount-display"> <span id="entertainment-amountValue">0</span></div>
+      <div class="divider"> </div> 
 
-        <button id="entertainment-decreaseBtn" class="decreaseBtn">−</button>
-            
-        <input type="range" name="entertainment_slider" id="entertainment-amountSlider" min="0" max="10" value="0" >
-            
-        <button id="entertainment-increaseBtn" class="increaseBtn">+</button>
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> FOOD & CULINARY EXPERIENCES
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="divider"> </div>  
 
-  <div id="relax-input" class="pref-input">
-    <div id="relax-text" class="pref-text">RELAXATION & WELLNESS</div>
-    <div id="relax-input-inner" class="pref-selects">
-      <div id="relax-tag-selector" class="tag-selector">
-        <select id="relax-tagDropdown">
-          <option value="" disabled selected>Select a tag</option>
-          <button onclick="addTag()">Add</button>
-        </select>
+      <div class="divider"> </div> 
 
-        <div id="relax-selectedTags" class="selectedTags"></div>
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> FESTIVALS & EVENTS
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
       </div>
+
+
+      <div class="divider"> </div>  
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> HISTORICAL SITES
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="divider"> </div> 
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> MUSIC & NIGHTLIFE
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="divider"> </div>  
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> OUTDOOR & NATURE
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
       
-      <div class="slider-control">
-        <div ><span> Priority: </span></div>
-        <div class="amount-display"> <span id="relax-amountValue">0</span></div>
+      <div class="divider"> </div> 
 
-        <button id="relax-decreaseBtn"class="decreaseBtn">−</button>
-            
-        <input type="range" name="relaxation_slider" id="relax-amountSlider" min="0" max="10" value="0" >
-            
-        <button id="relax-increaseBtn" class="increaseBtn">+</button>
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> ROAD TRIPS & SCENIC DRIVES
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
       </div>
+
+
+      <div class="divider"> </div> 
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> RELIGIOUS & SPIRITUAL SITES
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="divider"> </div>  
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> SCENIC TOURS & CRUISES
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="divider"> </div> 
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> SHOPPING & MARKETS
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="divider"> </div>  
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> SIGHTSEEING & LANDMARKS
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+      
+      <div class="divider"> </div> 
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> WELLNESS & SPA RETREATS
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="divider"> </div> 
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> WINTER SPORTS & SKIING
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="divider"> </div>  
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> WILDLIFE & ECO-TOURISM
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+            <button type="button" class="selection-next">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="divider"> </div> 
+
+
+      <div class="selection-section">
+        <button type="button" class="selection-section-btn">
+            <span class="selection-arrow">&#9662;</span> WINE & BREWERY TOURS
+        </button>
+        <div class="selection-section-content">
+
+          <div id="adventure-input" class="pref-input">
+            <div id="adventure-text" class="pref-text">Title</div>
+            <div id="adventure-input-inner" class="pref-selects">
+              <div id="adventure-tag-selector" class="tag-selector">
+                <select id="adventure-tagDropdown">
+                  <option value="" disabled selected>Select a tag</option>
+                  <button onclick="addTag()">Add</button>
+                </select>
+
+                <div id="adventure-selectedTags" class="selectedTags"></div>
+              </div>      
+              
+              <div class="slider-control">
+                <div ><span> "Tagname" Priority: </span></div>
+                <div class="amount-display"> <span id="adventure-amountValue">0</span></div>
+
+                <button type="button" id="adventure-decreaseBtn" class="decreaseBtn">−</button>
+                    
+                <input type="range" name="adventure_slider" id="adventure-amountSlider" min="0" max="10" value="0" >
+                    
+                <button type="button" id="adventure-increaseBtn" class="increaseBtn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="selection-section-nav">
+            <button type="button" class="selection-back">Back</button>
+                      
+          </div>
+          
+        </div>
+      </div>
+
+
+
     </div>
-  </div>
+  </div> 
+
 
   <div class="divider"> </div>  
   
@@ -279,7 +1051,7 @@
     ];
 
     //Preferences Tags for Dropdowns
-    const climate = ["Tropical", "Dry", "Temperate", "Polar"];
+    const adventure = ["Tropical", "Dry", "Temperate", "Polar"];
 
     const landmarks = ["Monuments", "Museums", "Galleries", "Festivals"];
 
@@ -308,41 +1080,12 @@
         selectedTagsContainer: document.getElementById('passport-selectedTags')
       },
       {
-        /*Climate*/
-        elementName: "Climate",
-        dropdown: document.getElementById('climate-tagDropdown'),
-        selectedTagsContainer: document.getElementById('climate-selectedTags')
-      },
-      {
-        /*Landmark*/
-        elementName: "Landmark",
-        dropdown: document.getElementById('landmark-tagDropdown'),
-        selectedTagsContainer: document.getElementById('landmark-selectedTags')
-      },
-      {
-        /*Outdoor Activities*/
-        elementName: "Outdoor Activities",
-        dropdown: document.getElementById('outdoor-tagDropdown'),
-        selectedTagsContainer: document.getElementById('outdoor-selectedTags')
-      },
-      {
-        /*Food & Culinary*/
-        elementName: "Food & Culinary",
-        dropdown: document.getElementById('food-tagDropdown'),
-        selectedTagsContainer: document.getElementById('food-selectedTags')
-      },
-      {
-        /*Entertainment*/
-        elementName: "Entertainment",
-        dropdown: document.getElementById('entertainment-tagDropdown'),
-        selectedTagsContainer: document.getElementById('entertainment-selectedTags')
-      },
-      {
-        /*Relaxation & Wellness*/
-        elementName: "Relaxation & Wellness",
-        dropdown: document.getElementById('relax-tagDropdown'),
-        selectedTagsContainer: document.getElementById('relax-selectedTags')
+        /*adventure*/
+        elementName: "adventure",
+        dropdown: document.getElementById('adventure-tagDropdown'),
+        selectedTagsContainer: document.getElementById('adventure-selectedTags')
       }
+      
     ];
     
 
@@ -359,58 +1102,15 @@
         stepValue: 50
       },
       {
-        /*Climate*/
-        elementName: "Climate",
-        slider: document.getElementById("climate-amountSlider"),
-        amountValue: document.getElementById("climate-amountValue"),
-        increaseBtn: document.getElementById("climate-increaseBtn"),
-        decreaseBtn: document.getElementById("climate-decreaseBtn"),
+        /*adventure*/
+        elementName: "adventure",
+        slider: document.getElementById("adventure-amountSlider"),
+        amountValue: document.getElementById("adventure-amountValue"),
+        increaseBtn: document.getElementById("adventure-increaseBtn"),
+        decreaseBtn: document.getElementById("adventure-decreaseBtn"),
         stepValue: 1 
-      },
-      {
-        /*Landmarks*/
-        elementName: "Landmarks",
-        slider: document.getElementById("landmark-amountSlider"),
-        amountValue: document.getElementById("landmark-amountValue"),
-        increaseBtn: document.getElementById("landmark-increaseBtn"),
-        decreaseBtn: document.getElementById("landmark-decreaseBtn"),
-        stepValue: 1
-      },
-      {
-        /*Outdoor Activities*/
-        elementName: "Outdoor Activities",
-        slider: document.getElementById("outdoor-amountSlider"),
-        amountValue: document.getElementById("outdoor-amountValue"),
-        increaseBtn: document.getElementById("outdoor-increaseBtn"),
-        decreaseBtn: document.getElementById("outdoor-decreaseBtn"),
-      },
-      {
-        /*Food & Culinary*/
-        elementName: "Food Culinary",
-        slider: document.getElementById("food-amountSlider"),
-        amountValue: document.getElementById("food-amountValue"),
-        increaseBtn: document.getElementById("food-increaseBtn"),
-        decreaseBtn: document.getElementById("food-decreaseBtn"),
-        stepValue: 1
-      },
-      {
-            /*Entertainment*/
-        elementName: "Entertainment",
-        slider: document.getElementById("entertainment-amountSlider"),
-        amountValue: document.getElementById("entertainment-amountValue"),
-        increaseBtn: document.getElementById("entertainment-increaseBtn"),
-        decreaseBtn: document.getElementById("entertainment-decreaseBtn"),
-        stepValue: 1
-      },
-      {
-        /*Relaxation & Wellness*/
-        elementName: "Relaxation & Wellness",
-        slider: document.getElementById("relax-amountSlider"),
-        amountValue: document.getElementById("relax-amountValue"),
-        increaseBtn: document.getElementById("relax-increaseBtn"),
-        decreaseBtn: document.getElementById("relax-decreaseBtn"),
-        stepValue: 1
       }
+      
     ];
 
 
@@ -432,11 +1132,10 @@
     });
 
     const tag_lists = [
-      climate, landmarks, outdoor, food, entertainment, relaxation
+      adventure
     ]
     const dropdown_names = [
-      "Climate", "Landmark", "Outdoor Activities", "Food & Culinary", "Entertainment",
-      "Relaxation & Wellness"
+      "adventure"
     ] 
     let name_tracker = 0
     
@@ -537,6 +1236,27 @@
         decrease_amt(element.slider, element.amountValue, element.stepValue)
       });
 
+    });
+
+    //Navigation for dropdowns
+    const dropdownButtons = document.querySelectorAll('.selection-section-btn');
+
+    dropdownButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        this.classList.toggle('active');
+    
+        const dropdownContent = this.nextElementSibling;
+        const arrow = this.querySelector('.selection-arrow');
+        console.log(arrow)
+    
+        if (dropdownContent.style.display === "block") {
+          dropdownContent.style.display = "none";
+          arrow.innerHTML = "&#9662;"; // arrow points down
+        } else {
+          dropdownContent.style.display = "block";
+          arrow.innerHTML = "&#9652;"; // arrow points up
+        }
+      });
     });
 
   </script>
