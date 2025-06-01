@@ -9,6 +9,7 @@ class Country(db.Model):
     iso_code       = db.Column(db.String(2), unique=True, nullable=False)
     continent      = db.Column(db.String(64))
     continent_code = db.Column(db.String(2))
+    image =          db.Column(db.String(64))
 
     cities          = db.relationship('City',       back_populates='country')
     visa_origins    = db.relationship(
@@ -20,9 +21,10 @@ class Country(db.Model):
     destinations    = db.relationship('Destination', back_populates='country')
     recommendations = db.relationship('Recommendation', back_populates='country')
 
-    def __init__(self, name:str, demonym:str, iso_code:str, continent:str, continent_code:str):
+    def __init__(self, name:str, demonym:str, iso_code:str, continent:str, continent_code:str, img:str):
         self.name = name
         self.demonym = demonym
         self.iso_code = iso_code
         self.continent = continent
         self.continent_code = continent_code
+        self.image = img

@@ -28,29 +28,46 @@ def add_countries():
         client = RestCountriesClient()
         countries = client.get_countries()
         print(f"Fetched {len(countries)} countries from Rest Countries API.")
+        file = open("no_image.txt", "w")
 
         # upsert each country
         for entry in countries:
             iso = entry["country_code"]
-            country = Country.query.filter_by(iso_code=iso).first()
 
-            if country:
-                # update existing
-                country.name           = entry["name"]
-                country.demonym        = entry["demonym"]
-                country.continent      = entry["continent"]
-                country.continent_code = entry["continent_code"]
+            # country = Country.query.filter_by(iso_code=iso).first()
+            image_name = entry["name"].lower()
+            if os.path.isfile(f"app/static/assets/images/countries/{image_name}.1.jpg"):
+               image = f"{image_name}.1.jpg"
             else:
+               image="no image"
+               country_name = entry["name"]
+               file.write(f"{country_name}\n")
+            
+                   
+               
+
+            # if country:
+            #     # update existing
+            #     country.name           = entry["name"]
+            #     country.demonym        = entry["demonym"]
+            #     country.continent      = entry["continent"]
+            #     country.continent_code = entry["continent_code"]
+            # else:
                 # insert new
-                country = Country(
-                    name=entry["name"],
-                    demonym=entry["demonym"],
-                    iso_code=iso,
-                    continent=entry["continent"],
-                    continent_code=entry["continent_code"]
-                )
-                db.session.add(country)
+            name = entry["name"]
+            print(name.encode("utf-8"))
+            escape_name = f"{name}"
+            country = Country(
+                name=escape_name,
+                demonym=entry["demonym"],
+                iso_code=iso,
+                continent=entry["continent"],
+                continent_code=entry["continent_code"],
+                img= image
+            )
+            db.session.add(country)
 
         #commit everything in one transaction
+        file.close()
         db.session.commit()
         print("Database has been updated with country data.")
