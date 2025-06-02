@@ -86,7 +86,7 @@
   width: 100%;  
 }
 
-.selection-section-btn {
+.selection-section-btn, .selection-subsection-btn {
   width: 100%;  
   background-color: var(--main-color);
   color: white;
@@ -106,11 +106,28 @@
   opacity: 0.9;
 }
 
-.selection-section-content {
+.selection-subsection-btn {
+  background-color: white;
+  border: 3px solid var(--main-color);
+  color: var(--main-color);
+  padding: 5px;
+  font-size: 14px;
+}
+
+.selection-subsection-btn:hover {
+  opacity: 0.9;
+}
+
+
+.selection-section-content, .selection-subsection-content{
   display: none;
   padding: 15px;
   font-size: 14px;
   z-index: 5;
+}
+
+.selection-subsection-content{
+  padding-right: 0px;
 }
 
 .selection-section-nav {
