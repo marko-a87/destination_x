@@ -126,8 +126,23 @@
   z-index: 5;
 }
 
+#activities-content{
+  padding: 13px;
+  padding-right: 0px;
+}
+
+
 .selection-subsection-content{
   padding-right: 0px;
+}
+
+.selection-subarrow {
+  font-size: 16px;
+}
+
+.selection-section i {
+  padding-left: 7px;
+  padding-right: 10px;
 }
 
 .selection-section-nav {
@@ -258,7 +273,7 @@
 
 
 .divider{  
-  border-top: 2px solid rgb(186, 186, 186);
+  border-top: 2px solid rgb(222, 222, 222);
   width: 100%;
   z-index: 2;
   margin-bottom: 10px;
@@ -292,6 +307,7 @@
   text-align: center;
   z-index: 2;
   margin-right: 15px;
+  color: var(--main-color);
 }
 
 /*var(--main-color);*/
@@ -304,7 +320,6 @@
 }
 
 .amount-display #budget-amountValue{
-  font-weight: normal;
 }
 
 .slider-control {
@@ -411,6 +426,15 @@ input[type="range"]::-ms-thumb {
 }
 
 
+.tag-dropdown {
+  padding: 5px;
+  border: 2px solid black; /* Indigo border */
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 15px;
+  color: black;
+}
+
 
 .tag-selector {
   width: 100%; 
@@ -428,20 +452,34 @@ input[type="range"]::-ms-thumb {
 
 .selection-tag {
   background-color: #ffd166;
-  padding: 6px 17px;
+  padding: 3px 17px;
   border-radius: 20px;
   display: flex;
   align-items: center;
   font-size: 14px;
+  margin-right: 6px;
 }
+
+.selection-subsection-content .selection-tag:hover {
+  outline: 6px solid var(--main-color);
+}
+
+.selection-subsection-content .active-tag {
+  outline: 6px solid var(--main-color);
+}
+
+
 
 .selection-tag .remove-tag {
   margin-left: 8px;
   cursor: pointer;
-  font-weight: bold;
   color: #333;
+  font-size: 25px;
 }
 
+.selection-tag .remove-tag:hover {
+  color: rgb(227, 37, 37);
+}
 
 
 .save{

@@ -19,17 +19,25 @@
                 <!-- ***** Menu End ***** -->
                 
                 <ul class="nav">
-                    <li><a id="profile-name" href="{{ url_for('landing') }}">
+
+                    {% if current_user.is_authenticated %}
+                        <li><a id="profile-name" href="{{ url_for('landing') }}">
                             <img id="profile-pic" src="{{ url_for('static', filename='assets/images/portrait.jpg') }}" alt="">
                             Hi, Jane
                         </a>
-                    </li>                    
-                    <li>
-                        <a id="settings-pic" href="{{ url_for('landing') }}">
-                            <img src="{{ url_for('static', filename='assets/images/settings-icon.png') }}" alt="">
-                        </a>
-                    </li>                                         
-                    <li><a id="login-link" href="{{ url_for('signup') }}">Logout</a></li>    
+                        </li>                    
+                        <li>
+                            <a id="settings-pic" href="{{ url_for('landing') }}">
+                                <img src="{{ url_for('static', filename='assets/images/settings-icon.png') }}" alt="">
+                            </a>
+                        </li>  
+
+                        <li><a id="login-link" href="{{ url_for('logout') }}">Logout</a></li>    
+                    {% else %}
+                        <li><a id="login-link" href="{{ url_for('login') }}">Login</a></li>  
+                        <li><a id="login-link" href="{{ url_for('signup') }}">Sign Up</a></li>  
+                    {% endif %}
+                    
                 </ul> 
                 <a class='menu-trigger'>
                     <span>Menu</span>

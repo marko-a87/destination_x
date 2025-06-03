@@ -6,12 +6,18 @@
 
   <div class="selection-section">
     <button type="button" class="selection-section-btn">
-        <span class="selection-arrow">&#9662;</span> 1. BUDGET
+        <span class="selection-arrow">&#9662;</span> 
+        <i class="fa-solid fa-circle-dollar-to-slot fa-lg"></i>
+        1. BUDGET 
     </button>
     <div class="selection-section-content" style="display: block;">
 
       <div id="budget-input" class="pref-input">
-        <div id="budget-text" class="pref-text">Select Your Ideal Budget Below</div>
+
+        <div id="budget-text" class="pref-text">
+          Select Your Ideal Budget Below
+        </div>
+
         <div id="budget-input-inner" class="pref-inner">
           <div class="slider-control">
             <div class="amount-display">$<span id="budget-amountValue">100</span></div>
@@ -36,16 +42,24 @@
 
   <div class="selection-section">
     <button type="button" class="selection-section-btn">
-        <span class="selection-arrow">&#9662;</span> 2. PASSPORTS
+        <span class="selection-arrow">&#9662;</span> 
+        <i class="fa-solid fa-passport fa-lg"></i> 
+        2. PASSPORTS 
     </button>
     <div class="selection-section-content">
       
       <div id="passport-input" class="pref-input">
-        <div id="passport-text" class="pref-text">Select All Countries for Which You Hold a Valid Passport</div>
+
+        <div id="passport-text" class="pref-text"> Select All Countries for Which You Hold a Valid Passport </div>
+
         <div id="passport-input-inner" class="pref-selects">
           <div id="passport-tag-selector" class="tag-selector">
-            <select id="passport-tagDropdown">
+            
+            <select id="passport-tagDropdown" class="tag-dropdown">
               <option value="" disabled selected>Select a country</option>
+              {% for country in countries %}
+                <option value="{{ country.name }}">{{ country.name }}</option>
+              {% endfor %}
               <button onclick="addTag()">Add</button>
             </select>
 
@@ -69,16 +83,23 @@
 
   <div class="selection-section">
     <button type="button" class="selection-section-btn">
-        <span class="selection-arrow">&#9662;</span> 3. VISAS
+        <span class="selection-arrow">&#9662;</span> 
+        <i class="fa-solid fa-id-card fa-lg"></i>
+        3. VISAS
     </button>
     <div class="selection-section-content">
 
       <div id="visa-input" class="pref-input">
-        <div id="visa-text" class="pref-text">Select All Countries for Which You Hold a Valid Visa</div>
+        <div id="visa-text" class="pref-text"> Select All Countries for Which You Hold a Valid Visa </div>
+
         <div id="visa-input-inner" class="pref-selects">
+
           <div id="visa-tag-selector" class="tag-selector">
-            <select id="visa-tagDropdown">
+            <select id="visa-tagDropdown" class="tag-dropdown">
               <option value="" disabled selected>Select a country</option>
+              {% for country in countries %}
+                <option value="{{ country.name }}">{{ country.name }}</option>
+              {% endfor %}
               <button onclick="addTag()">Add</button>
             </select>
 
@@ -101,27 +122,31 @@
   
   <div class="selection-section">
     <button type="button" class="selection-section-btn">
-        <span class="selection-arrow">&#9662;</span> 4. PREFERENCES
+        <span class="selection-arrow">&#9662;</span> 
+        <i class="fa-solid fa-heart fa-lg"></i>
+        4. PREFERRED ACTIVITIES
     </button>
-    <div class="selection-section-content">
+    <div class="selection-section-content" id="activities-content">
   
       {% for category in categories %}
       <div class="selection-section">
         <button type="button" class="selection-subsection-btn">
-            <span class="selection-arrow">&#9662;</span> {{ category.category_name | upper }} 
+            <span class="selection-subarrow">&#9662;</span> {{ category.category_name | upper }} 
         </button>
         <div class="selection-subsection-content">
 
           {% set category_firstword = category.category_name.split(' ')[0] | lower %}
 
           <div id="{{ category_firstword }}-input" class="pref-input">
-            <div id="{{ category_firstword }}-text" class="pref-text"> Select Your Preferred Tags Below</div>
+            <div id="{{ category_firstword }}-text" class="pref-text"> Select Your Preferred Activity Tags Below</div>
+
             <div id="{{ category_firstword }}-input-inner" class="pref-selects">
+
               <div id="{{ category_firstword }}-tag-selector" class="tag-selector">
-                <select id="{{ category_firstword }}-tagDropdown">
+                <select id="{{ category_firstword }}-tagDropdown" class="tag-dropdown">
                   <option value="" disabled selected>Select a tag</option>
                   {% for activity in category.category_activities %}
-                  <option value="">{{ activity.name }}</option>
+                  <option value="{{ activity.name }}">{{ activity.name }}</option>
                   {% endfor %}
                   <button onclick="addTag()">Add</button>
                 </select>
@@ -130,7 +155,7 @@
               </div>      
               
               <div class="slider-control">
-                <div><span> "Tagname" Priority: </span></div>
+                <div id="priority-name"><span> "Tagname" Priority: </span></div>
                 <div class="amount-display"> <span id="{{ category_firstword }}-amountValue">0</span></div>
 
                 <button type="button" id="{{ category_firstword }}-decreaseBtn" class="decreaseBtn">−</button>
@@ -172,61 +197,14 @@
 
 
 {% block js %}   
-  <script>
+  <script>    
 
-    //Countries for Visa & Passport Dropdowns
-    const countries = [
-      "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
-      "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas",
-      "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize",
-      "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil",
-      "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
-      "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China",
-      "Colombia", "Comoros", "Congo (Congo-Brazzaville)", "Congo (Congo-Kinshasa)", 
-      "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti",
-      "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador",
-      "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji",
-      "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece",
-      "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti",
-      "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq",
-      "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan",
-      "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon",
-      "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
-      "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta",
-      "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia",
-      "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique",
-      "Myanmar (Burma)", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand",
-      "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway",
-      "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru",
-      "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda",
-      "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines",
-      "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal",
-      "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia",
-      "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan",
-      "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria",
-      "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga",
-      "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda",
-      "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America",
-      "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam",
-      "Yemen", "Zambia", "Zimbabwe"
-    ];
+    /* 
+        <--------------------------------------------------->
+        <---------------- DROPDOWN ELEMENTS ---------------->
+        <--------------------------------------------------->
+    */
 
-    //Preferences Tags for Dropdowns
-    const adventure = ["Tropical", "Dry", "Temperate", "Polar"];
-
-    const landmarks = ["Monuments", "Museums", "Galleries", "Festivals"];
-
-    const outdoor = ["Snowboarding", "Rafting", "Water Sports", "Nature Exploration"];
-
-    const food = ["Restaurants", "Markets", "Street Food", "Local Cuisine"];
-
-    const entertainment = ["Concerts", "Theater", "Bars", "Clubs"];
-
-    const relaxation = ["Beaches", "Spas", "Springs", "Yoga"];
-
-
-
-    //Dropdown Elements
     const dropdown_elements = [
       {
         /*Visa*/
@@ -239,82 +217,20 @@
         elementName: "Passport",
         dropdown: document.getElementById('passport-tagDropdown'),
         selectedTagsContainer: document.getElementById('passport-selectedTags')
-      },
-      {
-        /*adventure*/
-        elementName: "adventure",
-        dropdown: document.getElementById('adventure-tagDropdown'),
-        selectedTagsContainer: document.getElementById('adventure-selectedTags')
-      }
-      
-    ];
-    
-
-
-    //Sliders  
-    const slider_elements = [
-      {
-        /*Budget*/
-        elementName: "Budget",
-        slider: document.getElementById("budget-amountSlider"),
-        amountValue: document.getElementById("budget-amountValue"),
-        increaseBtn: document.getElementById("budget-increaseBtn"),
-        decreaseBtn: document.getElementById("budget-decreaseBtn"),
-        stepValue: 50
-      },
-      {
-        /*adventure*/
-        elementName: "adventure",
-        slider: document.getElementById("adventure-amountSlider"),
-        amountValue: document.getElementById("adventure-amountValue"),
-        increaseBtn: document.getElementById("adventure-increaseBtn"),
-        decreaseBtn: document.getElementById("adventure-decreaseBtn"),
-        stepValue: 1 
-      }
-      
+      }      
     ];
 
+    {% for category in categories %}
 
-    // Populate the Dropdowns
-    countries.forEach(country => {
-      const option1 = document.createElement("option");
-      const option2 = document.createElement("option");
+      dropdown_elements.push(
+        {
+          elementName: "{{ category.category_name.split(' ')[0] | escape }}",
+          dropdown: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-tagDropdown"),
+          selectedTagsContainer: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-selectedTags")
+        }
+      );
 
-      option2.value = country;
-      option2.text = country;
-      option1.value = country;
-      option1.text = country;
-
-      const visa_dropdown_obj = dropdown_elements.find(el => el.elementName === "Visa");
-      visa_dropdown_obj.dropdown.appendChild(option1);
-
-      const passport_dropdown_obj = dropdown_elements.find(el => el.elementName === "Passport");
-      passport_dropdown_obj.dropdown.appendChild(option2);
-    });
-
-    const tag_lists = [
-      adventure
-    ]
-    const dropdown_names = [
-      "adventure"
-    ] 
-    let name_tracker = 0
-    
-    tag_lists.forEach(list => {
-      
-      list.forEach(tag => {
-        const option = document.createElement("option");
-
-        option.value = tag;
-        option.text = tag;
-
-        const dropdown_obj = dropdown_elements.find(el => el.elementName === dropdown_names[name_tracker]);
-        dropdown_obj.dropdown.appendChild(option);
-      });
-      
-      name_tracker += 1;
-
-    });
+    {% endfor %}
     
 
     function populate_tags(el_dropdown, tags_container) {      
@@ -327,7 +243,7 @@
       const tag = document.createElement('div');
       tag.classList.add('selection-tag');
       tag.dataset.value = value;
-      tag.innerHTML = `${value} <span class="remove-tag">&times;</span>`;
+      tag.innerHTML = `${value} <span class="remove-tag"> &times; </span>`;
 
       tags_container.appendChild(tag);
     }
@@ -350,7 +266,42 @@
 
     });
 
-    
+
+
+
+    /* 
+        <----------------------------------------------->
+        <--------------- SLIDER ELEMENTS --------------->
+        <----------------------------------------------->
+    */
+
+    const slider_elements = [
+      {
+        /*Budget*/
+        elementName: "Budget",
+        slider: document.getElementById("budget-amountSlider"),
+        amountValue: document.getElementById("budget-amountValue"),
+        increaseBtn: document.getElementById("budget-increaseBtn"),
+        decreaseBtn: document.getElementById("budget-decreaseBtn"),
+        stepValue: 50
+      }      
+    ];
+
+    {% for category in categories %}
+
+      slider_elements.push(
+        {
+          elementName: "{{ category.category_name.split(' ')[0] | escape }}",
+          slider: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-amountSlider"),
+          amountValue: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-amountValue"),
+          increaseBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-increaseBtn"),
+          decreaseBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-decreaseBtn"),
+          stepValue: 1 
+        }
+      );
+
+    {% endfor %}
+
 
     // Update value when slider moves (within its range)
     function set_pref_amt(el_slider, amt_val, display_val) {      
@@ -382,6 +333,7 @@
       amt_val.innerText = current_val;
     }
 
+
     //Slider & Amount Adjustment
     slider_elements.forEach(element => {
 
@@ -399,16 +351,18 @@
 
     });
 
+
+    
     //Navigation for dropdowns
     const dropdownButtons = document.querySelectorAll('.selection-section-btn, .selection-subsection-btn');
+    console.log(dropdownButtons);
 
     dropdownButtons.forEach(button => {
       button.addEventListener('click', function() {
         this.classList.toggle('active');
     
         const dropdownContent = this.nextElementSibling;
-        const arrow = this.querySelector('.selection-arrow');
-        console.log(arrow)
+        const arrow = this.querySelector('.selection-arrow, .selection-subarrow');
     
         if (dropdownContent.style.display === "block") {
           dropdownContent.style.display = "none";

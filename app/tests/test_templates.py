@@ -19,10 +19,11 @@ def selection_test():
     """Render website's preference selection page."""    
     
     categories = []
+    countries = []
     
     try:
         categories_result = db.session.execute(db.select(Category)).scalars().all()
-        #
+        countries_result = db.session.execute(db.select(Country)).scalars().all()
         
         if categories_result: 
             for category in categories_result:
@@ -35,21 +36,22 @@ def selection_test():
                         activities = activities_result
                         
                 except Exception as e:
-                    return make_response(jsonify({"error": str(e)}), 500)
+                    make_response(jsonify({"error": str(e)}), 500)
                 
-                print({"category_name": category.name, "category_id": category.id, "category_activities": activities})
+                #print({"category_name": category.name, "category_id": category.id, "category_activities": activities})
                 
                 categories.append({"category_name": category.name, "category_id": category.id, "category_activities": activities})
         
-        else:
-            return make_response(jsonify({"error": "User not found"}), 404)
         
+        if countries_result:
+            countries = countries_result       
 
     except Exception as e:
-        return make_response(jsonify({"error": str(e)}), 500)
+        make_response(jsonify({"error": str(e)}), 500)
     
     finally:
-        return render_template('selection_pg/selection_base.html', categories=categories)
+        return render_template('selection_pg/selection_base.html', categories=categories, countries=countries)
+
 
 @app.route('/recommendations-test')
 def recommendations_test():
