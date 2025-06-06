@@ -22,11 +22,11 @@
           <div class="slider-control">
             <div class="amount-display">$<span id="budget-amountValue">100</span></div>
 
-            <button type="button" id="budget-decreaseBtn">−</button>
+            <button type="button" id="budget-decreaseBtn" class="decreaseBtn">−</button>
                 
             <input type="range" name="budget_slider" id="budget-amountSlider" min="0" max="10000" value="100" step="50">
                 
-            <button type="button" id="budget-increaseBtn">+</button>
+            <button type="button" id="budget-increaseBtn" class="increaseBtn">+</button>
           </div>
         </div>
       </div>
@@ -60,7 +60,6 @@
               {% for country in countries %}
                 <option value="{{ country.name }}">{{ country.name }}</option>
               {% endfor %}
-              <button onclick="addTag()">Add</button>
             </select>
 
             <div id="passport-selectedTags" class="selectedTags"></div>
@@ -100,7 +99,6 @@
               {% for country in countries %}
                 <option value="{{ country.name }}">{{ country.name }}</option>
               {% endfor %}
-              <button onclick="addTag()">Add</button>
             </select>
 
             <div id="visa-selectedTags" class="selectedTags"></div>
@@ -123,7 +121,7 @@
   <div class="selection-section">
     <button type="button" class="selection-section-btn">
         <span class="selection-arrow">&#9662;</span> 
-        <i class="fa-solid fa-heart fa-lg"></i>
+        <i class="fa-solid fa-icons fa-xl"></i>
         4. PREFERRED ACTIVITIES
     </button>
     <div class="selection-section-content" id="activities-content">
@@ -131,14 +129,16 @@
       {% for category in categories %}
       <div class="selection-section">
         <button type="button" class="selection-subsection-btn">
-            <span class="selection-subarrow">&#9662;</span> {{ category.category_name | upper }} 
+            <span class="selection-subarrow">&#9662;</span> 
+            <i class="fa-solid fa-heart fa-lg"></i>
+            {{ category.category_name | upper }} 
         </button>
         <div class="selection-subsection-content">
 
           {% set category_firstword = category.category_name.split(' ')[0] | lower %}
 
           <div id="{{ category_firstword }}-input" class="pref-input">
-            <div id="{{ category_firstword }}-text" class="pref-text"> Select Your Preferred Activity Tags Below</div>
+            <div id="{{ category_firstword }}-text" class="pref-text"> Select Your Preferred Activity Tags & Priorities Below</div>
 
             <div id="{{ category_firstword }}-input-inner" class="pref-selects">
 
@@ -148,21 +148,22 @@
                   {% for activity in category.category_activities %}
                   <option value="{{ activity.name }}">{{ activity.name }}</option>
                   {% endfor %}
-                  <button onclick="addTag()">Add</button>
                 </select>
 
                 <div id="{{ category_firstword }}-selectedTags" class="selectedTags"></div>
               </div>      
               
-              <div class="slider-control">
-                <div id="priority-name"><span> "Tagname" Priority: </span></div>
-                <div class="amount-display"> <span id="{{ category_firstword }}-amountValue">0</span></div>
+              <div id="{{ category_firstword }}-slider-control" class="slider-control" style="display: none;">
+                <div> <span class="priority-name" id="{{ category_firstword }}-priority-name"></span></div>
+                <div class="amount-subdisplay"> <span id="{{ category_firstword }}-amountValue">0</span></div>
 
                 <button type="button" id="{{ category_firstword }}-decreaseBtn" class="decreaseBtn">−</button>
                     
                 <input type="range" name="{{ category_firstword }}_slider" id="{{ category_firstword }}-amountSlider" min="0" max="10" value="0" >
                     
                 <button type="button" id="{{ category_firstword }}-increaseBtn" class="increaseBtn">+</button>
+
+                <button type="button" id="{{ category_firstword }}-adjustBtn" class="adjustBtn">Save</button>
               </div>
             </div>
           </div>
@@ -197,78 +198,12 @@
 
 
 {% block js %}   
-  <script>    
-
-    /* 
-        <--------------------------------------------------->
-        <---------------- DROPDOWN ELEMENTS ---------------->
-        <--------------------------------------------------->
-    */
-
-    const dropdown_elements = [
-      {
-        /*Visa*/
-        elementName: "Visa",
-        dropdown: document.getElementById('visa-tagDropdown'),
-        selectedTagsContainer: document.getElementById('visa-selectedTags')
-      },
-      {
-        /*Passport*/
-        elementName: "Passport",
-        dropdown: document.getElementById('passport-tagDropdown'),
-        selectedTagsContainer: document.getElementById('passport-selectedTags')
-      }      
-    ];
-
-    {% for category in categories %}
-
-      dropdown_elements.push(
-        {
-          elementName: "{{ category.category_name.split(' ')[0] | escape }}",
-          dropdown: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-tagDropdown"),
-          selectedTagsContainer: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-selectedTags")
-        }
-      );
-
-    {% endfor %}
+  <script> 
     
+    const category_submit = [];
 
-    function populate_tags(el_dropdown, tags_container) {      
-      const value = el_dropdown.value;
-      if (!value) return;
 
-      // Check for duplicates
-      if (Array.from(tags_container.children).some(tag => tag.dataset.value === value)) return;
-
-      const tag = document.createElement('div');
-      tag.classList.add('selection-tag');
-      tag.dataset.value = value;
-      tag.innerHTML = `${value} <span class="remove-tag"> &times; </span>`;
-
-      tags_container.appendChild(tag);
-    }
     
-    function remove_tags(e) {      
-      if (e.target.classList.contains('remove-tag')) {
-        e.target.parentElement.remove();
-      }
-    }
-
-    dropdown_elements.forEach(element => {
-
-      element.dropdown.addEventListener('change', () => {
-        populate_tags(element.dropdown, element.selectedTagsContainer);
-      });
-
-      element.selectedTagsContainer.addEventListener('click', (e) => {
-        remove_tags(e);
-      });
-
-    });
-
-
-
-
     /* 
         <----------------------------------------------->
         <--------------- SLIDER ELEMENTS --------------->
@@ -291,11 +226,12 @@
 
       slider_elements.push(
         {
-          elementName: "{{ category.category_name.split(' ')[0] | escape }}",
+          elementName: "{{ category.category_name | escape }}",
           slider: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-amountSlider"),
           amountValue: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-amountValue"),
           increaseBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-increaseBtn"),
           decreaseBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-decreaseBtn"),
+          adjustBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-adjustBtn"),
           stepValue: 1 
         }
       );
@@ -352,10 +288,212 @@
     });
 
 
+
+
+    /* 
+        <--------------------------------------------------->
+        <---------------- DROPDOWN ELEMENTS ---------------->
+        <--------------------------------------------------->
+    */
+
+    function update_activity_submit(e, slider_el) {      
+      //check if tag name exists in category_submit list
+      //if does, update priority 
+      //if not, push to list, making note of the category, slected tag and current priority
+
+      console.log(e.target);
+
+
+      let target_category = category_submit.find(
+        category => Object.values(category).find(category_value => category_value === slider_el.elementName) !== undefined
+      );
+
+
+      if (target_category){
+
+        let activities_list = Object.entries(target_category).find(([key, value]) => key === "categoryActivities")[1];
+
+        let selected_tag_name = e.target.innerHTML.slice(0, e.target.innerHTML.indexOf(" <"))
+
+        let activity_exists_check = activities_list.find(
+          activity => Object.values(activity).find(activity_value => activity_value === selected_tag_name) !== undefined
+        )
+
+        console.log(selected_tag_name);
+
+        console.log(activity_exists_check);
+
+        if ( activity_exists_check !== undefined &&) {
+
+          activity_exists_check.activityPriority = slider_el.slider.value;
+
+        } else {
+
+          activities_list.push(
+
+            {
+              activityName: selected_tag_name,
+              activityPriority: slider_el.slider.value
+            }
+
+          )  
+        }
+
+        
+             
+        
+        console.log("activities_list: ")
+        console.log(activities_list);
+        
+      }       
+      else {
+
+        category_submit.push(
+          {
+            categoryName: slider_el.elementName,
+            categoryActivities: [
+              {
+                activityName: e.target.innerHTML.slice(0, e.target.innerHTML.indexOf(" <")),
+                activityPriority: slider_el.slider.value
+              }            
+            ]          
+          }
+        );
+
+      }
+
+      
+      console.log("category_submit: ");
+      console.log(category_submit);
+    }
+
+    const dropdown_elements = [
+      {
+        /*Visa*/
+        elementName: "Visa",
+        dropdown: document.getElementById('visa-tagDropdown'),
+        selectedTagsContainer: document.getElementById('visa-selectedTags')
+      },
+      {
+        /*Passport*/
+        elementName: "Passport",
+        dropdown: document.getElementById('passport-tagDropdown'),
+        selectedTagsContainer: document.getElementById('passport-selectedTags')
+      }      
+    ];
+
+    {% for category in categories %}
+
+      //console.log(slider_elements.find(element => element.elementName === "{{ category.category_name | escape }}"))
+
+      dropdown_elements.push(
+        {
+          elementName: "{{ category.category_name | escape }}",
+          dropdown: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-tagDropdown"),
+          selectedTagsContainer: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-selectedTags"),
+          priorityName: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-priority-name"),
+          sliderDiv: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-slider-control"),
+          sliderElement: slider_elements.find(element => element.elementName === "{{ category.category_name | escape }}")
+        }
+      );
+
+    {% endfor %}
     
-    //Navigation for dropdowns
+
+    function populate_tags(el_dropdown, tags_container, priority_name, slider_div, slider_el) {      
+      const value = el_dropdown.value;
+      if (!value) return;
+
+      // Check for duplicates
+      if (Array.from(tags_container.children).some(tag => tag.dataset.value === value)) return;
+
+      const tag = document.createElement('div');
+      tag.classList.add('selection-tag');
+      tag.dataset.value = value;
+      tag.innerHTML = `${value} <span class="remove-tag"> &times; </span>`;
+
+      let clicked_tag = null;
+
+      tag.addEventListener("click", function(e) {
+
+        
+
+        if (priority_name != null){
+          if (Array.from(tags_container.children).some(child => child !== tag && child.classList.contains("active-tag"))){
+            return;
+          } 
+          else {
+            clicked_tag = e;
+
+            if (tag.classList.contains("active-tag")) {
+              tag.classList.remove("active-tag");
+              slider_div.style.display = "none";
+              slider_el.slider.value = 0;
+              slider_el.amountValue.innerHTML = 0;
+
+              //if tag is already in dictionary, grab priority value from it and set slider value to it
+
+            }
+            else {
+              tag.classList.add('active-tag');
+              priority_name.innerHTML = 'Adjust "' + value + '" Priority:';
+              slider_div.style.display = "flex";
+            }    
+            
+          }
+        } 
+        else {
+          return;
+        }              
+          
+      });
+
+      tags_container.appendChild(tag);
+
+      slider_el.adjustBtn.addEventListener("click", () => {
+        update_activity_submit(clicked_tag, slider_el);
+      });
+    }
+    
+    function remove_tags(e) {      
+      if (e.target.classList.contains('remove-tag')) {
+        e.target.parentElement.remove();
+      }
+    }
+
+    
+
+
+    dropdown_elements.forEach(element => {
+
+      if (element.priorityName != null) {
+        //console.log(element.priorityName)
+        element.dropdown.addEventListener('change', () => {
+          populate_tags(element.dropdown, element.selectedTagsContainer, element.priorityName, element.sliderDiv, element.sliderElement);
+        });
+      }
+      else {
+        element.dropdown.addEventListener('change', () => {
+          populate_tags(element.dropdown, element.selectedTagsContainer, null, null, null);
+        });
+      }
+
+      element.selectedTagsContainer.addEventListener('click', (e) => {
+        remove_tags(e);
+      });
+
+    });
+
+
+
+    /* 
+        <----------------------------------------------------->
+        <---------------- DROPDOWN NAVIGATION ---------------->
+        <----------------------------------------------------->
+    */
+    
     const dropdownButtons = document.querySelectorAll('.selection-section-btn, .selection-subsection-btn');
-    console.log(dropdownButtons);
+    //console.log(dropdownButtons);
 
     dropdownButtons.forEach(button => {
       button.addEventListener('click', function() {
@@ -373,6 +511,14 @@
         }
       });
     });
+
+
+    //BACK & NEXT BUTTONS
+
+    //when click back, trigger click event of dropdown above it and remove display of current dropdown
+    //when click next, trigger click event of dropdown below it and remove display of current dropdown
+
+
 
   </script>
 

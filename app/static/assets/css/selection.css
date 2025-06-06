@@ -134,10 +134,11 @@
 
 .selection-subsection-content{
   padding-right: 0px;
+  padding-bottom: 30px;
 }
 
 .selection-subarrow {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .selection-section i {
@@ -163,6 +164,10 @@
 
 .selection-section-nav .selection-back:hover, .selection-section-nav .selection-next:hover {  
   opacity: 0.8;
+}
+
+.selection-section-nav .selection-back{  
+  margin-right: 10px;
 }
 
 .select-input-div {  
@@ -279,6 +284,7 @@
   margin-bottom: 10px;
 }
 
+
 .pref-input{  
   z-index: 3;
   padding: 20px 0px 25px 0px;
@@ -310,13 +316,20 @@
   color: var(--main-color);
 }
 
-/*var(--main-color);*/
-.amount-display {
+.priority-name {
+  font-size: 16px;
+  color: black;  
+}
+
+.amount-display, .amount-subdisplay{
   font-size: 17px;
   color: black;
   z-index: 2;
   margin-right: 15px;
   font-weight: bold;
+}
+
+.amount-subdisplay{
 }
 
 .amount-display #budget-amountValue{
@@ -333,7 +346,7 @@
 
 input[type="range"] {
   -webkit-appearance: none;
-  width: 35vw;
+  width: 23vw;
   height: 10px;
   outline: none;
   background: none;
@@ -409,7 +422,7 @@ input[type="range"]::-ms-thumb {
   cursor: pointer;
 }
 
-.slider-control button {
+.slider-control .decreaseBtn, .slider-control .increaseBtn{
   font-size: 27px;
   color: rgb(143, 142, 142);
   border: none;
@@ -421,8 +434,22 @@ input[type="range"]::-ms-thumb {
   transition: background 0.2s ease;
 }
 
-.slider-control button:hover {
+.slider-control .decreaseBtn:hover, .slider-control .increaseBtn:hover {
   transform: scale(1.1);
+}
+
+.slider-control .adjustBtn {
+  background-color: #ffd166;
+  color: black;
+  font-size: 15px;
+  padding: 6px 16px;
+  margin-left: 10px;
+  border-radius: 28px;
+  border: none;
+}
+
+.slider-control .adjustBtn:hover {
+  opacity: 0.8;
 }
 
 
@@ -431,7 +458,7 @@ input[type="range"]::-ms-thumb {
   border: 2px solid black; /* Indigo border */
   border-radius: 8px;
   background-color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   color: black;
 }
 
@@ -458,16 +485,27 @@ input[type="range"]::-ms-thumb {
   align-items: center;
   font-size: 14px;
   margin-right: 6px;
+  margin-bottom: 6px;
+}
+
+.selection-section-content .selection-tag:hover {
+  cursor: pointer;
 }
 
 .selection-subsection-content .selection-tag:hover {
-  outline: 6px solid var(--main-color);
+  outline: 3px solid var(--main-color);
+  cursor: pointer;
 }
 
 .selection-subsection-content .active-tag {
-  outline: 6px solid var(--main-color);
+  outline: 3px solid var(--main-color);
+  color: var(--main-color);
+  font-weight: bold;
 }
 
+.selection-subsection-content .active-tag .remove-tag{
+  font-weight: normal;
+}
 
 
 .selection-tag .remove-tag {
@@ -490,7 +528,6 @@ input[type="range"]::-ms-thumb {
   border-radius: 30px;
   border: none;
   margin: 30px;
-  margin-top: 50px;
 }
 
 .save:hover {
