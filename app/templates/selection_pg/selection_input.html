@@ -211,33 +211,41 @@
 
     // Function to update passports_submit/visas_submit with selected country
     function update_country_submit(country_dropdown) {
-      //dropdown.remove(index)	Removes the option at the given index, remove after selected, and put back before removing tag
 
-      // Extract the name and category for the selected country
+      // Extract the name of the selected country from the dropdown
       let selected_country = country_dropdown.value;
+
+      // Extract the category type ('passport' or 'visa') from the dropdown ID
       let dropdown_category = country_dropdown.id.slice(0, country_dropdown.id.indexOf("-"));
 
-      // Check if belongs to passport or visa and does not already exist to add to correct list
+      // If the category is 'passport' and the selected country is not already in passports_submit
       if (dropdown_category === "passport" && passports_submit.find(country => country === selected_country) === undefined) {
         
+        // Add the selected country to the passports_submit list
         passports_submit.push(
           selected_country
         );
 
+        // Log the updated list to console for debugging
         console.log("Add passports_submit: ");
         console.log(passports_submit);
 
-      } else if (dropdown_category === "visa" && visas_submit.find(country => country === selected_country) === undefined) {
+      } 
+      // If the category is 'visa' and the selected country is not already in visas_submit
+      else if (dropdown_category === "visa" && visas_submit.find(country => country === selected_country) === undefined) {
 
+        // Add the selected country to the visas_submit list
         visas_submit.push(
           selected_country
         );
 
+        // Log the updated list to console for debugging
         console.log("Add visas_submit: ");
         console.log(visas_submit);
       }
 
     }
+
 
 
 
@@ -537,7 +545,7 @@
 
       }); // end of tag.addEventListener
       
-
+      // Check to see if we're working with visa/passport
       if (priority_name === null)  {
         update_country_submit(el_dropdown);
       }
@@ -603,37 +611,49 @@
                 console.log("Remove category_submit: ");
                 console.log(category_submit);
 
-              }
+              } // end if (activity.activityName === selected_tag_name)
 
-            }
+            } // end if (activity !== undefined) 
 
-          }
+          } // end if (target_category !== undefined)
 
         } // end if (slider_div != null)
         
         else {
 
+          // Get the name of the country by extracting text before the " <" from the tag element's HTML
           let country_name = e.target.parentElement.innerHTML.slice(0, e.target.parentElement.innerHTML.indexOf(" <"));
+
+          // Get the container that holds all selected tags (e.g., for passport or visa)
           let tags_container = e.target.parentElement.parentElement;
+
+          // Extract the category (either 'passport' or 'visa') from the container's ID
           let category = tags_container.id.slice(0, tags_container.id.indexOf("-"));
 
-          // Check if belongs to passport or visa add remove from list
+          // Check if the tag belongs to the 'passport' category and is already in the passports_submit list
           if (category === "passport" && passports_submit.find(country => country === country_name) !== undefined) {
-            
-            passports_submit.splice(passports_submit.indexOf(country_name), 1); 
+              
+            // Remove the country from passports_submit
+            passports_submit.splice(passports_submit.indexOf(country_name), 1);
 
+            // Log the updated list to the console
             console.log("Remove passports_submit: ");
             console.log(passports_submit);
 
-          } else if (category === "visa" && visas_submit.find(country => country === country_name) !== undefined) {
+          } 
+          // Check if the tag belongs to the 'visa' category and is already in the visas_submit list
+          else if (category === "visa" && visas_submit.find(country => country === country_name) !== undefined) {
 
-            visas_submit.splice(visas_submit.indexOf(country_name), 1); 
+            // Remove the country from visas_submit
+            visas_submit.splice(visas_submit.indexOf(country_name), 1);
 
+            // Log the updated list to the console
             console.log("Remove visas_submit: ");
             console.log(visas_submit);
-          } 
+          }
 
-        }
+
+        } // end else for (slider_div != null)
 
 
         // Remove tag from UI
