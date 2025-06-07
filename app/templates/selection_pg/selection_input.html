@@ -199,24 +199,59 @@
 
 {% block js %}   
   <script> 
-    
+    // Stores user's selected countries in these categories
+    const passports_submit = []
+    const visas_submit = []
+
     // Stores user's selected categories and activities with priorities
     const category_submit = [];
-
     // Stores the last clicked tag
     let clicked_tag = null;
 
 
+    // Function to update passports_submit/visas_submit with selected country
+    function update_country_submit(country_dropdown) {
+      //dropdown.remove(index)	Removes the option at the given index, remove after selected, and put back before removing tag
+
+      // Extract the name and category for the selected country
+      let selected_country = country_dropdown.value;
+      let dropdown_category = country_dropdown.id.slice(0, country_dropdown.id.indexOf("-"));
+
+      // Check if belongs to passport or visa and does not already exist to add to correct list
+      if (dropdown_category === "passport" && passports_submit.find(country => country === selected_country) === undefined) {
+        
+        passports_submit.push(
+          selected_country
+        );
+
+        console.log("Add passports_submit: ");
+        console.log(passports_submit);
+
+      } else if (dropdown_category === "visa" && visas_submit.find(country => country === selected_country) === undefined) {
+
+        visas_submit.push(
+          selected_country
+        );
+
+        console.log("Add visas_submit: ");
+        console.log(visas_submit);
+      }
+
+    }
+
+
+
+    // Utility function to find a category from the category_submit array based on the element name
     function find_category(slider_element) {
 
       let category_exists_check = category_submit.find(
         category => Object.values(category).find(category_value => category_value === slider_element.elementName) !== undefined
       );
 
-      return category_exists_check;      
+      return category_exists_check;
     }
 
-
+    // Utility function to find a specific activity within a given list of activities
     function find_activity(tag_name, activities) {
 
       let activity_exists_check = activities.find(
@@ -227,38 +262,33 @@
     }
 
 
-    // Handles storing selected activity and its priority per category
-    function update_activity_submit(e, slider_el) {      
+    // Function to update category_submit with selected activity and its priority
+    function update_activity_submit(e, slider_el) {
 
+      // Extract the name of the selected tag from its innerHTML (before the " ×")
       let selected_tag_name = e.target.innerHTML.slice(0, e.target.innerHTML.indexOf(" <"));
 
-      // Look for category
+      // Find the category the tag belongs to
       let target_category = find_category(slider_el);
 
-      //console.log(e.target);
+      if (target_category !== undefined) {
 
-      if (target_category !== undefined) {        
-        // If category already exists, update or add new activity to it        
-        
+        // Category exists; update or add activity to the category
         let activities_list = target_category.categoryActivities;
-        
-        // Look for the activity in category
+
+        // Check if activity is already in the category
         let activity = find_activity(selected_tag_name, activities_list);
-        
+
         if (activity !== undefined) {
-          // If activity already exists, update activity priority
 
-          // Update existing activity priority
+          // Update priority if activity is already present
           if (activity.activityName === selected_tag_name) {
-
             activity.activityPriority = slider_el.slider.value;
-
           }
 
         } else {
-          // If activity does not exist, add new activity and priority
 
-          // Push new activity into the category's activities list
+          // Add new activity and priority to the category
           activities_list.push(
             {
               activityName: selected_tag_name,
@@ -267,11 +297,9 @@
           );
 
         }
-
       } else {
-        // If category does not exist, add it io the list
 
-        // First time this category is being selected
+        // Category not found — add new category with activity to category_submit
         category_submit.push(
           {
             categoryName: slider_el.elementName,
@@ -341,9 +369,11 @@
     // Increase slider value using plus button
     function increase_amt(el_slider, amt_val, add_val) { 
       let current_val = parseInt(amt_val.innerText);
+
       if (current_val < parseInt(el_slider.max)) {
         current_val += add_val;
       }
+
       el_slider.value = current_val;
       amt_val.innerText = current_val;
     }
@@ -351,15 +381,18 @@
     // Decrease slider value using minus button
     function decrease_amt(el_slider, amt_val, minus_val) { 
       let current_val = parseInt(amt_val.innerText);
+
       if (current_val > parseInt(el_slider.min)) {
         current_val -= minus_val;
       }
+
       el_slider.value = current_val;
       amt_val.innerText = current_val;
     }
 
-    // Attach slider listeners to update UI and value on interaction
+    // Add listeners for all sliders and associated UI buttons
     slider_elements.forEach(element => {
+
       element.slider.addEventListener("input", () => {
         set_pref_amt(element.slider, element.amountValue);
       });
@@ -371,6 +404,7 @@
       element.decreaseBtn.addEventListener("click", () => {
         decrease_amt(element.slider, element.amountValue, element.stepValue);
       });
+
     });
 
 
@@ -415,14 +449,23 @@
 
     {% endfor %}
 
+
     // Create tag and add to UI when dropdown value is selected
     function populate_tags(el_dropdown, tags_container, priority_name, slider_div, slider_el) {  
 
       const value = el_dropdown.value;
-      if (!value) return;
+      if (!value) return;      
 
       // Prevent duplicate tags
-      if (Array.from(tags_container.children).some(tag => tag.dataset.value === value)) return;
+      if (Array.from(tags_container.children).some(tag => tag.dataset.value === value)) {
+        
+        // Returns dropdwon to "select a tag" after 2 secs       
+        setTimeout(() => {
+          el_dropdown.selectedIndex = 0; 
+        }, 2000); // 2000ms = 2 seconds
+
+        return;
+      } 
 
       // Create new tag UI element
       const tag = document.createElement('div');
@@ -432,7 +475,10 @@
 
       // Handle click to activate tag and show priority slider
       tag.addEventListener("click", function(e) {
+
+        // Check to see if we're working with a activity category rather than visa/passport
         if (priority_name != null) {
+
           // Only one tag should be active per category
           // Check if any other tag in this container is active — and if so, don’t allow this new one to activate.
           if (Array.from(tags_container.children).some(child => child !== tag && child.classList.contains("active-tag"))) {
@@ -457,11 +503,11 @@
 
               let selected_tag_name = e.target.innerHTML.slice(0, e.target.innerHTML.indexOf(" <"));
 
-              // Look for category
+              // Look for category to see if activity is already present
               let target_category = find_category(slider_el);
 
               if (target_category !== undefined) {        
-                // If category already exists, update or add new activity to it        
+                // If category already exists, update slider with existing priority       
                 
                 let activities_list = target_category.categoryActivities;
                 
@@ -469,9 +515,8 @@
                 let activity = find_activity(selected_tag_name, activities_list);
                 
                 if (activity !== undefined) {
-                  // If activity already exists, update activity priority
+                  // If activity already exists, update slider with existing priority 
 
-                  // Update existing activity priority
                   if (activity.activityName === selected_tag_name) {           
 
                     slider_el.slider.value = activity.activityPriority;
@@ -481,26 +526,42 @@
 
                 }
 
-              }
+              } //end if target_category !== undefined
 
-            }
-          }
-        }
-      });
+            } // end else for (tag.classList.contains("active-tag")
 
+          } // end else for Checking if any other tag in this container is active
+
+        } // end if priority_name != null
+        
+
+      }); // end of tag.addEventListener
+      
+
+      if (priority_name === null)  {
+        update_country_submit(el_dropdown);
+      }
+
+      // Add the newly selected and created tag to the container 
       tags_container.appendChild(tag);      
+
+      // Returns dropdwon to "select a tag" after 2 secs       
+      setTimeout(() => {
+        el_dropdown.selectedIndex = 0; 
+      }, 2000); // 2000ms = 2 seconds
     }
 
-    // Removes tag when "×" is clicked
+
+    // Removes tag and update data structure when "×" is clicked
     function remove_tags(e, slider_div, slider_el) {    
       
-      //remove that deleted tag from the category in the submit list
-      //if a category has no tags, remove it from the list
-
+      // Remove that deleted tag from the category in the submit list
+      // If a category has no tags, remove it from the list
       
-        
+      // Only act if the close (×) icon is clicked
       if (e.target.classList.contains('remove-tag')) {
 
+        // Check to see if we're working with a activity category rather than visa/passport
         if (slider_div != null) {
 
           console.log(e.target.parentElement);
@@ -514,30 +575,33 @@
 
           if (target_category !== undefined) {     
             
-            // If category already exists, update or add new activity to it        
-            
             let activities_list = target_category.categoryActivities;
             
             // Look for the activity in category
             let activity = find_activity(selected_tag_name, activities_list);
             
             if (activity !== undefined) {
-              // If activity already exists, update activity priority
+              // If activity already exists, remove the activity
 
-              // Update existing activity priority
-              if (activity.activityName === selected_tag_name) {           
-                
+              if (activity.activityName === selected_tag_name) {  
+
+                // Remove the activity from the category
                 activities_list.splice(activities_list.indexOf(activity), 1);  // removes 1 item at that index
                 
+                // Disable the slider
                 slider_div.style.display = "none";
 
                 console.log(activities_list);
 
+                // If no more activities left in the category, remove the entire category
                 if (activities_list.length === 0) {
                   
                   category_submit.splice(category_submit.indexOf(target_category), 1); 
 
                 }
+
+                console.log("Remove category_submit: ");
+                console.log(category_submit);
 
               }
 
@@ -545,21 +609,46 @@
 
           }
 
-        }      
+        } // end if (slider_div != null)
+        
+        else {
 
-        e.target.parentElement.remove();
+          let country_name = e.target.parentElement.innerHTML.slice(0, e.target.parentElement.innerHTML.indexOf(" <"));
+          let tags_container = e.target.parentElement.parentElement;
+          let category = tags_container.id.slice(0, tags_container.id.indexOf("-"));
 
-        console.log("Remove category_submit: ");
-        console.log(category_submit);
+          // Check if belongs to passport or visa add remove from list
+          if (category === "passport" && passports_submit.find(country => country === country_name) !== undefined) {
+            
+            passports_submit.splice(passports_submit.indexOf(country_name), 1); 
+
+            console.log("Remove passports_submit: ");
+            console.log(passports_submit);
+
+          } else if (category === "visa" && visas_submit.find(country => country === country_name) !== undefined) {
+
+            visas_submit.splice(visas_submit.indexOf(country_name), 1); 
+
+            console.log("Remove visas_submit: ");
+            console.log(visas_submit);
+          } 
+
+        }
+
+
+        // Remove tag from UI
+        e.target.parentElement.remove();        
       }
-
       
     }
 
+
     // Bind all dropdowns and tag containers to logic
     dropdown_elements.forEach(element => {
+
       if (element.priorityName != null) {
         // Category-based dropdowns
+
         element.dropdown.addEventListener('change', () => {
           populate_tags(element.dropdown, element.selectedTagsContainer, element.priorityName, element.sliderDiv, element.sliderElement);
         });
@@ -582,6 +671,8 @@
         element.selectedTagsContainer.addEventListener('click', (e) => {
           remove_tags(e, null, null);
         });
+
+        // When a country is selected from the dropdwon, populate the list
       }
 
       
