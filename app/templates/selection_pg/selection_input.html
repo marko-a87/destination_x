@@ -200,28 +200,121 @@
 {% block js %}   
   <script> 
     
+    // Stores user's selected categories and activities with priorities
     const category_submit = [];
 
+    // Stores the last clicked tag
+    let clicked_tag = null;
 
-    
+
+    function find_category(slider_element) {
+
+      let category_exists_check = category_submit.find(
+        category => Object.values(category).find(category_value => category_value === slider_element.elementName) !== undefined
+      );
+
+      return category_exists_check;      
+    }
+
+
+    function find_activity(tag_name, activities) {
+
+      let activity_exists_check = activities.find(
+        activity => Object.values(activity).find(activity_value => activity_value === tag_name) !== undefined
+      );
+
+      return activity_exists_check;
+    }
+
+
+    // Handles storing selected activity and its priority per category
+    function update_activity_submit(e, slider_el) {      
+
+      let selected_tag_name = e.target.innerHTML.slice(0, e.target.innerHTML.indexOf(" <"));
+
+      // Look for category
+      let target_category = find_category(slider_el);
+
+      //console.log(e.target);
+
+      if (target_category !== undefined) {        
+        // If category already exists, update or add new activity to it        
+        
+        let activities_list = target_category.categoryActivities;
+        
+        // Look for the activity in category
+        let activity = find_activity(selected_tag_name, activities_list);
+        
+        if (activity !== undefined) {
+          // If activity already exists, update activity priority
+
+          // Update existing activity priority
+          if (activity.activityName === selected_tag_name) {
+
+            activity.activityPriority = slider_el.slider.value;
+
+          }
+
+        } else {
+          // If activity does not exist, add new activity and priority
+
+          // Push new activity into the category's activities list
+          activities_list.push(
+            {
+              activityName: selected_tag_name,
+              activityPriority: slider_el.slider.value
+            }
+          );
+
+        }
+
+      } else {
+        // If category does not exist, add it io the list
+
+        // First time this category is being selected
+        category_submit.push(
+          {
+            categoryName: slider_el.elementName,
+            categoryActivities: [
+              {
+                activityName: selected_tag_name,
+                activityPriority: slider_el.slider.value
+              }
+            ]
+          }
+        );
+
+      }
+
+      console.log("Add category_submit: ");
+      console.log(category_submit);
+    }
+
+
+
     /* 
         <----------------------------------------------->
         <--------------- SLIDER ELEMENTS --------------->
-        <----------------------------------------------->
+        <----------------------------------------------->        
     */
 
+    /* 
+      This array holds all slider-related UI elements and settings 
+      for budget and each dynamic category created from backend.
+    */
     const slider_elements = [
       {
-        /*Budget*/
+        // Base budget slider and controls
         elementName: "Budget",
         slider: document.getElementById("budget-amountSlider"),
         amountValue: document.getElementById("budget-amountValue"),
         increaseBtn: document.getElementById("budget-increaseBtn"),
         decreaseBtn: document.getElementById("budget-decreaseBtn"),
-        stepValue: 50
+        stepValue: 50 // Budget slider increases in $50 increments
       }      
     ];
 
+    // Dynamically generate slider elements for all categories using server-side template data
     {% for category in categories %}
 
       slider_elements.push(
@@ -232,291 +325,308 @@
           increaseBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-increaseBtn"),
           decreaseBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-decreaseBtn"),
           adjustBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-adjustBtn"),
-          stepValue: 1 
+          stepValue: 1 // Category sliders increase in single units
         }
       );
 
     {% endfor %}
 
 
-    // Update value when slider moves (within its range)
+    // Update display value when slider is moved manually
     function set_pref_amt(el_slider, amt_val, display_val) {      
       display_val = parseInt(el_slider.value);
       amt_val.innerText = display_val;
     }
 
-    // Increase displayed amount
+    // Increase slider value using plus button
     function increase_amt(el_slider, amt_val, add_val) { 
       let current_val = parseInt(amt_val.innerText);
-
       if (current_val < parseInt(el_slider.max)) {
         current_val += add_val;
       }
-
       el_slider.value = current_val;
       amt_val.innerText = current_val;
     }
 
-    // Decrease displayed amount
+    // Decrease slider value using minus button
     function decrease_amt(el_slider, amt_val, minus_val) { 
       let current_val = parseInt(amt_val.innerText);
-
       if (current_val > parseInt(el_slider.min)) {
         current_val -= minus_val;
       }
-
       el_slider.value = current_val;
       amt_val.innerText = current_val;
     }
 
-
-    //Slider & Amount Adjustment
+    // Attach slider listeners to update UI and value on interaction
     slider_elements.forEach(element => {
-
       element.slider.addEventListener("input", () => {
         set_pref_amt(element.slider, element.amountValue);
       });
 
       element.increaseBtn.addEventListener("click", () => {
-        increase_amt(element.slider, element.amountValue, element.stepValue)
-      });
-      
-     element.decreaseBtn.addEventListener("click", () => {
-        decrease_amt(element.slider, element.amountValue, element.stepValue)
+        increase_amt(element.slider, element.amountValue, element.stepValue);
       });
 
+      element.decreaseBtn.addEventListener("click", () => {
+        decrease_amt(element.slider, element.amountValue, element.stepValue);
+      });
     });
-
 
 
 
     /* 
         <--------------------------------------------------->
-        <---------------- DROPDOWN ELEMENTS ---------------->
-        <--------------------------------------------------->
+        <----------------- DROPDOWN ELEMENTS --------------->
+        <--------------------------------------------------->        
     */
 
-    function update_activity_submit(e, slider_el) {      
-      //check if tag name exists in category_submit list
-      //if does, update priority 
-      //if not, push to list, making note of the category, slected tag and current priority
 
-      console.log(e.target);
+    /*
+      Manages dropdowns and tag selections for categories 
+      and special elements like Visa and Passport.
+    */
 
-
-      let target_category = category_submit.find(
-        category => Object.values(category).find(category_value => category_value === slider_el.elementName) !== undefined
-      );
-
-
-      if (target_category){
-
-        let activities_list = Object.entries(target_category).find(([key, value]) => key === "categoryActivities")[1];
-
-        let selected_tag_name = e.target.innerHTML.slice(0, e.target.innerHTML.indexOf(" <"))
-
-        let activity_exists_check = activities_list.find(
-          activity => Object.values(activity).find(activity_value => activity_value === selected_tag_name) !== undefined
-        )
-
-        console.log(selected_tag_name);
-
-        console.log(activity_exists_check);
-
-        if ( activity_exists_check !== undefined &&) {
-
-          activity_exists_check.activityPriority = slider_el.slider.value;
-
-        } else {
-
-          activities_list.push(
-
-            {
-              activityName: selected_tag_name,
-              activityPriority: slider_el.slider.value
-            }
-
-          )  
-        }
-
-        
-             
-        
-        console.log("activities_list: ")
-        console.log(activities_list);
-        
-      }       
-      else {
-
-        category_submit.push(
-          {
-            categoryName: slider_el.elementName,
-            categoryActivities: [
-              {
-                activityName: e.target.innerHTML.slice(0, e.target.innerHTML.indexOf(" <")),
-                activityPriority: slider_el.slider.value
-              }            
-            ]          
-          }
-        );
-
-      }
-
-      
-      console.log("category_submit: ");
-      console.log(category_submit);
-    }
-
+    // Initialize dropdowns for static and dynamic categories
     const dropdown_elements = [
       {
-        /*Visa*/
         elementName: "Visa",
         dropdown: document.getElementById('visa-tagDropdown'),
         selectedTagsContainer: document.getElementById('visa-selectedTags')
       },
       {
-        /*Passport*/
         elementName: "Passport",
         dropdown: document.getElementById('passport-tagDropdown'),
         selectedTagsContainer: document.getElementById('passport-selectedTags')
       }      
     ];
 
+    // Dynamically push additional categories into dropdown array
     {% for category in categories %}
 
-      //console.log(slider_elements.find(element => element.elementName === "{{ category.category_name | escape }}"))
-
-      dropdown_elements.push(
-        {
-          elementName: "{{ category.category_name | escape }}",
-          dropdown: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-tagDropdown"),
-          selectedTagsContainer: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-selectedTags"),
-          priorityName: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-priority-name"),
-          sliderDiv: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-slider-control"),
-          sliderElement: slider_elements.find(element => element.elementName === "{{ category.category_name | escape }}")
-        }
-      );
+      dropdown_elements.push({
+        elementName: "{{ category.category_name | escape }}",
+        dropdown: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-tagDropdown"),
+        selectedTagsContainer: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-selectedTags"),
+        priorityName: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-priority-name"),
+        sliderDiv: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-slider-control"),
+        sliderElement: slider_elements.find(element => element.elementName === "{{ category.category_name | escape }}")
+      });
 
     {% endfor %}
-    
 
-    function populate_tags(el_dropdown, tags_container, priority_name, slider_div, slider_el) {      
+    // Create tag and add to UI when dropdown value is selected
+    function populate_tags(el_dropdown, tags_container, priority_name, slider_div, slider_el) {  
+
       const value = el_dropdown.value;
       if (!value) return;
 
-      // Check for duplicates
+      // Prevent duplicate tags
       if (Array.from(tags_container.children).some(tag => tag.dataset.value === value)) return;
 
+      // Create new tag UI element
       const tag = document.createElement('div');
       tag.classList.add('selection-tag');
       tag.dataset.value = value;
-      tag.innerHTML = `${value} <span class="remove-tag"> &times; </span>`;
+      tag.innerHTML = `${value} <span class="remove-tag"> &times; </span>`;      
 
-      let clicked_tag = null;
-
+      // Handle click to activate tag and show priority slider
       tag.addEventListener("click", function(e) {
-
-        
-
-        if (priority_name != null){
-          if (Array.from(tags_container.children).some(child => child !== tag && child.classList.contains("active-tag"))){
+        if (priority_name != null) {
+          // Only one tag should be active per category
+          // Check if any other tag in this container is active — and if so, don’t allow this new one to activate.
+          if (Array.from(tags_container.children).some(child => child !== tag && child.classList.contains("active-tag"))) {
             return;
-          } 
-          else {
+          } else {
+            // set clicked event e for updating the categories and priorities
             clicked_tag = e;
 
             if (tag.classList.contains("active-tag")) {
+              // Deselect tag
               tag.classList.remove("active-tag");
               slider_div.style.display = "none";
               slider_el.slider.value = 0;
               slider_el.amountValue.innerHTML = 0;
 
-              //if tag is already in dictionary, grab priority value from it and set slider value to it
-
-            }
-            else {
+            } else {
+              // Select tag and show slider UI
               tag.classList.add('active-tag');
               priority_name.innerHTML = 'Adjust "' + value + '" Priority:';
               slider_div.style.display = "flex";
-            }    
-            
+
+
+              let selected_tag_name = e.target.innerHTML.slice(0, e.target.innerHTML.indexOf(" <"));
+
+              // Look for category
+              let target_category = find_category(slider_el);
+
+              if (target_category !== undefined) {        
+                // If category already exists, update or add new activity to it        
+                
+                let activities_list = target_category.categoryActivities;
+                
+                // Look for the activity in category
+                let activity = find_activity(selected_tag_name, activities_list);
+                
+                if (activity !== undefined) {
+                  // If activity already exists, update activity priority
+
+                  // Update existing activity priority
+                  if (activity.activityName === selected_tag_name) {           
+
+                    slider_el.slider.value = activity.activityPriority;
+                    slider_el.amountValue.innerHTML = activity.activityPriority;
+
+                  }
+
+                }
+
+              }
+
+            }
           }
-        } 
-        else {
-          return;
-        }              
-          
+        }
       });
 
-      tags_container.appendChild(tag);
-
-      slider_el.adjustBtn.addEventListener("click", () => {
-        update_activity_submit(clicked_tag, slider_el);
-      });
+      tags_container.appendChild(tag);      
     }
-    
-    function remove_tags(e) {      
+
+    // Removes tag when "×" is clicked
+    function remove_tags(e, slider_div, slider_el) {    
+      
+      //remove that deleted tag from the category in the submit list
+      //if a category has no tags, remove it from the list
+
+      
+        
       if (e.target.classList.contains('remove-tag')) {
+
+        if (slider_div != null) {
+
+          console.log(e.target.parentElement);
+
+          let selected_tag_name = e.target.parentElement.innerHTML.slice(0, e.target.parentElement.innerHTML.indexOf(" <"));
+
+          // Look for category
+          let target_category = find_category(slider_el);
+
+          console.log(target_category);
+
+          if (target_category !== undefined) {     
+            
+            // If category already exists, update or add new activity to it        
+            
+            let activities_list = target_category.categoryActivities;
+            
+            // Look for the activity in category
+            let activity = find_activity(selected_tag_name, activities_list);
+            
+            if (activity !== undefined) {
+              // If activity already exists, update activity priority
+
+              // Update existing activity priority
+              if (activity.activityName === selected_tag_name) {           
+                
+                activities_list.splice(activities_list.indexOf(activity), 1);  // removes 1 item at that index
+                
+                slider_div.style.display = "none";
+
+                console.log(activities_list);
+
+                if (activities_list.length === 0) {
+                  
+                  category_submit.splice(category_submit.indexOf(target_category), 1); 
+
+                }
+
+              }
+
+            }
+
+          }
+
+        }      
+
         e.target.parentElement.remove();
+
+        console.log("Remove category_submit: ");
+        console.log(category_submit);
       }
+
+      
     }
 
-    
-
-
+    // Bind all dropdowns and tag containers to logic
     dropdown_elements.forEach(element => {
-
       if (element.priorityName != null) {
-        //console.log(element.priorityName)
+        // Category-based dropdowns
         element.dropdown.addEventListener('change', () => {
           populate_tags(element.dropdown, element.selectedTagsContainer, element.priorityName, element.sliderDiv, element.sliderElement);
         });
-      }
-      else {
+
+        // On "Adjust" button click, update the data structure
+        element.sliderElement.adjustBtn.addEventListener("click", () => {
+          update_activity_submit(clicked_tag, element.sliderElement);
+        });
+
+        element.selectedTagsContainer.addEventListener('click', (e) => {
+          remove_tags(e, element.sliderDiv, element.sliderElement);
+        });
+
+      } else {
+        // Static dropdowns like Visa/Passport
         element.dropdown.addEventListener('change', () => {
           populate_tags(element.dropdown, element.selectedTagsContainer, null, null, null);
         });
+
+        element.selectedTagsContainer.addEventListener('click', (e) => {
+          remove_tags(e, null, null);
+        });
       }
 
-      element.selectedTagsContainer.addEventListener('click', (e) => {
-        remove_tags(e);
-      });
-
+      
     });
 
 
-
     /* 
-        <----------------------------------------------------->
-        <---------------- DROPDOWN NAVIGATION ---------------->
-        <----------------------------------------------------->
+        <---------------------------------------------------->
+        <--------------- DROPDOWN NAVIGATION ---------------->
+        <---------------------------------------------------->
+        Collapsible UI sections for organizing categories or groups
     */
-    
+
     const dropdownButtons = document.querySelectorAll('.selection-section-btn, .selection-subsection-btn');
-    //console.log(dropdownButtons);
 
     dropdownButtons.forEach(button => {
       button.addEventListener('click', function() {
         this.classList.toggle('active');
-    
+
         const dropdownContent = this.nextElementSibling;
         const arrow = this.querySelector('.selection-arrow, .selection-subarrow');
-    
+
+        // Toggle the arrow and dropdown visibility
         if (dropdownContent.style.display === "block") {
           dropdownContent.style.display = "none";
-          arrow.innerHTML = "&#9662;"; // arrow points down
+          arrow.innerHTML = "&#9662;"; // down
         } else {
           dropdownContent.style.display = "block";
-          arrow.innerHTML = "&#9652;"; // arrow points up
+          arrow.innerHTML = "&#9652;"; // up
         }
       });
     });
 
 
-    //BACK & NEXT BUTTONS
+    /*
+      <------------------------------------------------------>
+      <------------------- BACK/NEXT BUTTONS ---------------->
+      <------------------------------------------------------>
+      Not yet implemented: navigation logic between sections
+      using "Back" and "Next" buttons.
+    */
 
-    //when click back, trigger click event of dropdown above it and remove display of current dropdown
-    //when click next, trigger click event of dropdown below it and remove display of current dropdown
+    // On click back: trigger click on previous dropdown button
+    // On click next: trigger click on next dropdown button
+
 
 
 
