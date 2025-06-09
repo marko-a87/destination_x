@@ -166,8 +166,21 @@
   opacity: 0.8;
 }
 
-.selection-section-nav .selection-back{  
+.selection-section-nav .selection-back {  
   margin-right: 10px;
+}
+
+.selection-error-div {
+  outline: 2px solid rgb(207, 63, 63);
+  color: rgb(207, 63, 63);
+  border-radius: 9px;
+  padding: 7px;
+  margin-top: 25px;
+}
+
+.error-icon {
+  color: rgb(207, 63, 63);
+  margin-right: -5px;
 }
 
 .select-input-div {  

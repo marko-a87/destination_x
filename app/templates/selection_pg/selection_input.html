@@ -1,12 +1,12 @@
-<form action="" method="post">
+<form id="selection-form">
 <div class="selection-input">
 
   <div class="divider"> </div>
 
 
   <div class="selection-section">
-    <button type="button" class="selection-section-btn">
-        <span class="selection-arrow">&#9662;</span> 
+    <button type="button" id="budget-section-btn" class="selection-section-btn">
+        <span id="budget-arrow" class="selection-arrow">&#9662;</span> 
         <i class="fa-solid fa-circle-dollar-to-slot fa-lg"></i>
         1. BUDGET 
     </button>
@@ -31,8 +31,10 @@
         </div>
       </div>
 
-      <div class="selection-section-nav">                    
-        <button type="button" class="selection-next">Next</button>
+      <div class="selection-section-nav">    
+        <button type="button" id="budget-back" class="selection-back">Back</button>
+
+        <button type="button" id="budget-next" class="selection-next">Next</button>
       </div>
       
     </div>
@@ -41,10 +43,11 @@
 
 
   <div class="selection-section">
-    <button type="button" class="selection-section-btn">
-        <span class="selection-arrow">&#9662;</span> 
+    <button type="button" id="passport-section-btn" class="selection-section-btn">
+        <span id="passport-arrow" class="selection-arrow">&#9662;</span> 
+
         <i class="fa-solid fa-passport fa-lg"></i> 
-        2. PASSPORTS 
+        2. PASSPORTS       
     </button>
     <div class="selection-section-content">
       
@@ -69,9 +72,9 @@
       </div>
 
       <div class="selection-section-nav">
-        <button type="button" class="selection-back">Back</button>
+        <button type="button" id="passport-back" class="selection-back">Back</button>
                 
-        <button type="button" class="selection-next">Next</button>
+        <button type="button" id="passport-next" class="selection-next">Next</button>
       </div>
 
     </div>
@@ -81,8 +84,8 @@
 
 
   <div class="selection-section">
-    <button type="button" class="selection-section-btn">
-        <span class="selection-arrow">&#9662;</span> 
+    <button type="button" id="visa-section-btn" class="selection-section-btn">
+        <span id="visa-arrow" class="selection-arrow">&#9662;</span> 
         <i class="fa-solid fa-id-card fa-lg"></i>
         3. VISAS
     </button>
@@ -108,9 +111,9 @@
       </div>
 
       <div class="selection-section-nav">
-        <button type="button" class="selection-back">Back</button>
+        <button type="button" id="visa-back" class="selection-back">Back</button>
                 
-        <button type="button" class="selection-next">Next</button>
+        <button type="button" id="visa-next" class="selection-next">Next</button>
       </div>
       
     </div>
@@ -119,23 +122,26 @@
 
   
   <div class="selection-section">
-    <button type="button" class="selection-section-btn">
-        <span class="selection-arrow">&#9662;</span> 
+    <button type="button" id="activity-section-btn" class="selection-section-btn">
+        <span id="activity-arrow" class="selection-arrow">&#9662;</span>        
+
         <i class="fa-solid fa-icons fa-xl"></i>
         4. PREFERRED ACTIVITIES
     </button>
     <div class="selection-section-content" id="activities-content">
   
       {% for category in categories %}
+
+      {% set category_firstword = category.category_name.split(' ')[0] | lower %}
+
       <div class="selection-section">
-        <button type="button" class="selection-subsection-btn">
-            <span class="selection-subarrow">&#9662;</span> 
+        <button type="button" id="{{ category_firstword }}-subsection-btn" class="selection-subsection-btn">
+            <span id="{{ category_firstword }}-subarrow" class="selection-subarrow">&#9662;</span>    
+
             <i class="fa-solid fa-heart fa-lg"></i>
             {{ category.category_name | upper }} 
         </button>
-        <div class="selection-subsection-content">
-
-          {% set category_firstword = category.category_name.split(' ')[0] | lower %}
+        <div class="selection-subsection-content">          
 
           <div id="{{ category_firstword }}-input" class="pref-input">
             <div id="{{ category_firstword }}-text" class="pref-text"> Select Your Preferred Activity Tags & Priorities Below</div>
@@ -169,11 +175,11 @@
           </div>
 
           <div class="selection-section-nav">
-            <button type="button" class="selection-back">Back</button>
+            <button type="button" id="{{ category_firstword }}-back" class="selection-back">Back</button>
                       
-            <button type="button" class="selection-next">Next</button>
+            <button type="button" id="{{ category_firstword }}-next" class="selection-next">Next</button>
           </div>
-          
+                    
         </div>
       </div>
       {% endfor %}
@@ -188,7 +194,7 @@
  
   <div id="save-input" class="pref-input">
     <div id="save-input-inner" class="pref-inner">
-      <button type = "submit" class="save">Save Changes</button>    
+      <button type="button" onclick="submitForm()" class="save">Save Changes</button>    
     </div>   
   </div>
   
@@ -200,8 +206,8 @@
 {% block js %}   
   <script> 
     // Stores user's selected countries in these categories
-    const passports_submit = []
-    const visas_submit = []
+    const passports_submit = [];
+    const visas_submit = [];
 
     // Stores user's selected categories and activities with priorities
     const category_submit = [];
@@ -227,8 +233,7 @@
         );
 
         // Log the updated list to console for debugging
-        console.log("Add passports_submit: ");
-        console.log(passports_submit);
+        console.log("Add passports_submit: ", passports_submit);
 
       } 
       // If the category is 'visa' and the selected country is not already in visas_submit
@@ -240,8 +245,7 @@
         );
 
         // Log the updated list to console for debugging
-        console.log("Add visas_submit: ");
-        console.log(visas_submit);
+        console.log("Add visas_submit: ", visas_submit);
       }
 
     }
@@ -322,8 +326,7 @@
 
       }
 
-      console.log("Add category_submit: ");
-      console.log(category_submit);
+      console.log("Add category_submit: ", category_submit);
     }
 
 
@@ -446,14 +449,16 @@
     // Dynamically push additional categories into dropdown array
     {% for category in categories %}
 
-      dropdown_elements.push({
-        elementName: "{{ category.category_name | escape }}",
-        dropdown: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-tagDropdown"),
-        selectedTagsContainer: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-selectedTags"),
-        priorityName: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-priority-name"),
-        sliderDiv: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-slider-control"),
-        sliderElement: slider_elements.find(element => element.elementName === "{{ category.category_name | escape }}")
-      });
+      dropdown_elements.push(
+        {
+          elementName: "{{ category.category_name | escape }}",
+          dropdown: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-tagDropdown"),
+          selectedTagsContainer: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-selectedTags"),
+          priorityName: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-priority-name"),
+          sliderDiv: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-slider-control"),
+          sliderElement: slider_elements.find(element => element.elementName === "{{ category.category_name | escape }}")
+        }
+      );
 
     {% endfor %}
 
@@ -599,17 +604,16 @@
                 // Disable the slider
                 slider_div.style.display = "none";
 
-                console.log(activities_list);
+                console.log("activities_list: ", activities_list);
 
                 // If no more activities left in the category, remove the entire category
                 if (activities_list.length === 0) {
                   
                   category_submit.splice(category_submit.indexOf(target_category), 1); 
 
+                
                 }
-
-                console.log("Remove category_submit: ");
-                console.log(category_submit);
+                console.log("Remove category_submit: ", category_submit);
 
               } // end if (activity.activityName === selected_tag_name)
 
@@ -637,8 +641,7 @@
             passports_submit.splice(passports_submit.indexOf(country_name), 1);
 
             // Log the updated list to the console
-            console.log("Remove passports_submit: ");
-            console.log(passports_submit);
+            console.log("Remove passports_submit: ", passports_submit);
 
           } 
           // Check if the tag belongs to the 'visa' category and is already in the visas_submit list
@@ -648,8 +651,7 @@
             visas_submit.splice(visas_submit.indexOf(country_name), 1);
 
             // Log the updated list to the console
-            console.log("Remove visas_submit: ");
-            console.log(visas_submit);
+            console.log("Remove visas_submit: ", visas_submit);
           }
 
 
@@ -699,17 +701,112 @@
     });
 
 
+
     /* 
         <---------------------------------------------------->
         <--------------- DROPDOWN NAVIGATION ---------------->
         <---------------------------------------------------->
+
         Collapsible UI sections for organizing categories or groups
     */
 
-    const dropdownButtons = document.querySelectorAll('.selection-section-btn, .selection-subsection-btn');
 
-    dropdownButtons.forEach(button => {
-      button.addEventListener('click', function() {
+    //function to take the currently clicked button and find the dropdown before and after
+    function navigate_to_dropdown(current_element, nav_to_element) { 
+
+      const this_dropdown_content = current_element.dropdownButton.nextElementSibling;
+      const nav_to_dropdown_content = nav_to_element.dropdownButton.nextElementSibling;
+
+      current_element.dropdownButton.classList.remove('active');
+      this_dropdown_content.style.display = "none";
+      current_element.dropdownArrow.innerHTML = "&#9662;"; // down
+
+      nav_to_element.dropdownButton.classList.add('active');
+      nav_to_dropdown_content.style.display = "block";
+      nav_to_element.dropdownArrow.innerHTML = "&#9652;"; // up
+
+    }
+
+
+    // Initialize dropdowns for static and dynamic categories
+    const navigation_elements = [
+      {
+        elementName: "Budget",
+        dropdownButton: document.getElementById('budget-section-btn'),
+        dropdownArrow: document.getElementById('budget-arrow'),
+        backButton: document.getElementById('budget-back'),
+        nextButton: document.getElementById('budget-next')
+      },
+      {
+        elementName: "Passport",
+        dropdownButton: document.getElementById('passport-section-btn'),
+        dropdownArrow: document.getElementById('passport-arrow'),
+        backButton: document.getElementById('passport-back'),
+        nextButton: document.getElementById('passport-next')
+      },
+      {
+        elementName: "Visa",
+        dropdownButton: document.getElementById('visa-section-btn'),
+        dropdownArrow: document.getElementById('visa-arrow'),
+        backButton: document.getElementById('visa-back'),
+        nextButton: document.getElementById('visa-next')
+      },
+      {
+        elementName: "Activity",
+        dropdownButton: document.getElementById('activity-section-btn'),
+        dropdownArrow: document.getElementById('activity-arrow'),
+      }    
+    ];
+
+    // Dynamically push additional categories into dropdown array
+    {% for category in categories %}
+
+      navigation_elements.push(
+        {          
+          elementName: "{{ category.category_name | escape }}",
+          dropdownButton: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-subsection-btn'),
+          dropdownArrow: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-subarrow'),
+          backButton: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-back'),
+          nextButton: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-next')
+        }
+      );
+
+    {% endfor %}
+    
+    //console.log(navigation_elements);
+
+
+    /*
+      <------------------------------------------------------>
+      <------------------- BACK/NEXT BUTTONS ---------------->
+      <------------------------------------------------------>
+      
+      Navigation logic between sections using "Back" and "Next" 
+      buttons.
+    */
+
+    // On click back: trigger click on previous dropdown button
+    // On click next: trigger click on next dropdown button
+
+    navigation_elements.forEach(function (element, index, array) {
+
+      const previous = index > 0 ? array[index - 1] : undefined;
+      const next = index < array.length - 1 ? array[index + 1] : undefined;
+
+      //console.log("Previous:", previous);
+      //console.log("Current:", element);
+      //console.log("Next:", next);
+
+      if (previous === undefined) {
+        element.backButton.style.display = "none";  // Disables the button
+      } 
+      else if (next === undefined) {
+        element.nextButton.style.display = "none";  // Disables the button
+      } 
+
+
+      // Allows any dropdown clicked on to either expand or collapse
+      element.dropdownButton.addEventListener('click', function() {
         this.classList.toggle('active');
 
         const dropdownContent = this.nextElementSibling;
@@ -717,26 +814,101 @@
 
         // Toggle the arrow and dropdown visibility
         if (dropdownContent.style.display === "block") {
+
           dropdownContent.style.display = "none";
           arrow.innerHTML = "&#9662;"; // down
         } else {
+
           dropdownContent.style.display = "block";
           arrow.innerHTML = "&#9652;"; // up
         }
+
       });
+      
+
+      if (element.backButton !== undefined){
+
+        element.backButton.addEventListener("click", function() {
+
+          //console.log("back");
+
+          if (previous !== undefined) {
+            navigate_to_dropdown(element, previous);
+          }
+
+        });
+      }
+      
+      if (element.nextButton !== undefined){
+
+        element.nextButton.addEventListener("click", function() {
+
+          //console.log("next");
+
+          if (next !== undefined) {
+            navigate_to_dropdown(element, next);
+          }
+
+        });
+
+      } 
+      
     });
 
 
+
     /*
-      <------------------------------------------------------>
-      <------------------- BACK/NEXT BUTTONS ---------------->
-      <------------------------------------------------------>
-      Not yet implemented: navigation logic between sections
-      using "Back" and "Next" buttons.
+      <---------------------------------------------->
+      <----------------- SUBMIT FORM ---------------->
+      <---------------------------------------------->
+
+      logic to collect data from the form and list 
+      and submit it as a POST request.      
     */
 
-    // On click back: trigger click on previous dropdown button
-    // On click next: trigger click on next dropdown button
+    function submitForm() {
+      // Get the form element by its ID
+      const form = document.getElementById("selection-form");
+
+      // Create a FormData object from the form
+      const formData = new FormData(form);
+
+      // Initialize an empty object to hold the cleaned data
+      const data = {};
+
+      // Iterate over each form field and extract necessary values
+      formData.forEach((value, key) => {
+        // Only include the budget_slider field, rename it to "Budget"
+        if (key === "budget_slider") {
+          data["Budget"] = value;
+        }
+      });
+
+      // Add additional values from external variables to the data object
+      data["Passports"] = passports_submit;
+      data["Visas"] = visas_submit;
+      data["Activities"] = category_submit;
+
+      // Log the final data object for debugging
+      console.log("Submitted: ", data);
+
+      // Send the data to the Flask endpoint via a POST request
+      fetch("/selection-test", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"  // Tell the server we’re sending JSON
+        },
+        body: JSON.stringify(data)  // Convert the data object to a JSON string
+      })
+      .then(response => {
+        // Check if the response was successful
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.json();  // Parse the response as JSON
+      })
+      .then(data => console.log('Response:', data))  // Log the server's response
+      .catch(err => console.error('Error:', err));  // Handle any errors
+    }
+
 
 
 

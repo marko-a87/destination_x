@@ -14,9 +14,9 @@ from app.models.hotel import Hotel
 from app.models.activity import Activity
 
 
-@app.route('/selection-test')
+@app.route('/selection-test', methods=['POST','GET'])
 def selection_test():
-    """Render website's preference selection page."""    
+    """Render website's preference selection page."""     
     
     categories = []
     countries = []
@@ -31,12 +31,12 @@ def selection_test():
                 
                 try: 
                     activities_result = db.session.execute(db.select(Activity).filter_by(category=category.name)).scalars().all()
-                     
+                    
                     if activities_result:
                         activities = activities_result
                         
                 except Exception as e:
-                    make_response(jsonify({"error": str(e)}), 500)
+                    print("error: ", str(e))
                 
                 #print({"category_name": category.name, "category_id": category.id, "category_activities": activities})
                 
@@ -47,10 +47,68 @@ def selection_test():
             countries = countries_result       
 
     except Exception as e:
-        make_response(jsonify({"error": str(e)}), 500)
+        print("error: ", str(e))
+        
     
-    finally:
-        return render_template('selection_pg/selection_base.html', categories=categories, countries=countries)
+    if request.method == 'POST':
+        
+        data = request.get_json()  # receives the JSON data sent by fetch
+        #print("Received data:", data)
+        
+        print("budget:", data["Budget"])
+        print("passports:", data["Passports"])
+        print("visas:", data["Visas"])
+        print("activities:", data["Activities"])
+        
+        #data format
+        """ 
+        data = [
+            Budget: value,
+            Passports: [country 1, ... country n],
+            Visas: [country 1, ... country n],
+            Activities: [
+                {
+                    categoryName: category 1 name,
+                    categoryActivities: [
+                        {
+                            activityName: activity 1 name,
+                            activityPriority: activity 1 priority
+                        }
+                        ...
+                        {
+                            activityName: activity n name,
+                            activityPriority: activity n priority
+                        }
+                    ]
+                } 
+                ...                
+                {
+                    categoryName: category n name,
+                    categoryActivities: [
+                        {
+                            activityName: activity 1 name,
+                            activityPriority: activity 1 priority
+                        }
+                        ...
+                        {
+                            activityName: activity n name,
+                            activityPriority: activity n priority
+                        }
+                    ]
+                }
+            ]
+        ] 
+        """
+        
+        # Logic here to add it to the database...   
+        
+        
+        return jsonify({"message": "POST received", "status": "success"})
+        
+           
+        
+
+    return render_template('selection_pg/selection_base.html', categories=categories, countries=countries)
 
 
 @app.route('/recommendations-test')
