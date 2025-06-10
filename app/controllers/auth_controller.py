@@ -61,16 +61,17 @@ def signup():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('Username')
+        user_email = request.form.get('Email')
         password = request.form.get('Password')
 
-        if username == None:
+        if user_email == None:
             # return render_template("/login.html")
-            return jsonify({"Status": 400, "Message": "Enter the username"})
+            return jsonify({"Status": 400, "Message": "Enter the email"})
         if password == None:
             return jsonify({"Status": 400, "Message": "Enter the password"})
         
-        user = User.query.filter_by(name=username).first()
+        user = User.query.filter_by(email=user_email).first()
+        print(user)
         bcrypt = Bcrypt()
         check_pass = bcrypt.check_password_hash(user.password_hash, password)
         if user and check_pass:
