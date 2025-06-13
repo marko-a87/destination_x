@@ -170,12 +170,26 @@
   margin-right: 10px;
 }
 
-.selection-error-div {
-  outline: 2px solid rgb(207, 63, 63);
-  color: rgb(207, 63, 63);
+.selection-feedback-div {
   border-radius: 9px;
   padding: 7px;
-  margin-top: 25px;
+  margin: 25px 0 15px 0;
+  width: 100%;
+}
+
+.error-message{
+  outline: 2px solid rgb(207, 63, 63);
+  color: rgb(207, 63, 63);
+}
+
+.success-message{
+  outline: 2px solid rgb(57, 188, 68);
+  color: rgb(57, 188, 68);
+}
+
+.neutral-message{
+  outline: 2px solid rgb(38, 38, 38);
+  color: rgb(38, 38, 38);
 }
 
 .error-icon {

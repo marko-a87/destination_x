@@ -1,12 +1,19 @@
 <form id="selection-form">
 <div class="selection-input">
 
-  <div class="divider"> </div>
+  <div id="form-feedback-div" class="selection-feedback-div success-message" > 
+    <i class="fa-solid fa-circle-check fa-lg"></i>
+    Success: User Preferences Saved!
+  </div>
 
+  <div class="divider"> </div>
 
   <div class="selection-section">
     <button type="button" id="budget-section-btn" class="selection-section-btn">
-        <span id="budget-arrow" class="selection-arrow">&#9662;</span> 
+        <span id="budget-arrow" class="selection-arrow">&#9662;</span>         
+
+        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>
+
         <i class="fa-solid fa-circle-dollar-to-slot fa-lg"></i>
         1. BUDGET 
     </button>
@@ -37,6 +44,11 @@
         <button type="button" id="budget-next" class="selection-next">Next</button>
       </div>
       
+      <div id="budget-feedback-div" class="selection-feedback-div neutral-message"> 
+        <i class="fa-solid fa-circle-exclamation fa-lg"></i>
+        Note: Please Adjust The Element.
+      </div>
+      
     </div>
   </div>
 
@@ -44,7 +56,9 @@
 
   <div class="selection-section">
     <button type="button" id="passport-section-btn" class="selection-section-btn">
-        <span id="passport-arrow" class="selection-arrow">&#9662;</span> 
+        <span id="passport-arrow" class="selection-arrow">&#9662;</span>         
+
+        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>
 
         <i class="fa-solid fa-passport fa-lg"></i> 
         2. PASSPORTS       
@@ -77,6 +91,11 @@
         <button type="button" id="passport-next" class="selection-next">Next</button>
       </div>
 
+      <div id="passport-feedback-div" class="selection-feedback-div" style="display: none;"> 
+        <i class="fa-solid fa-circle-exclamation fa-lg"></i>
+        Error:
+      </div>
+
     </div>
   </div>
 
@@ -86,6 +105,9 @@
   <div class="selection-section">
     <button type="button" id="visa-section-btn" class="selection-section-btn">
         <span id="visa-arrow" class="selection-arrow">&#9662;</span> 
+
+        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>
+
         <i class="fa-solid fa-id-card fa-lg"></i>
         3. VISAS
     </button>
@@ -114,8 +136,13 @@
         <button type="button" id="visa-back" class="selection-back">Back</button>
                 
         <button type="button" id="visa-next" class="selection-next">Next</button>
-      </div>
-      
+      </div>     
+
+      <div id="visa-feedback-div" class="selection-feedback-div" style="display: none;"> 
+        <i class="fa-solid fa-circle-exclamation fa-lg"></i>
+        Error:
+      </div>      
+
     </div>
   </div>
 
@@ -123,7 +150,9 @@
   
   <div class="selection-section">
     <button type="button" id="activity-section-btn" class="selection-section-btn">
-        <span id="activity-arrow" class="selection-arrow">&#9662;</span>        
+        <span id="activity-arrow" class="selection-arrow">&#9662;</span> 
+
+        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>       
 
         <i class="fa-solid fa-icons fa-xl"></i>
         4. PREFERRED ACTIVITIES
@@ -137,6 +166,8 @@
       <div class="selection-section">
         <button type="button" id="{{ category_firstword }}-subsection-btn" class="selection-subsection-btn">
             <span id="{{ category_firstword }}-subarrow" class="selection-subarrow">&#9662;</span>    
+
+            <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>
 
             <i class="fa-solid fa-heart fa-lg"></i>
             {{ category.category_name | upper }} 
@@ -179,6 +210,11 @@
                       
             <button type="button" id="{{ category_firstword }}-next" class="selection-next">Next</button>
           </div>
+          
+          <div id="{{ category_firstword }}-feedback-div" class="selection-feedback-div" style="display: none;"> 
+            <i class="fa-solid fa-circle-exclamation fa-lg"></i>
+            Error: Priority missing for tag - "tagname"
+          </div>
                     
         </div>
       </div>
@@ -213,7 +249,6 @@
     const category_submit = [];
     // Stores the last clicked tag
     let clicked_tag = null;
-
 
     // Function to update passports_submit/visas_submit with selected country
     function update_country_submit(country_dropdown) {
@@ -254,10 +289,10 @@
 
 
     // Utility function to find a category from the category_submit array based on the element name
-    function find_category(slider_element) {
+    function find_category(element) {
 
       let category_exists_check = category_submit.find(
-        category => Object.values(category).find(category_value => category_value === slider_element.elementName) !== undefined
+        category => Object.values(category).find(category_value => category_value === element.elementName) !== undefined
       );
 
       return category_exists_check;
@@ -425,7 +460,6 @@
         <----------------- DROPDOWN ELEMENTS --------------->
         <--------------------------------------------------->        
     */
-
 
     /*
       Manages dropdowns and tag selections for categories 
@@ -671,8 +705,9 @@
       if (element.priorityName != null) {
         // Category-based dropdowns
 
-        element.dropdown.addEventListener('change', () => {
+        element.dropdown.addEventListener('change', (e) => {   
           populate_tags(element.dropdown, element.selectedTagsContainer, element.priorityName, element.sliderDiv, element.sliderElement);
+          find_errors();
         });
 
         // On "Adjust" button click, update the data structure
@@ -680,7 +715,7 @@
           update_activity_submit(clicked_tag, element.sliderElement);
         });
 
-        element.selectedTagsContainer.addEventListener('click', (e) => {
+        element.selectedTagsContainer.addEventListener('click', (e) => {          
           remove_tags(e, element.sliderDiv, element.sliderElement);
         });
 
@@ -694,7 +729,6 @@
           remove_tags(e, null, null);
         });
 
-        // When a country is selected from the dropdwon, populate the list
       }
 
       
@@ -754,7 +788,7 @@
       {
         elementName: "Activity",
         dropdownButton: document.getElementById('activity-section-btn'),
-        dropdownArrow: document.getElementById('activity-arrow'),
+        dropdownArrow: document.getElementById('activity-arrow')
       }    
     ];
 
@@ -767,7 +801,8 @@
           dropdownButton: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-subsection-btn'),
           dropdownArrow: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-subarrow'),
           backButton: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-back'),
-          nextButton: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-next')
+          nextButton: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-next'),
+          errorMessages: []
         }
       );
 
@@ -795,7 +830,9 @@
 
       //console.log("Previous:", previous);
       //console.log("Current:", element);
-      //console.log("Next:", next);
+      //console.log("Next:", next);     
+
+      //console.log(this.nextElementSibling);
 
       if (previous === undefined) {
         element.backButton.style.display = "none";  // Disables the button
@@ -807,6 +844,7 @@
 
       // Allows any dropdown clicked on to either expand or collapse
       element.dropdownButton.addEventListener('click', function() {
+
         this.classList.toggle('active');
 
         const dropdownContent = this.nextElementSibling;
@@ -824,7 +862,7 @@
         }
 
       });
-      
+
 
       if (element.backButton !== undefined){
 
@@ -862,13 +900,16 @@
       <----------------- SUBMIT FORM ---------------->
       <---------------------------------------------->
 
-      logic to collect data from the form and list 
+      logic to collect data from the form and lists 
       and submit it as a POST request.      
     */
 
     function submitForm() {
+
       // Get the form element by its ID
       const form = document.getElementById("selection-form");
+
+      // if find_errors() returns false, run the rest of this function
 
       // Create a FormData object from the form
       const formData = new FormData(form);
@@ -911,8 +952,136 @@
 
 
 
+    /*
+      <------------------------------------------------->
+      <----------------- ERROR CHECKING ---------------->
+      <------------------------------------------------->
+
+      Validates the form and checks for errors and displays
+      them if found.    
+    */
+
+    // Initialize dropdowns for static and dynamic categories
+    const feedback_elements = [
+      {
+        elementName: "Form",
+        feedbackDiv: document.getElementById('form-feedback-div')
+      },
+      {
+        elementName: "Budget",
+        feedbackDiv: document.getElementById('budget-feedback-div')
+      },
+      {
+        elementName: "Passport",
+        feedbackDiv: document.getElementById('passport-feedback-div')
+      },
+      {
+        elementName: "Visa",
+        feedbackDiv: document.getElementById('visa-feedback-div')
+      }
+    ];
+
+    // Dynamically push additional categories into feedback array
+    {% for category in categories %}
+
+      feedback_elements.push(
+        {          
+          elementName: "{{ category.category_name | escape }}",
+          feedbackDiv: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-feedback-div')
+        }
+      );
+
+    {% endfor %}
+    
+    //console.log(feedback_elements);
+    
+
+    function display_message(element, message, message_type) {
+      //chnage ui elements based on type of message
+      //types: error, success, neutral
+
+      //add success-message, error-message or neutral-message to the classlist
+      //change the icon present in the div to the correct one
+
+
+    }
+
+    function find_errors() {
+
+      const errors_exist = false;
+      /*
+        have a call in submitForm() and navigate_to_dropdown() to scan for possible 
+        issues in the div then displays the error messges at the bottom and the error
+        icon at the top of the dropdown categories involved
+
+        also run this on change in the selected tag container
+      */
+
+      // return true if any errors are found, false otherwise
+
+
+      // Search all dropdown element in categories for errors
+      dropdown_elements.forEach(function(element) {
+        
+        // Check for category-based dropdowns
+        if (element.priorityName != null) {
+
+          /*
+          if (Array.from(element.tags_container.children).some(child => child !== tag && child.classList.contains("active-tag"))) {
+              return;
+          }
+          */
+
+          //console.log(element);
+
+          Array.from(element.selectedTagsContainer.children).forEach(function(tag) {
+        
+            /*
+              Check tags in tag container for the ones that are missing from category
+              Used to indicate whether priority has been chosen since only those you've 
+              clicked save on have their priorities set. So if in container but not in
+              category_submit, priority missing.
+
+              update ui elements to display message, update dropdown element to have 
+              error message
+
+              also run this so as soon as a tag exists in the dropdown, inform user to
+              click on it to set its priority. disappears when click on a tag
+            */
+
+            console.log(element.elementName);
+            console.log("tag", tag);
+
+            //use find category and find activty here
+            console.log("find_category", find_category(element));
+
+            if (find_category(element) !== undefined) {
+
+              errors_exist = true;
+              //make error message/nuetrsl
+
+            }
+
+          });
+
+
+          //also have success message for save when set priority
+
+          
+        }
+
+        
+      });   
+
+      
+      return errors_exist;
+
+    } //end of find_errors()
+
+      
+
 
 
   </script>
 
-{% endblock%}
+{% endblock %}
