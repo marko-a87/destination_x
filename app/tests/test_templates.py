@@ -20,6 +20,7 @@ def selection_test():
     
     categories = []
     countries = []
+    activities = []
     
     try:
         categories_result = db.session.execute(db.select(Category)).scalars().all()
@@ -27,20 +28,45 @@ def selection_test():
         
         if categories_result: 
             for category in categories_result:
-                activities = []
                 
                 try: 
                     activities_result = db.session.execute(db.select(Activity).filter_by(category=category.name)).scalars().all()
                     
                     if activities_result:
-                        activities = activities_result
+                        for activity in activities_result:
+                
+                            #activities = activities_result                    
+                
+                            """print({
+                                    "activity_name": activity.name, 
+                                    "activity_id": activity.id, 
+                                    "activity_category": activity.category,
+                                    "activity_cityid": activity.city_id,
+                                    "activity_latitude": activity.latitude,
+                                    "activity_longitude": activity.longitude,
+                                    "activity_price": activity.price
+                                })"""
+                            
+                            activities.append({
+                                    "activity_name": activity.name, 
+                                    "activity_id": activity.id, 
+                                    "activity_category": activity.category,
+                                    "activity_cityid": activity.city_id,
+                                    "activity_latitude": activity.latitude,
+                                    "activity_longitude": activity.longitude,
+                                    "activity_price": activity.price
+                                })                            
                         
                 except Exception as e:
                     print("error: ", str(e))
                 
                 #print({"category_name": category.name, "category_id": category.id, "category_activities": activities})
                 
-                categories.append({"category_name": category.name, "category_id": category.id, "category_activities": activities})
+                categories.append({
+                                    "category_name": category.name, 
+                                    "category_id": category.id, 
+                                    "category_activities": activities
+                                })
         
         
         if countries_result:

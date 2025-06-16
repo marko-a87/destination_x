@@ -255,6 +255,10 @@
 
     //Stores reference to selection form
     const selection_form = document.getElementById("selection-form");
+
+    //Stored converted categories passed to template as array of category objects
+    const converted_categories = {{ categories | tojson }};
+    //console.log(converted_categories);
     
     // Stores user's selected countries in these categories
     const passports_submit = [];
@@ -272,47 +276,27 @@
       submit_selection_form(selection_form, passports_submit, visas_submit, category_submit);
     }
 
-    /* 
-      <----------------------------------------------->
-      <--------------- SLIDER ELEMENTS --------------->
-      <----------------------------------------------->        
+
+    /*
+      <---------------------------------------------------------------->
+      <  This array holds all slider-related UI elements and settings  >
+      <  for budget and each dynamic category created from backend.    >
+      <---------------------------------------------------------------->
     */
+    const slider_elements = [];
 
-    /* 
-      This array holds all slider-related UI elements and settings 
-      for budget and each dynamic category created from backend.
-    */
+    // <-- SET UP SLIDER ELEMENTS USING selection_sliders.js FUNCTIONS -->
 
-    const slider_elements = [
-      {
-        // Base budget slider and controls
-        elementName: "Budget",
-        sliderElement: document.getElementById("budget-amountSlider"),
-        amountValue: document.getElementById("budget-amountValue"),
-        increaseBtn: document.getElementById("budget-increaseBtn"),
-        decreaseBtn: document.getElementById("budget-decreaseBtn"),
-        stepValue: 50 // Budget slider increases in $50 increments
-      }      
-    ];
-
-    // Dynamically generate slider elements for all categories using server-side template data
-    {% for category in categories %}
-
-      slider_elements.push(
-        {
-          elementName: "{{ category.category_name | escape }}",
-          sliderElement: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-amountSlider"),
-          amountValue: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-amountValue"),
-          increaseBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-increaseBtn"),
-          decreaseBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-decreaseBtn"),
-          adjustBtn: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-adjustBtn"),
-          stepValue: 1 // Category sliders increase in single units
-        }
-      );
-
-    {% endfor %}
-        
+    // Populate slider elements intially with static elements like Budget
+    static_slider_elements(slider_elements);
+    // Populate slider elements for all categories
+    dynamic_slider_elements(converted_categories, slider_elements);
+    // Bind all slider elements to logic
     add_slider_listeners(slider_elements);
+
+    // Display for debugging
+    console.log(slider_elements);
+        
 
 
 

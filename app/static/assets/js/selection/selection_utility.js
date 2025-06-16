@@ -38,9 +38,9 @@ function find_activity(tag_name, activities) {
 }
 
 
-// General
+// <-------------- GENERAL UTILITY FUNCTIONS -------------->
 
-function toTitleCase(string) {
+function to_title_case(string) {
   return string
     .toLowerCase()
     .split(' ')
