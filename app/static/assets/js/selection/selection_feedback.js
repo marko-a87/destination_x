@@ -66,6 +66,7 @@ function display_message(element, message, message_type, disable) {
 
     } else {       
         
+        //remove display of feedback div
         element.feedbackDiv.classList.add("hidden");   
 
     }
