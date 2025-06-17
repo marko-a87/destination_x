@@ -134,11 +134,11 @@ function update_activity_submit(event_element, slider_element, category_submit_l
     console.log("Add category_submit: ", category_submit_list);
 
     //"display_message(element, message, message_type, disable);
-    display_message(
+    /*display_message(
         feedback_elements.find(feedback_element => feedback_element.elementName === slider_element.elementName),
         "Priority of the <strong>'" + selected_tag_name + "'</strong> tag Saved!",
         "success",
         false
-    );
+    );*/
 
 }

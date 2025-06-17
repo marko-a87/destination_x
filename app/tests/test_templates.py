@@ -1,6 +1,8 @@
 from app import app, db, login_manager
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response, jsonify, session
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
+from sqlalchemy.inspection import inspect
+import json
 
 from app.models.user import User
 from app.services.reccommendation_service import RecommendationService
@@ -14,79 +16,76 @@ from app.models.hotel import Hotel
 from app.models.activity import Activity
 
 
+def object_as_dict(obj):
+    #print("object_as_dict: ", {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs})
+    return {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs}
+
+
 @app.route('/selection-test', methods=['POST','GET'])
 def selection_test():
-    """Render website's preference selection page."""     
+    """Render website's preference selection page."""  
     
-    categories = []
-    countries = []
-    activities = []
-    
-    try:
-        categories_result = db.session.execute(db.select(Category)).scalars().all()
-        countries_result = db.session.execute(db.select(Country)).scalars().all()
+    # Handle GET request to load the selection page
+    if request.method == 'GET':
         
-        if categories_result: 
-            for category in categories_result:
+        # Initialize empty lists to store countries, categories, and activities
+        categories = []
+        countries = []
+        activities = []
+        
+        try:
+            # Fetch all countries and categories from the database
+            countries_result = db.session.execute(db.select(Country)).scalars().all()
+            categories_result = db.session.execute(db.select(Category)).scalars().all()
+            
+            # Convert country objects to dictionaries if query returned results
+            if countries_result:
+                countries = [object_as_dict(country) for country in countries_result]   
+            
+            # Convert category objects to dictionaries if query returned results
+            if categories_result:  
+                categories = [object_as_dict(category) for category in categories_result]
                 
-                try: 
-                    activities_result = db.session.execute(db.select(Activity).filter_by(category=category.name)).scalars().all()
-                    
-                    if activities_result:
-                        for activity in activities_result:
-                
-                            #activities = activities_result                    
-                
-                            """print({
-                                    "activity_name": activity.name, 
-                                    "activity_id": activity.id, 
-                                    "activity_category": activity.category,
-                                    "activity_cityid": activity.city_id,
-                                    "activity_latitude": activity.latitude,
-                                    "activity_longitude": activity.longitude,
-                                    "activity_price": activity.price
-                                })"""
-                            
-                            activities.append({
-                                    "activity_name": activity.name, 
-                                    "activity_id": activity.id, 
-                                    "activity_category": activity.category,
-                                    "activity_cityid": activity.city_id,
-                                    "activity_latitude": activity.latitude,
-                                    "activity_longitude": activity.longitude,
-                                    "activity_price": activity.price
-                                })                            
+                # Loop through each category to attach its activities
+                for category in categories:
+                    try: 
+                        # Query activities where category name matches
+                        activities_result = db.session.execute(
+                            db.select(Activity).filter_by(category=category["name"])
+                        ).scalars().all()
                         
-                except Exception as e:
-                    print("error: ", str(e))
-                
-                #print({"category_name": category.name, "category_id": category.id, "category_activities": activities})
-                
-                categories.append({
-                                    "category_name": category.name, 
-                                    "category_id": category.id, 
-                                    "category_activities": activities
-                                })
-        
-        
-        if countries_result:
-            countries = countries_result       
+                        # Convert activities to dictionary form if found
+                        if activities_result:
+                            activities = [object_as_dict(activity) for activity in activities_result]
+                        
+                        # Add list of activities to the corresponding category
+                        category["activities"] = activities
+                        
+                        #print(category)
+                        
+                    except Exception as e:
+                        # Print error if activity query fails
+                        print("activities_result error: ", str(e))           
 
-    except Exception as e:
-        print("error: ", str(e))
+        except Exception as e:
+            # Print error if country or category query fails
+            print("categories_result or countries_result error: ", str(e))          
         
+        # Render the selection page template with the countries and categories data
+        return render_template('selection_pg/selection_base.html', categories=categories, countries=countries)       
     
+    # Handle POST request from client-side JavaScript
     if request.method == 'POST':
+        # Parse incoming JSON data sent via fetch
+        data = request.get_json()
         
-        data = request.get_json()  # receives the JSON data sent by fetch
-        #print("Received data:", data)
+        # Log received preference data for debugging
+        #print("budget:", data["Budget"])
+        #print("passports:", data["Passports"])
+        #print("visas:", data["Visas"])
+        #print("activities:", data["Activities"])
         
-        print("budget:", data["Budget"])
-        print("passports:", data["Passports"])
-        print("visas:", data["Visas"])
-        print("activities:", data["Activities"])
-        
-        #data format
+        # Expected data format from client:
         """ 
         data = [
             Budget: value,
@@ -126,15 +125,14 @@ def selection_test():
         ] 
         """
         
-        # Logic here to add it to the database...   
+        # TODO: Logic here to process and store user preferences in the database...
+         
         
         
+        # Return a success response as JSON
         return jsonify({"message": "POST received", "status": "success"})
-        
-           
-        
 
-    return render_template('selection_pg/selection_base.html', categories=categories, countries=countries)
+        
 
 
 @app.route('/recommendations-test')

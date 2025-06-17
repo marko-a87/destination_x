@@ -155,7 +155,7 @@
   
       {% for category in categories %}
 
-      {% set category_firstword = category.category_name.split(' ')[0] | lower %}
+      {% set category_firstword = category.name.split(' ')[0] | lower %}
 
       <div class="selection-section">
         <button type="button" id="{{ category_firstword }}-subsection-btn" class="selection-subsection-btn">
@@ -164,7 +164,7 @@
             <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>
 
             <i class="fa-solid fa-heart fa-lg"></i>
-            {{ category.category_name | upper }} 
+            {{ category.name | upper }} 
         </button>
         <div class="selection-subsection-content">          
 
@@ -176,7 +176,7 @@
               <div id="{{ category_firstword }}-tag-selector" class="tag-selector">
                 <select id="{{ category_firstword }}-tagDropdown" class="tag-dropdown">
                   <option value="" disabled selected>Select a tag</option>
-                  {% for activity in category.category_activities %}
+                  {% for activity in category.activities %}
                   <option value="{{ activity.name }}">{{ activity.name }}</option>
                   {% endfor %}
                 </select>
@@ -268,8 +268,9 @@
     const category_submit = [];
 
     // Stores the last clicked tag
-    let clicked_tag = null;
+    let current_clicked_tag = null;
     let recently_added_tag = null;
+    //let current_clicked_country = null;
     
     // Handles submissions by the form
     function submitForm() {
@@ -288,64 +289,37 @@
     // <-- SET UP SLIDER ELEMENTS USING selection_sliders.js FUNCTIONS -->
 
     // Populate slider elements intially with static elements like Budget
-    static_slider_elements(slider_elements);
+    add_static_sliders(slider_elements);
     // Populate slider elements for all categories
-    dynamic_slider_elements(converted_categories, slider_elements);
+    add_dynamic_sliders(converted_categories, slider_elements);
     // Bind all slider elements to logic
     add_slider_listeners(slider_elements);
 
-    // Display for debugging
-    console.log(slider_elements);
+    // Display slider elements for debugging
+    //console.log("slider_elements: ", slider_elements);
         
 
-
-
-
-    
-
-    /* 
-        <--------------------------------------------------->
-        <----------------- DROPDOWN ELEMENTS --------------->
-        <--------------------------------------------------->        
-    */
-
     /*
-      Manages dropdowns and tag selections for categories 
-      and special elements like Visa and Passport.
+      <------------------------------------------------------->
+      <  Manages dropdowns and tag selections for categories  > 
+      <  and special elements like Visa and Passport.         >
+      <------------------------------------------------------->
     */
+    const dropdown_elements = [];
 
-    // Initialize dropdowns for static and dynamic categories
-    const dropdown_elements = [
-      {
-        elementName: "Visa",
-        dropdownElement: document.getElementById('visa-tagDropdown'),
-        selectedTagsContainer: document.getElementById('visa-selectedTags')
-      },
-      {
-        elementName: "Passport",
-        dropdownElement: document.getElementById('passport-tagDropdown'),
-        selectedTagsContainer: document.getElementById('passport-selectedTags')
-      }      
-    ];
+    // <-- SET UP DROPDOWN ELEMENTS USING selection_dropdowns.js FUNCTIONS -->
 
-    // Dynamically push additional categories into dropdown array
-    {% for category in categories %}
+    // Populate dropdown elements intially with static elements like Budget
+    add_static_dropdowns(dropdown_elements);
+    // Populate dropdown elements for all categories
+    add_dynamic_dropdowns(converted_categories, dropdown_elements, slider_elements);
+    // Bind all dropdown elements to logic
+    add_dropdown_listeners(dropdown_elements, current_clicked_tag, recently_added_tag,  category_submit, passports_submit, visas_submit);
 
-      dropdown_elements.push(
-        {
-          elementName: "{{ category.category_name | escape }}",
-          dropdownElement: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-tagDropdown"),
-          selectedTagsContainer: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-selectedTags"),
-          priorityName: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-priority-name"),
-          sliderDiv: document.getElementById("{{ category.category_name.split(' ')[0] | lower | escape }}-slider-control"),
-          sliderListElement: slider_elements.find(element => element.elementName === "{{ category.category_name | escape }}")
-        }
-      );
+    // Display dropdown elements for debugging
+    //console.log("dropdown_elements: ", dropdown_elements);
 
-    {% endfor %}
 
-    
-    add_dropdown_listeners(dropdown_elements, clicked_tag, category_submit);
    
 
 
@@ -394,11 +368,11 @@
 
       navigation_elements.push(
         {          
-          elementName: "{{ category.category_name | escape }}",
-          dropdownButton: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-subsection-btn'),
-          dropdownArrow: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-subarrow'),
-          backButton: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-back'),
-          nextButton: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-next')
+          elementName: "{{ category.name | escape }}",
+          dropdownButton: document.getElementById('{{ category.name.split(' ')[0] | lower | escape }}-subsection-btn'),
+          dropdownArrow: document.getElementById('{{ category.name.split(' ')[0] | lower | escape }}-subarrow'),
+          backButton: document.getElementById('{{ category.name.split(' ')[0] | lower | escape }}-back'),
+          nextButton: document.getElementById('{{ category.name.split(' ')[0] | lower | escape }}-next')
         }
       );
 
@@ -532,8 +506,8 @@
 
       feedback_elements.push(
         {          
-          elementName: "{{ category.category_name | escape }}",
-          feedbackDiv: document.getElementById('{{ category.category_name.split(' ')[0] | lower | escape }}-feedback-div')
+          elementName: "{{ category.name | escape }}",
+          feedbackDiv: document.getElementById('{{ category.name.split(' ')[0] | lower | escape }}-feedback-div')
         }
       );
 
@@ -545,7 +519,7 @@
 
     function find_errors() {
 
-        let errors_exist = false;
+        let errors_exist = "None";
         /*
         have a call in submitForm() and navigate_to_dropdown() to scan for possible 
         issues in the div then displays the error messges at the bottom and the error
@@ -561,7 +535,7 @@
         dropdown_elements.forEach(function(element) {
         
         // Check for category-based dropdowns
-        if (element.priorityName != null) {
+        if (element.elementType === "Category") {
 
             /*
             if (Array.from(element.tags_container.children).some(child => child !== tag && child.classList.contains("active-tag"))) {
@@ -574,14 +548,14 @@
             Array.from(element.selectedTagsContainer.children).forEach(function(tag) {        
               
               // Find the category the tag belongs to
-              let target_category = find_category(element);
+              let target_category = find_category(element, category_submit);
 
               //use find category and find activity here
               console.log(target_category);
 
-              if (find_category(element) === undefined) {
+              if (target_category === undefined) {
 
-                errors_exist = true;
+                errors_exist = "Category Missing";
                 
               } 
               
@@ -597,7 +571,7 @@
 
                   if (activity === undefined) {
 
-                    errors_exist = true;
+                    errors_exist = "Activity Missing";
                 
                   }
                 }

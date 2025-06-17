@@ -12,17 +12,13 @@
 //  <     FUNCTION TO HANDLE POPULATING SLIDER ELEMENTS     >
 //  <------------------------------------------------------->
 
-// Extract first word from category name, convert to lowercase
-function format_category_name(category_name){
-    return category_name.split(' ')[0].toLowerCase();
-}
-
-// Populate slider_elements intially with static elements like Budget
-function static_slider_elements(slider_element_list){    
+// Populate slider elements intially with static elements like Budget
+function add_static_sliders(slider_element_list){    
     
     slider_element_list.push({
         // Base budget slider and controls
         elementName: "Budget",
+        elementType: "Non-Category",
         sliderElement: document.getElementById("budget-amountSlider"),
         amountValue: document.getElementById("budget-amountValue"),
         increaseBtn: document.getElementById("budget-increaseBtn"),
@@ -32,25 +28,26 @@ function static_slider_elements(slider_element_list){
 
 }
 
-/* Dynamically generate slider elements for all categories & populate
-slider element list */
-function dynamic_slider_elements(category_list, slider_element_list){
+// Dynamically generate slider elements for all categories & populate
+// slider element list 
+function add_dynamic_sliders(category_list, slider_element_list){
 
     category_list.forEach(category => {
 
-            // Push additional dynamic
-            slider_element_list.push({
-                elementName: category.category_name,
-                sliderElement: document.getElementById(format_category_name(category.category_name) + "-amountSlider"),
-                amountValue: document.getElementById(format_category_name(category.category_name) + "-amountValue"),
-                increaseBtn: document.getElementById(format_category_name(category.category_name) + "-increaseBtn"),
-                decreaseBtn: document.getElementById(format_category_name(category.category_name) + "-decreaseBtn"),
-                adjustBtn: document.getElementById(format_category_name(category.category_name) + "-adjustBtn"),
+        slider_element_list.push(
+            {
+                elementName: category.name,
+                elementType: "Category",
+                sliderElement: document.getElementById(format_category_name(category.name) + "-amountSlider"),
+                amountValue: document.getElementById(format_category_name(category.name) + "-amountValue"),
+                increaseBtn: document.getElementById(format_category_name(category.name) + "-increaseBtn"),
+                decreaseBtn: document.getElementById(format_category_name(category.name) + "-decreaseBtn"),
+                adjustBtn: document.getElementById(format_category_name(category.name) + "-adjustBtn"),
                 stepValue: 1 // Category sliders increase in single units
-            });
+            }
+        );
             
-        }
-    );    
+    });    
     
 }
 
@@ -59,20 +56,21 @@ function dynamic_slider_elements(category_list, slider_element_list){
 //  <    FUNCTION TO ADD SLIDER LISTENERS    >
 //  <---------------------------------------->
 
+// Bind all slider elements to logic
 function add_slider_listeners(slider_element_list){    
     
     slider_element_list.forEach(element => {
 
         element.sliderElement.addEventListener("input", () => {
-            set_pref_amt(element);
+            set_preference_amount(element);
         });
 
         element.increaseBtn.addEventListener("click", () => {
-            increase_amt(element);
+            increase_amount(element);
         });
 
         element.decreaseBtn.addEventListener("click", () => {
-            decrease_amt(element);
+            decrease_amount(element);
         });
 
     });
@@ -85,13 +83,16 @@ function add_slider_listeners(slider_element_list){
 //  <----------------------------------->
 
 // Update display value when slider is moved manually
-function set_pref_amt(slider_element) {      
+function set_preference_amount(slider_element) {      
+    
     display_val = parseInt(slider_element.sliderElement.value);
-    slider_element.amountValue.innerText = display_val;      
+    slider_element.amountValue.innerText = display_val;     
+
 }
 
 // Increase slider value using plus button
-function increase_amt(slider_element) { 
+function increase_amount(slider_element) { 
+
     let current_val = parseInt(slider_element.amountValue.innerText);
 
     if (current_val < parseInt(slider_element.sliderElement.max)) {
@@ -100,10 +101,12 @@ function increase_amt(slider_element) {
 
     slider_element.sliderElement.value = current_val;
     slider_element.amountValue.innerText = current_val;
+
 }
 
 // Decrease slider value using minus button
-function decrease_amt(slider_element) { 
+function decrease_amount(slider_element) { 
+
     let current_val = parseInt(slider_element.amountValue.innerText);
 
     if (current_val > parseInt(slider_element.sliderElement.min)) {
@@ -112,17 +115,33 @@ function decrease_amt(slider_element) {
 
     slider_element.sliderElement.value = current_val;
     slider_element.amountValue.innerText = current_val;
+
 }
-
-
-
 
 
 
 // Prevent errors when JS file tries to access DOM elements before they exist
 document.addEventListener("DOMContentLoaded", () => {   
 
-    
+    // Make all slider functions accessible globally
+
+    // add_static_sliders(slider_element_list) function
+    window.add_static_sliders = add_static_sliders;
+
+    // add_dynamic_sliders(category_list, slider_element_list) function
+    window.add_dynamic_sliders = add_dynamic_sliders;
+
+    // add_slider_listeners(slider_element_list) function
+    window.add_slider_listeners = add_slider_listeners;
+
+    // set_preference_amount(slider_element) function
+    window.set_preference_amount = set_preference_amount;
+
+    // increase_amount(slider_element) function
+    window.increase_amount = increase_amount;
+
+    // increase_amount(slider_element) function
+    window.increase_amount = increase_amount;   
 
 
 });
