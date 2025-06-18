@@ -519,6 +519,7 @@ input[type="range"]::-ms-thumb {
 
 .selection-tag {
   background-color: #ffd166;
+  color: black;
   padding: 3px 17px;
   border-radius: 20px;
   display: flex;

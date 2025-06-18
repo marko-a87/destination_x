@@ -141,8 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.increase_amount = increase_amount;
 
     // increase_amount(slider_element) function
-    window.increase_amount = increase_amount;   
-
+    window.increase_amount = increase_amount;
 
 });
 

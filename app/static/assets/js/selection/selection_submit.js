@@ -1,9 +1,13 @@
 
-/*
-    <---------------------------------------------------------->
-    <-------------- SUBMISSION HANDLING FUNCTIONS ------------->
-    <---------------------------------------------------------->
+/* 
+    <--------------------------------------------------->
+    <                                                   >
+    <           SUBMISSION HANDLING FUNCTIONS           >
+    <                                                   >
+    <--------------------------------------------------->        
+*/
 
+/*
     logic to collect data from the form and lists 
     and submit it as a POST request.      
 */
@@ -54,8 +58,12 @@ function submit_selection_form(form_element, passport_list, visa_list, category_
 
 
 
+//  <------------------------------------------->
+//  <    FUNCTIONS TO HANDLE SUBMISSION DATA    >
+//  <------------------------------------------->
+
 // Function to update passports_submit/visas_submit with selected country
-function update_country_submit(country_dropdown, country_submit_list) {
+function update_country_submit(country_dropdown) {
 
     // Extract the name of the selected country from the dropdown
     let selected_country = country_dropdown.value;
@@ -63,26 +71,39 @@ function update_country_submit(country_dropdown, country_submit_list) {
     // Extract the category type ('passport' or 'visa') from the dropdown ID
     let dropdown_category = country_dropdown.id.slice(0, country_dropdown.id.indexOf("-"));
 
-    // If the selected country is not already in submit list
-    if (submit_list.find(country => country === selected_country) === undefined) {
+    // If the category is 'passport' and the selected country is not already in passports_submit
+    if (dropdown_category === "passport" && passports_submit.find(country => country === selected_country) === undefined) {
     
         // Add the selected country to the passports_submit list
-        submit_list.push(
+        passports_submit.push(
             selected_country
         );
 
         // Log the updated list to console for debugging
-        console.log("Add " + dropdown_category + "submit_list: ", country_submit_list);
+        console.log("Add passports_submit: ", passports_submit);
+
     } 
+    // If the category is 'visa' and the selected country is not already in visas_submit
+    else if (dropdown_category === "visa" && visas_submit.find(country => country === selected_country) === undefined) {
+
+        // Add the selected country to the visas_submit list
+        visas_submit.push(
+            selected_country
+        );
+
+        // Log the updated list to console for debugging
+        console.log("Add visas_submit: ", visas_submit);
+    }
+
 
 }
 
 
 // Function to update category_submit with selected activity and its priority
-function update_activity_submit(event_element, slider_element, category_submit_list) {
+function update_activity_submit(slider_element, category_submit_list) {
 
     // Extract the name of the selected tag from its innerHTML (before the " ×")
-    let selected_tag_name = extract_tag_name(event_element.target);
+    let selected_tag_name = extract_tag_name(current_clicked_tag);
 
     // Find the category the tag belongs to
     let target_category = find_category(slider_element, category_submit_list);
@@ -116,29 +137,48 @@ function update_activity_submit(event_element, slider_element, category_submit_l
         }
     } else {
 
-    // Category not found — add new category with activity to category_submit
-    category_submit_list.push(
-        {
-            categoryName: slider_element.elementName,
-            categoryActivities: [
-                {
-                    activityName: selected_tag_name,
-                    activityPriority: slider_element.sliderElement.value
-                }
-            ]
-        }
-    );
+        // Category not found — add new category with activity to category_submit
+        category_submit_list.push(
+            {
+                categoryName: slider_element.elementName,
+                categoryActivities: [
+                    {
+                        activityName: selected_tag_name,
+                        activityPriority: slider_element.sliderElement.value
+                    }
+                ]
+            }
+        );
 
     }
 
     console.log("Add category_submit: ", category_submit_list);
 
-    //"display_message(element, message, message_type, disable);
-    /*display_message(
+    //format: disable, element, message, message_type
+    display_message( 
+        false, //don't disable display
         feedback_elements.find(feedback_element => feedback_element.elementName === slider_element.elementName),
-        "Priority of the <strong>'" + selected_tag_name + "'</strong> tag Saved!",
-        "success",
-        false
-    );*/
+        "Priority of the <strong>'" + extract_tag_name(current_clicked_tag) + "'</strong> tag saved!",
+        "success"
+    ) 
 
 }
+
+
+
+// Prevent errors when JS file tries to access DOM elements before they exist
+document.addEventListener("DOMContentLoaded", () => {   
+
+    // Make all submission functions accessible globally
+
+    // submit_selection_form(form_element, passport_list, visa_list, category_list) function
+    window.submit_selection_form = submit_selection_form;
+
+    // update_country_submit(country_dropdown) function
+    window.update_country_submit = update_country_submit;
+
+    // update_activity_submit(slider_element, category_submit_list) function
+    window. update_activity_submit =  update_activity_submit;
+
+});
+

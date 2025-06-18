@@ -63,7 +63,7 @@ function add_dynamic_dropdowns(category_list, dropdown_element_list, slider_elem
 //  <------------------------------------------>
 
 // Bind all dropdown elements to logic
-function add_dropdown_listeners(dropdown_element_list, current_clicked_tag, recently_added_tag, category_submit_list, passport_submit_list, visa_submit_list) {
+function add_dropdown_listeners(dropdown_element_list, category_submit_list, passport_submit_list, visa_submit_list) {
 
     //console.log(dropdown_element_list);
 
@@ -73,7 +73,10 @@ function add_dropdown_listeners(dropdown_element_list, current_clicked_tag, rece
         // Common between Static dropdowns like Visa/Passport & Category-based dropdowns
 
         element.dropdownElement.addEventListener('change', () => {
-            process_dropdown_selection(element, current_clicked_tag, recently_added_tag, category_submit_list);            
+            process_dropdown_selection(element, category_submit_list);    
+            
+            // Resets dropdown after 2 seconds
+            reset_dropdown_selection(element, 2000);        
         });
 
         element.selectedTagsContainer.addEventListener('click', (event_element) => {          
@@ -82,22 +85,11 @@ function add_dropdown_listeners(dropdown_element_list, current_clicked_tag, rece
 
         if (element.elementType === "Category") {   
 
-            element.selectedTagsContainer.addEventListener('change', () => {          
-
-                //Display feedback to let user know upon selecting from dropdown to click on tag and add priority                
-
-                //use find errors
-                // display message - 
-                // note: "Click the <strong>'" + extract_tag_name(recently_added_tag) + 
-                // "'</strong> tag to set priority.",
-                // false, don't disable display
-            });       
-
             // Binding logic to Adjust/"Save" button for category-based dropdowns
 
             // On Adjust/"Save" button click, update the data structure
             element.sliderListElement.adjustBtn.addEventListener("click", () => {
-                update_activity_submit(current_clicked_tag, element.sliderListElement);
+                update_activity_submit(element.sliderListElement, category_submit_list);
             });           
 
         } 
@@ -149,10 +141,19 @@ function hide_category_slider(element, hide) {
 //  <--------------------------------------------->
 
 // Create tag and add to UI when dropdown value is selected
-function process_dropdown_selection(element, current_clicked_tag, recently_added_tag, category_submit_list) {  
+function process_dropdown_selection(element, category_submit_list) {  
 
     //console.log(element);
     //console.log("populate_tags test");
+
+    // Clear feedback if present
+    console.log("proc, display clear");
+    display_message( 
+        true, //don't disable display
+        feedback_elements.find(feedback_element => feedback_element.elementName === element.elementName),
+        null,
+        null
+    ) 
 
     // Extract selected value of dropdown
     const selected_value = element.dropdownElement.value;
@@ -162,52 +163,74 @@ function process_dropdown_selection(element, current_clicked_tag, recently_added
         return;      
     }
 
-    // if any tag is missing a priority, do nothing (prevent new tag selection)
-    /*
-    //element.elementType === "Category" && (find_errors() == "Category Missing" || find_errors() == "Activity Missing") && 
-    if (Array.from(element.selectedTagsContainer.children).length !== 0) {
-        // Prevent new tags being selected when one is missing a priority
-        console.log("test2");
-
-        // display message - 
-        // error: "Please click <strong>'" + extract_tag_name(recently_added_tag) +
-        //  "'</strong> to set the tag priority.",
-        // false, don't disable display
-
-        return;
-    }
-    */
-
     // If a tag with the selected value already exists in the container, do nothing
     if (Array.from(element.selectedTagsContainer.children).some(tag => tag.dataset.value === selected_value)) {
         
-        // Prevent duplicate tags
-        console.log("duplicate tag");
+        //console.log("duplicate tag");    
 
-        // display message - 
-        // error: "The <strong>'" + extract_tag_name(recently_added_tag) + "'</strong> tag already exists.",
-        // false, don't disable display
+        // Display error message to notify user of duplicate tags
+
+        //format: disable, element, message, message_type
+        display_message( 
+            false, //don't disable display
+            feedback_elements.find(feedback_element => feedback_element.elementName === element.elementName),
+            "<strong>'" + selected_value + "'</strong> was already selected.",
+            "neutral"
+        ) 
 
         // Resets dropdown after 2 seconds to allow re-selection
         reset_dropdown_selection(element, 2000);
-
+        
+        // Prevent duplicate tags   
         return;
     } 
 
+    // if any tag is missing a priority, do nothing (prevent new tag selection)
+    if (element.elementType === "Category" && 
+        (find_errors() === "Category Missing" || find_errors() === "Activity Missing") && 
+        Array.from(element.selectedTagsContainer.children).length !== 0) {
+
+        // Also checks whether tags actually exist in the container
+
+        // Prevent new tags being selected when one is missing a priority
+        //console.log("test2");
+
+        //format: disable, element, message, message_type
+        display_message( 
+            false, //don't disable display
+            feedback_elements.find(feedback_element => feedback_element.elementName === element.elementName),
+            "Please click <strong>'" + extract_tag_name(recently_added_tag) + "'</strong> and set the tag priority.",
+            "error"
+        ) 
+
+        // Prevent addition of more tags until priority is set
+        return;
+    }
+
     // Create a new tag DOM element using the selected value if passes above checks
-    const new_tag = create_tag_element(element, selected_value, current_clicked_tag, category_submit_list);    
+    const new_tag = create_tag_element(element, selected_value, category_submit_list);    
     
     // Check if tag is for Visa or Passport (i.e., not an activity category)
     if (element.elementType === "Non-Category")  {
-
+        
         // Update country submission list for visa/passport types
         update_country_submit(element.dropdownElement);
-    } else {
+    } 
+    else {
 
-        // Track the most recently added tag for potential feedback display
+        // Track the most recently added tag for feedback display
         recently_added_tag = new_tag;
         
         console.log("process dropdwon, recently_added_tag: ", recently_added_tag);
+
+        // Let user know to click on tags to set priority
+        //format: disable, element, message, message_type
+        display_message( 
+            false, //don't disable display
+            feedback_elements.find(feedback_element => feedback_element.elementName === element.elementName),
+            "Click the <strong>'" + extract_tag_name(recently_added_tag) + "'</strong> tag to set priority.",
+            "neutral"
+        ) 
     }
 
     // Add the new tag element to the container in the UI
@@ -219,7 +242,7 @@ function process_dropdown_selection(element, current_clicked_tag, recently_added
 
 
 // Create tag element and bind logic on click
-function create_tag_element(element, tag_value, current_clicked_tag, category_submit_list) {
+function create_tag_element(element, tag_value, category_submit_list) {
 
     // Create new tag UI element
     const tag = document.createElement('div');
@@ -271,6 +294,17 @@ function create_tag_element(element, tag_value, current_clicked_tag, category_su
                     // Set/select tag as active 
                     tag.classList.add('active-tag');
 
+                    // Display message to notify user to click save to set priority
+
+                    //format: disable, element, message, message_type
+                    display_message( 
+                        false, //don't disable display
+                        feedback_elements.find(feedback_element => feedback_element.elementName === element.elementName),
+                        "Click <strong>'Save'</strong> to set the new priority of <strong>'" + 
+                        extract_tag_name(current_clicked_tag) + "'</strong>.",
+                        "neutral"
+                    ) 
+
                     // Show slider UI
                     hide_category_slider(element, false);   
 
@@ -320,10 +354,19 @@ function repopulate_category_slider(element, tag_element, category_submit_list) 
 //  <--------------------------------------------->
 
 // Removes tag and update data structure when "×" is clicked
-function remove_tags(event_element, element, category_submit_list, passport_submit_list, visa_submit_list) {    
+function remove_tags(event_element, element, category_submit_list, passport_submit_list, visa_submit_list) { 
     
     // Only act if the close (×) icon is clicked
     if (event_element.target.classList.contains('remove-tag')) {
+        
+        // Clear feedback if present
+        display_message( 
+            true, //don't disable display
+            feedback_elements.find(feedback_element => feedback_element.elementName === element.elementName),
+            null,
+            null
+        )    
+    
 
         // event_element target refers to the x span element clicked, parent is the whole tag
         let onclick_tag = event_element.target.parentElement;
@@ -333,7 +376,7 @@ function remove_tags(event_element, element, category_submit_list, passport_subm
         remove_from_submit(element, onclick_tag, category_submit_list, passport_submit_list, visa_submit_list);       
         
         // Remove tag from UI (parent is selected tags container)
-        onclick_tag.parentElement.remove(); 
+        onclick_tag.remove(); 
     }        
 }
 
@@ -351,6 +394,8 @@ function remove_from_submit(element, tag_element, category_submit_list, passport
     
         if (activity !== undefined) {    
 
+            let activities_list = find_category(element, category_submit_list).categoryActivities;
+
             // Remove the activity from the category
             activities_list.splice(activities_list.indexOf(activity), 1);  // removes 1 item at that index
 
@@ -362,7 +407,7 @@ function remove_from_submit(element, tag_element, category_submit_list, passport
             // If no more activities left in the category, remove the entire category
             if (activities_list.length === 0) {
                 
-                category_submit_list.splice(category_submit_list.indexOf(target_category), 1); 
+                category_submit_list.splice(category_submit_list.indexOf(find_category(element, category_submit_list)), 1); 
 
             }
 
@@ -370,10 +415,13 @@ function remove_from_submit(element, tag_element, category_submit_list, passport
 
         } 
 
-        // display message - 
-        // success: The <strong>'"+ extract_tag_name(event_element.target.parentElement) +
-            "'</strong> tag was successfully removed.",
-        // false, don't disable display
+        //format: disable, element, message, message_type
+        display_message( 
+            false, //don't disable display
+            feedback_elements.find(feedback_element => feedback_element.elementName === element.elementName),
+            "The <strong>'"+ extract_tag_name(current_clicked_tag.parentElement) +"'</strong> tag was successfully removed.",
+            "success"
+        ) 
 
         // Hide slider UI
         hide_category_slider(element, true);
@@ -384,10 +432,10 @@ function remove_from_submit(element, tag_element, category_submit_list, passport
     else {
 
         // Get the name of the country 
-        let country_name = extract_tag_name(event_element.target.parentElement);
+        let country_name = extract_tag_name(tag_element);
 
         // Get the container that holds all selected tags (e.g., for passport or visa)
-        let tags_container = event_element.target.parentElement.parentElement;
+        let tags_container = tag_element.parentElement;
 
         // Extract the category (either 'passport' or 'visa') from the container's ID
         let category = tags_container.id.slice(0, tags_container.id.indexOf("-"));
@@ -413,18 +461,19 @@ function remove_from_submit(element, tag_element, category_submit_list, passport
         }
 
 
-        // display message - 
-        // success: "<strong>'"+ country_name + "'</strong> was successfully removed from " +
-        //   to_title_case(category) + "s.",
-        // false, don't disable display
+        // Display successful feedback
+        
+        //format: disable, element, message, message_type
+        display_message( 
+            false, //don't disable display
+            feedback_elements.find(feedback_element => feedback_element.elementName === element.elementName),
+            "<strong>'"+ country_name + "'</strong> was successfully removed from " + to_title_case(category) + "s.",
+            "success"
+        ) 
 
     } // end else for (element.elementType === "Category")
 
 }
-
-
-
-
 
 
 
@@ -439,9 +488,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // add_dynamic_dropdowns(category_list, dropdown_element_list, slider_element_list) function
     window.add_dynamic_dropdowns = add_dynamic_dropdowns;
 
-    // add_dropdown_listeners(dropdown_element_list, current_clicked_tag, 
-    // recently_added_tag, category_submit_list, passport_submit_list, visa_submit_list) 
-    // function
+    // add_dropdown_listeners(dropdown_element_list, category_submit_list, passport_submit_list, 
+    // visa_submit_list) function
     window.add_dropdown_listeners = add_dropdown_listeners;
 
     // reset_dropdown_selection(element, time_ms) function
@@ -450,12 +498,10 @@ document.addEventListener("DOMContentLoaded", () => {
     //  hide_category_slider(element, hide) function
     window.hide_category_slider =  hide_category_slider;
 
-    // process_dropdown_selection(element, current_clicked_tag, recently_added_tag, 
-    // category_submit_list) function
+    // process_dropdown_selection(element, category_submit_list) function
     window.process_dropdown_selection = process_dropdown_selection;
 
-    // create_tag_element(element, tag_value, current_clicked_tag, category_submit_list)
-    // function
+    // create_tag_element(element, tag_value, category_submit_list) function
     window.create_tag_element = create_tag_element;
 
     // repopulate_category_slider(element, tag_element, category_submit_list) function

@@ -43,6 +43,7 @@ function extract_tag_name(tag) {
 
 // Find a category from the category_submit array based on the element name
 function find_category(element, category_submit_list) {
+    //console.log("category_submit_list:",category_submit_list)
 
     let category_exists_check = category_submit_list.find(
         category => Object.values(category).find(category_value => category_value === element.elementName) !== undefined

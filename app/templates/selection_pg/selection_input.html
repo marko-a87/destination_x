@@ -21,6 +21,11 @@
 
       <div id="budget-input" class="pref-input">
 
+        <div id="budget-feedback-div" class="selection-feedback-div neutral-message"> 
+          <i class="fa-solid fa-circle-exclamation fa-lg"></i>
+          Note: Please Adjust The Element.
+        </div>
+
         <div id="budget-text" class="pref-text">
           Select Your Ideal Budget Below
         </div>
@@ -36,13 +41,8 @@
             <button type="button" id="budget-increaseBtn" class="increaseBtn">+</button>
           </div>
         </div>
-      </div>
+      </div>     
       
-      <div id="budget-feedback-div" class="selection-feedback-div neutral-message"> 
-        <i class="fa-solid fa-circle-exclamation fa-lg"></i>
-        Note: Please Adjust The Element.
-      </div>
-
       <div class="selection-section-nav">    
         <button type="button" id="budget-back" class="selection-back">Back</button>
 
@@ -67,6 +67,8 @@
       
       <div id="passport-input" class="pref-input">
 
+      <div id="passport-feedback-div" class="selection-feedback-div hidden"> </div>
+
         <div id="passport-text" class="pref-text"> Select All Countries for Which You Hold a Valid Passport </div>
 
         <div id="passport-input-inner" class="pref-selects">
@@ -84,8 +86,6 @@
           
         </div>
       </div>
-
-      <div id="passport-feedback-div" class="selection-feedback-div hidden"> </div>
 
       <div class="selection-section-nav">
         <button type="button" id="passport-back" class="selection-back">Back</button>
@@ -111,6 +111,9 @@
     <div class="selection-section-content">
 
       <div id="visa-input" class="pref-input">
+
+        <div id="visa-feedback-div" class="selection-feedback-div hidden"> </div> 
+
         <div id="visa-text" class="pref-text"> Select All Countries for Which You Hold a Valid Visa </div>
 
         <div id="visa-input-inner" class="pref-selects">
@@ -127,9 +130,7 @@
           </div>
 
         </div>
-      </div>
-
-      <div id="visa-feedback-div" class="selection-feedback-div hidden"> </div>    
+      </div>   
 
       <div class="selection-section-nav">
         <button type="button" id="visa-back" class="selection-back">Back</button>
@@ -169,6 +170,9 @@
         <div class="selection-subsection-content">          
 
           <div id="{{ category_firstword }}-input" class="pref-input">
+          
+            <div id="{{ category_firstword }}-feedback-div" class="selection-feedback-div hidden"> </div>
+            
             <div id="{{ category_firstword }}-text" class="pref-text"> Select Your Preferred Activity Tags & Priorities Below</div>
 
             <div id="{{ category_firstword }}-input-inner" class="pref-selects">
@@ -198,8 +202,6 @@
               </div>
             </div>
           </div>
-          
-          <div id="{{ category_firstword }}-feedback-div" class="selection-feedback-div hidden"> </div>
 
           <div class="selection-section-nav">
             <button type="button" id="{{ category_firstword }}-back" class="selection-back">Back</button>
@@ -249,6 +251,8 @@
   <!-- DROPDOWN JAVASCRIPT FUNCTIONS -->
   <script src="{{ url_for('static', filename='assets/js/selection/selection_dropdowns.js') }}"></script>
 
+   <!-- NAVIGATION JAVASCRIPT FUNCTIONS -->
+  <script src="{{ url_for('static', filename='assets/js/selection/selection_navigation.js') }}"></script>
 
 
   <script> 
@@ -267,10 +271,10 @@
     // Stores user's selected categories and activities with priorities
     const category_submit = [];
 
-    // Stores the last clicked tag
-    let current_clicked_tag = null;
-    let recently_added_tag = null;
-    //let current_clicked_country = null;
+    // Stores trackers for feedback logic, globally accessible across files
+    window.current_clicked_tag = null;
+    window.recently_added_tag = null;
+    //window.recently_added_country = null;
     
     // Handles submissions by the form
     function submitForm() {
@@ -314,253 +318,103 @@
     // Populate dropdown elements for all categories
     add_dynamic_dropdowns(converted_categories, dropdown_elements, slider_elements);
     // Bind all dropdown elements to logic
-    add_dropdown_listeners(dropdown_elements, current_clicked_tag, recently_added_tag,  category_submit, passports_submit, visas_submit);
+    add_dropdown_listeners(dropdown_elements, category_submit, passports_submit, visas_submit);
 
     // Display dropdown elements for debugging
     //console.log("dropdown_elements: ", dropdown_elements);
-
-
    
 
-
-
-    /* 
-        <---------------------------------------------------->
-        <--------------- DROPDOWN NAVIGATION ---------------->
-        <---------------------------------------------------->
-
-        Collapsible UI sections for organizing categories or groups
-    */
-
-
-    // Initialize dropdowns for static and dynamic categories
-    const navigation_elements = [
-      {
-        elementName: "Budget",
-        dropdownButton: document.getElementById('budget-section-btn'),
-        dropdownArrow: document.getElementById('budget-arrow'),
-        backButton: document.getElementById('budget-back'),
-        nextButton: document.getElementById('budget-next')
-      },
-      {
-        elementName: "Passport",
-        dropdownButton: document.getElementById('passport-section-btn'),
-        dropdownArrow: document.getElementById('passport-arrow'),
-        backButton: document.getElementById('passport-back'),
-        nextButton: document.getElementById('passport-next')
-      },
-      {
-        elementName: "Visa",
-        dropdownButton: document.getElementById('visa-section-btn'),
-        dropdownArrow: document.getElementById('visa-arrow'),
-        backButton: document.getElementById('visa-back'),
-        nextButton: document.getElementById('visa-next')
-      },
-      {
-        elementName: "Activity",
-        dropdownButton: document.getElementById('activity-section-btn'),
-        dropdownArrow: document.getElementById('activity-arrow')
-      }    
-    ];
-
-    // Dynamically push additional categories into dropdown array
-    {% for category in categories %}
-
-      navigation_elements.push(
-        {          
-          elementName: "{{ category.name | escape }}",
-          dropdownButton: document.getElementById('{{ category.name.split(' ')[0] | lower | escape }}-subsection-btn'),
-          dropdownArrow: document.getElementById('{{ category.name.split(' ')[0] | lower | escape }}-subarrow'),
-          backButton: document.getElementById('{{ category.name.split(' ')[0] | lower | escape }}-back'),
-          nextButton: document.getElementById('{{ category.name.split(' ')[0] | lower | escape }}-next')
-        }
-      );
-
-    {% endfor %}
-    
-    //console.log(navigation_elements);
-
-
-    
     /*
-        <------------------------------------------------------>
-        <------------------- BACK/NEXT BUTTONS ---------------->
-        <------------------------------------------------------>
-        
-        Navigation logic between sections using "Back" and "Next" 
-        buttons.
+      <-------------------------------------------------------->
+      <  Collapsible UI sections for organizing categories or  >
+      <  groups                                                >
+      <-------------------------------------------------------->
     */
+    const navigation_elements = [];
 
-    // On click back: trigger click on previous dropdown button
-    // On click next: trigger click on next dropdown button
+    // <-- SET UP NAVIGATION ELEMENTS USING selection_navigation.js FUNCTIONS -->
 
-    navigation_elements.forEach(function (element, index, array) {
+    // Populate navigation elements intially with static elements like Budget
+    add_static_nav_els(navigation_elements);
+    // Populate navigation elements for all categories
+    add_dynamic_nav_els(converted_categories, navigation_elements);
+    // Bind all navigation elements to logic
+    add_nav_logic(navigation_elements);
 
-        const previous = index > 0 ? array[index - 1] : undefined;
-        const next = index < array.length - 1 ? array[index + 1] : undefined;
+    // Display navigation elements for debugging
+    //console.log("navigation elements: ", navigation_elements);
 
-        //console.log("Previous:", previous);
-        //console.log("Current:", element);
-        //console.log("Next:", next);     
-
-        //console.log(this.nextElementSibling);
-
-        if (previous === undefined) {
-        element.backButton.style.display = "none";  // Disables the button
-        } 
-        else if (next === undefined) {
-        element.nextButton.style.display = "none";  // Disables the button
-        } 
-
-
-        // Allows any dropdown clicked on to either expand or collapse
-        element.dropdownButton.addEventListener('click', function() {
-
-          this.classList.toggle('active');
-
-          const dropdownContent = this.nextElementSibling;
-          const arrow = this.querySelector('.selection-arrow, .selection-subarrow');
-
-          // Toggle the arrow and dropdown visibility
-          if (dropdownContent.style.display === "block") {
-
-              dropdownContent.style.display = "none";
-              arrow.innerHTML = "&#9662;"; // down
-          } else {
-
-              dropdownContent.style.display = "block";
-              arrow.innerHTML = "&#9652;"; // up
-          }
-
-        });
-
-
-        if (element.backButton !== undefined){
-
-          element.backButton.addEventListener("click", function() {
-
-              //console.log("back");
-
-              if (previous !== undefined) {
-              navigate_to_dropdown(element, previous);
-              }
-
-          });
-        }
-        
-        if (element.nextButton !== undefined){
-
-          element.nextButton.addEventListener("click", function() {
-
-              //console.log("next");
-
-              if (next !== undefined) {
-              navigate_to_dropdown(element, next);
-              }
-
-          });
-
-        } 
-        
-    });
-
-
-
-
-
-
-    
 
 
     /*
-      <------------------------------------------------->
-      <----------------- ERROR CHECKING ---------------->
-      <------------------------------------------------->
-
-      Validates the form and checks for errors and displays
-      them if found.    
+      <--------------------------------------------------------->
+      <  Validates the form and checks for errors and displays  >
+      <  them if found.                                         >
+      <--------------------------------------------------------->
     */
+    const feedback_elements = [];
 
-    // Initialize dropdowns for static and dynamic categories
-    const feedback_elements = [
-      {
-        elementName: "Form",
-        feedbackDiv: document.getElementById('form-feedback-div')
-      },
-      {
-        elementName: "Budget",
-        feedbackDiv: document.getElementById('budget-feedback-div')
-      },
-      {
-        elementName: "Passport",
-        feedbackDiv: document.getElementById('passport-feedback-div')
-      },
-      {
-        elementName: "Visa",
-        feedbackDiv: document.getElementById('visa-feedback-div')
-      }
-    ];
+    // <-- SET UP FEEDBACK ELEMENTS USING selection_feedback.js FUNCTIONS -->
 
-    // Dynamically push additional categories into feedback array
-    {% for category in categories %}
+    // Populate feedback elements intially with static elements like Budget
+    add_static_feedbacks(feedback_elements);
+    // Populate feedback elements for all categories
+    add_dynamic_feedbacks(converted_categories, feedback_elements);
 
-      feedback_elements.push(
-        {          
-          elementName: "{{ category.name | escape }}",
-          feedbackDiv: document.getElementById('{{ category.name.split(' ')[0] | lower | escape }}-feedback-div')
-        }
-      );
+    // Display feedback elements for debugging
+    //console.log("feedback elements: ", feedback_elements);
 
-    {% endfor %}
-    
-    //console.log(feedback_elements);    
 
     
+
+    //  <--------------------------------------->
+    //  <    FUNCTION TO FIND ERRORS IN FORM    >
+    //  <--------------------------------------->
 
     function find_errors() {
 
-        let errors_exist = "None";
-        /*
-        have a call in submitForm() and navigate_to_dropdown() to scan for possible 
-        issues in the div then displays the error messges at the bottom and the error
-        icon at the top of the dropdown categories involved
+      let errors_exist = "None";
+      /*
+      have a call in submitForm() and navigate_to_dropdown() to scan for possible 
+      issues in the div then displays the error messges at the bottom and the error
+      icon at the top of the dropdown categories involved
 
-        also run this on change in the selected tag container
-        */
+      also run this on change in the selected tag container
+      */
 
-        // return true if any errors are found, false otherwise
+      // return true if any errors are found, false otherwise
 
 
-        // Search all dropdown element in categories for errors
-        dropdown_elements.forEach(function(element) {
-        
+      // Search all dropdown element in categories for errors
+      dropdown_elements.forEach(function(element) {
+      
         // Check for category-based dropdowns
         if (element.elementType === "Category") {
 
-            /*
-            if (Array.from(element.tags_container.children).some(child => child !== tag && child.classList.contains("active-tag"))) {
-                return;
-            }
-            */
+          /*
+          if (Array.from(element.tags_container.children).some(child => child !== tag && child.classList.contains("active-tag"))) {
+              return;
+          }
+          */
 
-            //console.log(element);
+          //console.log(element);
 
-            Array.from(element.selectedTagsContainer.children).forEach(function(tag) {        
+          Array.from(element.selectedTagsContainer.children).forEach(function(tag) {        
               
               // Find the category the tag belongs to
               let target_category = find_category(element, category_submit);
 
-              //use find category and find activity here
-              console.log(target_category);
+              // Check for the presence of a tag or its category
+              //console.log(target_category);
 
               if (target_category === undefined) {
 
                 errors_exist = "Category Missing";
-                
+              
               } 
               
               else {
-                
+              
                 if (target_category !== undefined) {
 
                   // Category exists; update or add activity to the category
@@ -572,49 +426,45 @@
                   if (activity === undefined) {
 
                     errors_exist = "Activity Missing";
-                
+              
                   }
                 }
               }
 
-            });
+          });
             
         }
 
-        
-        });   
+      
+      });   
 
-        console.log("errors_exist: ", errors_exist);
-        
-        return errors_exist;
+      console.log("errors_exist: ", errors_exist);
+      
+      return errors_exist;
 
-        /*
-            Check tags in tag container for the ones that are missing from category
-            Used to indicate whether priority has been chosen since only those you've 
-            clicked save on have their priorities set. So if in container but not in
-            category_submit, priority missing.
+      /*
+          Check tags in tag container for the ones that are missing from category
+          Used to indicate whether priority has been chosen since only those you've 
+          clicked save on have their priorities set. So if in container but not in
+          category_submit, priority missing.
 
-            update ui elements to display message, update dropdown element to have 
-            error message
+          update ui elements to display message, update dropdown element to have 
+          error message
 
-            also run this so as soon as a tag exists in the dropdown, inform user to
-            click on it to set its priority. disappears when click on a tag
-        */
+          also run this so as soon as a tag exists in the dropdown, inform user to
+          click on it to set its priority. disappears when click on a tag
+      */
 
-        
+      
 
-        //if priority mssing but havent pressed save changes, neutral m=feedback saying to select
-        //if pressed save changes, error message for the tag/s (bullet points) with missing priority
+      //if priority mssing but havent pressed save changes, neutral m=feedback saying to select
+      //if pressed save changes, error message for the tag/s (bullet points) with missing priority
 
-        //console.log(element.elementName);
-        //console.log("tag", tag);
+      //console.log(element.elementName);
+      //console.log("tag", tag);
 
 
     } //end of find_errors()
-
-    
-      
-
 
 
   </script>
