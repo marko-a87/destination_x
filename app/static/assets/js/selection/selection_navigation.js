@@ -22,7 +22,8 @@ function add_static_nav_els(navigation_element_list){
             dropdownButton: document.getElementById('budget-section-btn'),
             dropdownArrow: document.getElementById('budget-arrow'),
             backButton: document.getElementById('budget-back'),
-            nextButton: document.getElementById('budget-next')
+            nextButton: document.getElementById('budget-next'),
+            hasErrors: false
         },
         {
             elementName: "Passport",
@@ -30,7 +31,8 @@ function add_static_nav_els(navigation_element_list){
             dropdownButton: document.getElementById('passport-section-btn'),
             dropdownArrow: document.getElementById('passport-arrow'),
             backButton: document.getElementById('passport-back'),
-            nextButton: document.getElementById('passport-next')
+            nextButton: document.getElementById('passport-next'),
+            hasErrors: false
         },
         {
             elementName: "Visa",
@@ -38,13 +40,15 @@ function add_static_nav_els(navigation_element_list){
             dropdownButton: document.getElementById('visa-section-btn'),
             dropdownArrow: document.getElementById('visa-arrow'),
             backButton: document.getElementById('visa-back'),
-            nextButton: document.getElementById('visa-next')
+            nextButton: document.getElementById('visa-next'),
+            hasErrors: false
         },
         {
-            elementName: "Activity",
+            elementName: "Preferences",
             elementType: "Non-Category",
             dropdownButton: document.getElementById('activity-section-btn'),
-            dropdownArrow: document.getElementById('activity-arrow')
+            dropdownArrow: document.getElementById('activity-arrow'),
+            hasErrors: false
         }    
     );
 }
@@ -62,7 +66,8 @@ function add_dynamic_nav_els(category_list, navigation_element_list){
                 dropdownButton: document.getElementById(format_category_name(category.name) + "-subsection-btn"),
                 dropdownArrow: document.getElementById(format_category_name(category.name) + "-subarrow"),
                 backButton: document.getElementById(format_category_name(category.name) + "-back"),
-                nextButton: document.getElementById(format_category_name(category.name) + "-next")
+                nextButton: document.getElementById(format_category_name(category.name) + "-next"),
+                hasErrors: false
             }
         );
     });  
@@ -75,9 +80,115 @@ function add_dynamic_nav_els(category_list, navigation_element_list){
 //  <---------------------------------------->
 
 /*
+    Navigation dropdown section elements.
     Navigation logic between sections using "Back" and "Next" 
     buttons.
 */
+
+// Toggle the display of sections
+function toggle_nav_content(element, collapse) {
+    
+    // Get the section content DOM elements for the current element   
+    const section_content = element.dropdownButton.nextElementSibling;
+
+    //console.log(element.dropdownButton);
+
+    // Toggle active styling from current button
+    element.dropdownButton.classList.toggle('active');
+    // Toggle dropdown section content
+    section_content.classList.toggle('hidden'); 
+    
+    //console.log(section_content.classList);
+
+    // Hide section content
+    if (collapse === true) {
+
+        // Set current arrow to down symbol
+        element.dropdownArrow.innerHTML = "&#9662;"; 
+    }
+    else {
+
+        // Set current arrow to up symbol  
+        element.dropdownArrow.innerHTML = "&#9652;";       
+
+        if (element.elementName !== "Preferences"){
+            
+            // Bring attention to section by scrolling it into view
+            section_content.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+
+    }
+}
+
+// Navigates between sections
+function navigate_to_dropdown(current_element, nav_to_element, skip_element) { 
+
+    //console.log("current_element:", current_element);
+    //console.log("nav_to_element:", nav_to_element);
+
+    // If a category has unresolved errors
+    if (find_category_errors() !== "None"){
+
+        // Display error informing user to address current errors first
+
+        //format: disable, element, message, message_type
+        display_message( 
+            false, //don't disable display
+            find_element("feedback", current_element.elementName),
+            "Please ensure priorities are set for all selected tags.",
+            "error"
+        ) 
+
+        // Flag the effected categories
+        flag_nav_section();
+    }
+
+    // If current element has unresolves errors
+    else if (current_element.hasErrors){
+
+        // Display error informing user to address current errors first
+
+        //format: disable, element, message, message_type
+        display_message( 
+            false, //don't disable display
+            find_element("feedback", current_element.elementName),
+            "Please address all errors in this section.",
+            "error"
+        ) 
+
+        // Flag the effected categories
+        flag_nav_section();
+    }
+
+    else {      
+
+        // Clear feedback if present            
+        //format: disable, element, message, message_type
+        display_message( 
+            true, //disable display
+            find_element("feedback", current_element.elementName),
+            null,
+            null
+        )    
+
+        // Unflag any effected actvity sections that had errors
+        flag_nav_section();
+
+        // Collapse the currently open dropdown
+        toggle_nav_content(current_element, true);
+
+        // Allows the opening of a subcategory at the same time as main
+        if (skip_element !== undefined){   
+
+            // Expand the sub section dropdown content
+            toggle_nav_content(skip_element, false);
+        }
+
+        // Expand the target section dropdown content
+        toggle_nav_content(nav_to_element, false);
+    }    
+}
+
 // Bind all navigation elements to logic
 function add_nav_logic(navigation_element_list){    
     
@@ -90,6 +201,9 @@ function add_nav_logic(navigation_element_list){
         const previous = index > 0 ? array[index - 1] : undefined;
         const next = index < array.length - 1 ? array[index + 1] : undefined;
 
+        // Toggle dropdown section
+        let show_section = false;   
+
         // Hide the back button for the first element
         if (previous === undefined) {
             element.backButton.style.display = "none";  // Disables the button
@@ -97,29 +211,15 @@ function add_nav_logic(navigation_element_list){
         // Hide the next button for the last element
         else if (next === undefined) {
             element.nextButton.style.display = "none";  // Disables the button
-        } 
+        }          
 
         // Allows dropdown buttons to toggle visibility of their corresponding content
         element.dropdownButton.addEventListener('click', function() {
+            
+            toggle_nav_content(element, show_section);
 
-            // Toggle active class for animation/styling
-            this.classList.toggle('active');
-
-            // Get the content to toggle and the arrow indicator
-            const dropdownContent = this.nextElementSibling;
-            const arrow = this.querySelector('.selection-arrow, .selection-subarrow');
-
-            // Toggle display and change arrow direction
-            if (dropdownContent.style.display === "block") {
-
-                dropdownContent.style.display = "none";
-                arrow.innerHTML = "&#9662;"; // down arrow
-            } else {
-
-                dropdownContent.style.display = "block";
-                arrow.innerHTML = "&#9652;"; // up arrow
-            }
-
+            // Flip boolean value
+            show_section = !show_section;
         });
 
         // If back button exists, bind click event to navigate to previous dropdown
@@ -129,10 +229,17 @@ function add_nav_logic(navigation_element_list){
 
                 //console.log("back");
 
-                if (previous !== undefined) {
+                if (previous.elementName === "Preferences"){
+
+                    const before_previous = index > 0 ? array[index - 2] : undefined;
+                    //console.log("before_previous:", before_previous);
+
+                    navigate_to_dropdown(element, before_previous, previous);
+                }
+                else if (previous !== undefined) {
+
                     navigate_to_dropdown(element, previous);
                 }
-
             });
         }
         
@@ -142,49 +249,22 @@ function add_nav_logic(navigation_element_list){
             element.nextButton.addEventListener("click", function() {
 
                 //console.log("next");
+                
+                if (next.elementName === "Preferences"){
 
-                if (next !== undefined) {
+                    const after_next = index < array.length - 1 ? array[index + 2] : undefined;
+                    //console.log("after_next:", after_next);
+
+                    navigate_to_dropdown(element, after_next, next);
+                }
+                else if (next !== undefined) {      
+
                     navigate_to_dropdown(element, next);
                 }
-
             });
-
-        } 
-        
+        }         
     });
-
 }
-
-// Navigates between elements
-function navigate_to_dropdown(current_element, nav_to_element) { 
-
-    // Clear feedback message if necessary (commented out in this case)
-    // display_message(element, message, message_type, disable);
-    /*
-    display_message(
-        current_element,
-        null,
-        null,
-        true
-    );
-    */
-
-    // Get the dropdown content DOM elements for the current and navigation target elements
-    const this_dropdown_content = current_element.dropdownButton.nextElementSibling;
-    const nav_to_dropdown_content = nav_to_element.dropdownButton.nextElementSibling;
-
-    // Collapse the currently open dropdown
-    current_element.dropdownButton.classList.remove('active');          // Remove active styling from current button
-    this_dropdown_content.style.display = "none";                       // Hide current dropdown content
-    current_element.dropdownArrow.innerHTML = "&#9662;";               // Set current arrow to down symbol
-
-    // Expand the target dropdown
-    nav_to_element.dropdownButton.classList.add('active');              // Add active styling to target button
-    nav_to_dropdown_content.style.display = "block";                    // Show target dropdown content
-    nav_to_element.dropdownArrow.innerHTML = "&#9652;";                // Set target arrow to up symbol
-}
-
-
 
 
 
@@ -199,10 +279,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // add_dynamic_nav_els(category_list, navigation_element_list) function
     window.add_dynamic_nav_els = add_dynamic_nav_els;
 
-    // add_nav_logic(navigation_element_list) function
-    window.add_nav_logic = add_nav_logic;
+    // toggle_nav_content(element, collapse) function
+    window.toggle_nav_content = toggle_nav_content;
 
     // navigate_to_dropdown(current_element, nav_to_element) function
     window.navigate_to_dropdown = navigate_to_dropdown;
+
+    // add_nav_logic(navigation_element_list) function
+    window.add_nav_logic = add_nav_logic;
 
 });

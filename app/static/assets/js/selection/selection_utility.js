@@ -22,79 +22,87 @@ function to_title_case(string) {
 }
 
 
+//  <---------------------------------------------->
+//  <     FUNCTIONS TO ACCESS DECLARED ENTITIES    >
+//  <---------------------------------------------->
 
-//  <------------------------------------------------->
-//  <     CATEGORY & ACTIVITIES UTILITY FUNCTIONS     >
-//  <------------------------------------------------->
+// Get a specific submission list declared in selection_input.html script
+function get_submission_list(list_type){
 
-// Extract first word from category name, convert to lowercase
-function format_category_name(category_name){
-    return category_name.split(' ')[0].toLowerCase();
-}
-
-// Take name from tag element by extracting text before the span element starts (" <")
-// from the tag element's inner HTML
-function extract_tag_name(tag) {
-
-    //console.log(tag);
-
-    return tag.innerHTML.slice(0, tag.innerHTML.indexOf(" <"));
-}
-
-// Find a category from the category_submit array based on the element name
-function find_category(element, category_submit_list) {
-    //console.log("category_submit_list:",category_submit_list)
-
-    let category_exists_check = category_submit_list.find(
-        category => Object.values(category).find(category_value => category_value === element.elementName) !== undefined
-    );
-
-    return category_exists_check;
-}
-
-
-// Find a specific activity within a given list of activities
-function find_activity(tag_name, activities) {
-
-    let activity_exists_check = activities.find(
-        activity => Object.values(activity).find(activity_value => activity_value === tag_name) !== undefined
-    );
-
-    return activity_exists_check;
-}
-
-
-// Look for a specific activity that matches a tag
-function activity_in_category(element, tag_element, category_submit_list) {
-    
-    // Store name of tag
-    let selected_tag_name = extract_tag_name(tag_element);
-
-    // Look for category 
-    let target_category = find_category(element.sliderListElement, category_submit_list);
-
-    // If category related to the activity is found
-    if (target_category !== undefined) {            
+    switch (list_type) {
         
-        // Get all activities previously selected under category
-        let activities_list = target_category.categoryActivities;
-        
-        // Look for the activity in category
-        let activity = find_activity(selected_tag_name, activities_list);
-        
-        // If a match is found for the activity
-        if (activity !== undefined) {            
+        case "passport":
+            return passports_submit;
 
-            if (activity.activityName === selected_tag_name) {           
+        case "visa":
+            return visas_submit;
 
-                return activity;
-            }            
-        }
+        case "category":
+            return category_submit;
 
-        return activity;
-
+        default:
+            console.error("Invalid submission list type: ", element_type);
     }
+}
 
+// Search for specific country added to passport_submit_list or visa_submit_list
+function find_country(section_type, country_name){
+
+    switch (section_type) {
+        
+        case "passport":            
+            return get_submission_list("passport").find(country => country === country_name);
+
+        case "visa":
+            return get_submission_list("visa").find(country => country === country_name);
+
+        default:
+            console.error("Invalid section type: ", section_type);
+    }
+}
+
+// Get a specific element list declared in selection_input.html script
+function get_element_list(list_type){
+
+    switch (list_type) {
+        
+        case "slider":
+            return slider_elements;
+
+        case "dropdown":
+            return dropdown_elements;
+
+        case "navigation":
+            return navigation_elements;
+
+        case "feedback":
+            return feedback_elements;
+
+        default:
+            console.error("Invalid element list type: ", list_type);
+    }
+}
+
+// Search for specific element declared in selection_input.html script
+function find_element(element_type, element_name){
+
+    switch (element_type) {
+        
+        case "slider":
+            return get_element_list("slider").find(slider_element => slider_element.elementName === element_name);
+
+        case "dropdown":
+            return get_element_list("dropdown").find(dropdown_element => dropdown_element.elementName === element_name);
+
+        case "navigation":
+            return get_element_list("navigation").find(navigation_element => navigation_element.elementName === element_name);
+
+        case "feedback":
+            return get_element_list("feedback").find(feedback_element => feedback_element.elementName === element_name);
+
+        default:
+            console.error("Invalid element type: ", element_type);
+    }
 }
 
 
@@ -104,25 +112,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Make all slider functions accessible globally
 
-    // <----------- GENERAL ------------->
+    // <---------------- GENERAL ------------------>
     // to_title_case(string) function
-    window.to_title_case = to_title_case
+    window.to_title_case = to_title_case;
+
+    // get_element_list(list_type) function
+    window.get_element_list = get_element_list;
 
 
-    // <----- CATEGORY & ACTIVITIES ----->
-    // format_category_name(category_name) function
-    window.format_category_name = format_category_name;
+    // <-- FUNCTIONS TO ACCESS DECLARED ENTITIES -->
+    // get_submission_list(list_type) function
+    window.get_submission_list = get_submission_list;
 
-    // extract_tag_name(tag) function
-    window.extract_tag_name = extract_tag_name;
+    // find_country(section_type, country_name) function
+    window.find_country = find_country;
 
-    // find_category(element, category_submit_list) function
-    window.find_category = find_category;
+    // get_element_list(list_type) function
+    window.get_element_list = get_element_list;
 
-    // format_category_name(category_name) function
-    window.find_activity = find_activity;
+    // find_element(element_type, element_name) function
+    window.find_element = find_element;
 
-    // activity_in_category(element, tag_element, category_submit_list) function
-    window.activity_in_category = activity_in_category;
-    
 });

@@ -37,7 +37,6 @@ function add_static_feedbacks(feedback_element_list){
             feedbackDiv: document.getElementById('visa-feedback-div')
         }
     );
-
 }
 
 
@@ -53,14 +52,11 @@ function add_dynamic_feedbacks(category_list, feedback_element_list){
                 feedbackDiv: document.getElementById(format_category_name(category.name) + "-feedback-div")
             }
         );
-
     });   
 
-    //console.log(feedback_element_list);
-    
+    //console.log(feedback_element_list);    
 }
 
-//<-----------------------FUNCTION TO FIND FEEDBACKDIV
 
 
 //  <-------------------------------------------->
@@ -68,25 +64,26 @@ function add_dynamic_feedbacks(category_list, feedback_element_list){
 //  <-------------------------------------------->
 
 function display_message(disable, element, message, message_type) {
-    //chnage ui elements based on type of message
-    //types: error, success, neutral
-    //disable: boolean, determines whether a message is being displayed or removed
+    // display feedback based on type of message
+    // types: error, success, neutral
+    // disable: boolean, determines whether a message is being displayed or removed
 
-    //add success-message, error-message or neutral-message to the classlist
-    //change the icon present in the div to the correct one
+    let nav_dropdown = find_element("navigation", element.elementName);   
 
-    console.log("display_message() element:", element, "message:", message);
+    // Display for debugging
+    //console.log("display_message() feedback element:", element); 
+    console.log("message:", message);
     console.log("message_type:", message_type, "disabled? ", disable);
 
     if (disable === false) {    
     
-        // make feedback visible
+        // Make feedback visible
         element.feedbackDiv.classList.remove("hidden");
 
-        // remove other message classes
+        // Remove other message classes to prevent multiple simultaneously
         element.feedbackDiv.classList.forEach(className => {
             if (className.includes("-message")) {
-            element.feedbackDiv.classList.remove(className);
+                element.feedbackDiv.classList.remove(className);
             }
         });
 
@@ -97,6 +94,13 @@ function display_message(disable, element, message, message_type) {
                 element.feedbackDiv.classList.add("error-message");
                 element.feedbackDiv.innerHTML = "<i class='fa-solid fa-circle-exclamation fa-bounce fa-lg'></i>" +
                     "<strong> Error: </strong> &nbsp;&nbsp;" + message;
+                
+                // If element is not the form feedback div
+                if (element.elementName !== "Form") {
+
+                    // Flag dropdown nagivate section as having errors                
+                    nav_dropdown.hasErrors = true;
+                }
             
                 break;
 
@@ -107,6 +111,14 @@ function display_message(disable, element, message, message_type) {
                 element.feedbackDiv.innerHTML = "<i class='fa-solid fa-circle-check fa-beat fa-lg'></i>" +
                     "<strong> Success: </strong> &nbsp;&nbsp;" + message;   
 
+                    
+                // If element is not the form feedback div
+                if (element.elementName !== "Form") {
+
+                    // Remove error flag on dropdown nagivate section              
+                    nav_dropdown.hasErrors = false;
+                }
+            
                 break;
 
             case "neutral":
@@ -118,21 +130,32 @@ function display_message(disable, element, message, message_type) {
 
                 //console.log(element.feedbackDiv.innerHTML);
 
+                // If element is not the form feedback div
+                if (element.elementName !== "Form") {
+
+                    // Remove error flag on dropdown nagivate section              
+                    nav_dropdown.hasErrors = false;
+                }
+
                 break;
 
             default:
                 console.error("Invalid message type: ", message_type);
         }
+            
+        //console.log("nav_dropdown:", nav_dropdown);   
 
+        // Bring attention to feedback by scrolling it into view
+        element.feedbackDiv.scrollIntoView({ behavior: "auto", block: "center" });
 
     } else {       
         
-        //remove display of feedback div
+        // Remove display of feedback div
         element.feedbackDiv.classList.add("hidden");   
-
     }
 
 }
+
 
 
 
@@ -145,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.add_static_feedbacks = add_static_feedbacks;
 
     // add_dynamic_feedbacks(category_list, feedback_element_list) function
-    window.add_dynamic_feedbacks= add_dynamic_feedbacks;
+    window.add_dynamic_feedbacks = add_dynamic_feedbacks;
 
     // display_message(element, message, message_type, disable) function
     window.display_message = display_message;

@@ -1,10 +1,7 @@
 <form id="selection-form">
 <div class="selection-input">
 
-  <div id="form-feedback-div" class="selection-feedback-div success-message"> 
-    <i class="fa-solid fa-circle-check fa-lg"></i>
-    Success: User Preferences Saved!
-  </div>
+  <div id="form-feedback-div" class="selection-feedback-div"> </div>
 
   <div class="divider"> </div>
 
@@ -12,19 +9,16 @@
     <button type="button" id="budget-section-btn" class="selection-section-btn">
         <span id="budget-arrow" class="selection-arrow">&#9662;</span>         
 
-        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>
+        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon hidden"></i>
 
         <i class="fa-solid fa-circle-dollar-to-slot fa-lg"></i>
         1. BUDGET 
     </button>
-    <div class="selection-section-content" style="display: block;">
+    <div class="selection-section-content">
 
       <div id="budget-input" class="pref-input">
 
-        <div id="budget-feedback-div" class="selection-feedback-div neutral-message"> 
-          <i class="fa-solid fa-circle-exclamation fa-lg"></i>
-          Note: Please Adjust The Element.
-        </div>
+        <div id="budget-feedback-div" class="selection-feedback-div"> </div>
 
         <div id="budget-text" class="pref-text">
           Select Your Ideal Budget Below
@@ -58,12 +52,12 @@
     <button type="button" id="passport-section-btn" class="selection-section-btn">
         <span id="passport-arrow" class="selection-arrow">&#9662;</span>         
 
-        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>
+        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon hidden"></i>
 
         <i class="fa-solid fa-passport fa-lg"></i> 
         2. PASSPORTS       
     </button>
-    <div class="selection-section-content">
+    <div class="selection-section-content hidden">
       
       <div id="passport-input" class="pref-input">
 
@@ -103,12 +97,12 @@
     <button type="button" id="visa-section-btn" class="selection-section-btn">
         <span id="visa-arrow" class="selection-arrow">&#9662;</span> 
 
-        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>
+        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon hidden"></i>
 
         <i class="fa-solid fa-id-card fa-lg"></i>
         3. VISAS
     </button>
-    <div class="selection-section-content">
+    <div class="selection-section-content hidden">
 
       <div id="visa-input" class="pref-input">
 
@@ -147,12 +141,12 @@
     <button type="button" id="activity-section-btn" class="selection-section-btn">
         <span id="activity-arrow" class="selection-arrow">&#9662;</span> 
 
-        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>       
+        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon hidden"></i>       
 
         <i class="fa-solid fa-icons fa-xl"></i>
         4. PREFERRED ACTIVITIES
     </button>
-    <div class="selection-section-content" id="activities-content">
+    <div class="selection-section-content hidden" id="activities-content">
   
       {% for category in categories %}
 
@@ -162,17 +156,17 @@
         <button type="button" id="{{ category_firstword }}-subsection-btn" class="selection-subsection-btn">
             <span id="{{ category_firstword }}-subarrow" class="selection-subarrow">&#9662;</span>    
 
-            <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon" style="display: none;"></i>
+            <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon hidden"></i>
 
             <i class="fa-solid fa-heart fa-lg"></i>
             {{ category.name | upper }} 
         </button>
-        <div class="selection-subsection-content">          
+        <div class="selection-subsection-content hidden">          
 
           <div id="{{ category_firstword }}-input" class="pref-input">
           
             <div id="{{ category_firstword }}-feedback-div" class="selection-feedback-div hidden"> </div>
-            
+
             <div id="{{ category_firstword }}-text" class="pref-text"> Select Your Preferred Activity Tags & Priorities Below</div>
 
             <div id="{{ category_firstword }}-input-inner" class="pref-selects">
@@ -245,14 +239,20 @@
   <!-- NAVIGATION JAVASCRIPT FUNCTIONS -->
   <script src="{{ url_for('static', filename='assets/js/selection/selection_navigation.js') }}"></script>
 
-  <!-- SLIDER JAVASCRIPT FUNCTIONS  -->
+  <!-- SLIDER JAVASCRIPT FUNCTIONS -->
   <script src="{{ url_for('static', filename='assets/js/selection/selection_sliders.js') }}"></script>
 
   <!-- DROPDOWN JAVASCRIPT FUNCTIONS -->
   <script src="{{ url_for('static', filename='assets/js/selection/selection_dropdowns.js') }}"></script>
 
-   <!-- NAVIGATION JAVASCRIPT FUNCTIONS -->
+  <!-- NAVIGATION JAVASCRIPT FUNCTIONS -->
   <script src="{{ url_for('static', filename='assets/js/selection/selection_navigation.js') }}"></script>
+
+  <!-- ACTIVITY UTILITY JAVASCRIPT FUNCTIONS -->
+  <script src="{{ url_for('static', filename='assets/js/selection/selection_activity_util.js') }}"></script>
+
+  <!-- ERROR HANDLING JAVASCRIPT FUNCTIONS -->
+  <script src="{{ url_for('static', filename='assets/js/selection/selection_error.js') }}"></script>
 
 
   <script> 
@@ -274,11 +274,10 @@
     // Stores trackers for feedback logic, globally accessible across files
     window.current_clicked_tag = null;
     window.recently_added_tag = null;
-    //window.recently_added_country = null;
     
-    // Handles submissions by the form
+    // Handles data submissions from the form
     function submitForm() {
-      submit_selection_form(selection_form, passports_submit, visas_submit, category_submit);
+      submit_selection_form(selection_form);
     }
 
 
@@ -318,7 +317,7 @@
     // Populate dropdown elements for all categories
     add_dynamic_dropdowns(converted_categories, dropdown_elements, slider_elements);
     // Bind all dropdown elements to logic
-    add_dropdown_listeners(dropdown_elements, category_submit, passports_submit, visas_submit);
+    add_dropdown_listeners(dropdown_elements);
 
     // Display dropdown elements for debugging
     //console.log("dropdown_elements: ", dropdown_elements);
@@ -363,108 +362,6 @@
 
     // Display feedback elements for debugging
     //console.log("feedback elements: ", feedback_elements);
-
-
-    
-
-    //  <--------------------------------------->
-    //  <    FUNCTION TO FIND ERRORS IN FORM    >
-    //  <--------------------------------------->
-
-    function find_errors() {
-
-      let errors_exist = "None";
-      /*
-      have a call in submitForm() and navigate_to_dropdown() to scan for possible 
-      issues in the div then displays the error messges at the bottom and the error
-      icon at the top of the dropdown categories involved
-
-      also run this on change in the selected tag container
-      */
-
-      // return true if any errors are found, false otherwise
-
-
-      // Search all dropdown element in categories for errors
-      dropdown_elements.forEach(function(element) {
-      
-        // Check for category-based dropdowns
-        if (element.elementType === "Category") {
-
-          /*
-          if (Array.from(element.tags_container.children).some(child => child !== tag && child.classList.contains("active-tag"))) {
-              return;
-          }
-          */
-
-          //console.log(element);
-
-          Array.from(element.selectedTagsContainer.children).forEach(function(tag) {        
-              
-              // Find the category the tag belongs to
-              let target_category = find_category(element, category_submit);
-
-              // Check for the presence of a tag or its category
-              //console.log(target_category);
-
-              if (target_category === undefined) {
-
-                errors_exist = "Category Missing";
-              
-              } 
-              
-              else {
-              
-                if (target_category !== undefined) {
-
-                  // Category exists; update or add activity to the category
-                  let activities_list = target_category.categoryActivities;
-
-                  // Check if activity is already in the category
-                  let activity = find_activity(extract_tag_name(tag), activities_list);
-
-                  if (activity === undefined) {
-
-                    errors_exist = "Activity Missing";
-              
-                  }
-                }
-              }
-
-          });
-            
-        }
-
-      
-      });   
-
-      console.log("errors_exist: ", errors_exist);
-      
-      return errors_exist;
-
-      /*
-          Check tags in tag container for the ones that are missing from category
-          Used to indicate whether priority has been chosen since only those you've 
-          clicked save on have their priorities set. So if in container but not in
-          category_submit, priority missing.
-
-          update ui elements to display message, update dropdown element to have 
-          error message
-
-          also run this so as soon as a tag exists in the dropdown, inform user to
-          click on it to set its priority. disappears when click on a tag
-      */
-
-      
-
-      //if priority mssing but havent pressed save changes, neutral m=feedback saying to select
-      //if pressed save changes, error message for the tag/s (bullet points) with missing priority
-
-      //console.log(element.elementName);
-      //console.log("tag", tag);
-
-
-    } //end of find_errors()
 
 
   </script>
