@@ -18,7 +18,7 @@ function add_static_nav_els(navigation_element_list){
     navigation_element_list.push(        
         {
             elementName: "Budget",
-            elementType: "Non-Category",
+            elementType: "Non-Activity",
             dropdownButton: document.getElementById('budget-section-btn'),
             dropdownArrow: document.getElementById('budget-arrow'),
             backButton: document.getElementById('budget-back'),
@@ -27,7 +27,7 @@ function add_static_nav_els(navigation_element_list){
         },
         {
             elementName: "Passport",
-            elementType: "Non-Category",
+            elementType: "Non-Activity",
             dropdownButton: document.getElementById('passport-section-btn'),
             dropdownArrow: document.getElementById('passport-arrow'),
             backButton: document.getElementById('passport-back'),
@@ -36,7 +36,7 @@ function add_static_nav_els(navigation_element_list){
         },
         {
             elementName: "Visa",
-            elementType: "Non-Category",
+            elementType: "Non-Activity",
             dropdownButton: document.getElementById('visa-section-btn'),
             dropdownArrow: document.getElementById('visa-arrow'),
             backButton: document.getElementById('visa-back'),
@@ -45,7 +45,7 @@ function add_static_nav_els(navigation_element_list){
         },
         {
             elementName: "Preferences",
-            elementType: "Non-Category",
+            elementType: "Non-Activity",
             dropdownButton: document.getElementById('activity-section-btn'),
             dropdownArrow: document.getElementById('activity-arrow'),
             hasErrors: false
@@ -62,7 +62,7 @@ function add_dynamic_nav_els(category_list, navigation_element_list){
         navigation_element_list.push(
             {          
                 elementName: category.name,
-                elementType: "Category",
+                elementType: "Activity",
                 dropdownButton: document.getElementById(format_category_name(category.name) + "-subsection-btn"),
                 dropdownArrow: document.getElementById(format_category_name(category.name) + "-subarrow"),
                 backButton: document.getElementById(format_category_name(category.name) + "-back"),

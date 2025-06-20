@@ -12,8 +12,12 @@ from app.models.country import Country
 from app.models.city import City
 from app.models.hotel import Hotel
 from app.models.activity import Activity
+
+from app.utils.helpers import object_as_dict
+
 import random
 from flask_login import login_user,logout_user,login_required,current_user
+
 ###
 # Routing for your application.
 ###
@@ -100,59 +104,120 @@ def recommendations():
         #             hotel_price = recommend_service.calculate_hotel_price(hotels_lst[id-1])
 
 
-@login_required
+#@login_required
 @app.route('/selection', methods=['POST','GET'])
 def selection():
-    """Render website's preference selection page."""
+    """Render website's preference selection page."""  
+    
+    # Handle GET request to load the selection page
+    if request.method == 'GET':
+        
+        # Initialize empty lists to store countries, categories, and activities
+        categories = []
+        countries = []
+        activities = []
+        
+        try:
+            # Fetch all countries and categories from the database
+            countries_result = db.session.execute(db.select(Country)).scalars().all()
+            categories_result = db.session.execute(db.select(Category)).scalars().all()
+            
+            # Convert country objects to dictionaries if query returned results
+            if countries_result:
+                countries = [object_as_dict(country) for country in countries_result]   
+            
+            # Convert category objects to dictionaries if query returned results
+            if categories_result:  
+                categories = [object_as_dict(category) for category in categories_result]
+                
+                # Loop through each category to attach its activities
+                for category in categories:
+                    try: 
+                        # Query activities where category name matches
+                        activities_result = db.session.execute(
+                            db.select(Activity).filter_by(category=category["name"])
+                        ).scalars().all()
+                        
+                        # Convert activities to dictionary form if found
+                        if activities_result:
+                            activities = [object_as_dict(activity) for activity in activities_result]
+                        
+                        # Add list of activities to the corresponding category
+                        category["activities"] = activities
+                        
+                        #print(category)
+                        
+                    except Exception as e:
+                        # Print error if activity query fails
+                        print("activities_result error: ", str(e))           
+
+        except Exception as e:
+            # Print error if country or category query fails
+            print("categories_result or countries_result error: ", str(e))          
+        
+        # Render the selection page template with the countries and categories data
+        return render_template('selection/selection_base.html', categories=categories, countries=countries)       
+    
+    # Handle POST request from client-side JavaScript
     if request.method == 'POST':
-        """Getting the priority assigned to each category"""
+        # Parse incoming JSON data sent via fetch
+        data = request.get_json()
+        
+        # Log received preference data for debugging
+        #print("budget:", data["Budget"])
+        #print("passports:", data["Passports"])
+        #print("visas:", data["Visas"])
+        #print("activities:", data["Activities"])
+        
+        # Expected data format from client:
+        """ 
+        data = [
+            Budget: value,
+            Passports: [country 1, ... country n],
+            Visas: [country 1, ... country n],
+            Activities: [
+                {
+                    categoryName: category 1 name,
+                    categoryActivities: [
+                        {
+                            activityName: activity 1 name,
+                            activityPriority: activity 1 priority
+                        }
+                        ...
+                        {
+                            activityName: activity n name,
+                            activityPriority: activity n priority
+                        }
+                    ]
+                } 
+                ...                
+                {
+                    categoryName: category n name,
+                    categoryActivities: [
+                        {
+                            activityName: activity 1 name,
+                            activityPriority: activity 1 priority
+                        }
+                        ...
+                        {
+                            activityName: activity n name,
+                            activityPriority: activity n priority
+                        }
+                    ]
+                }
+            ]
+        ] 
+        """
+        
+        # TODO: Logic here to process and store user preferences in the database...
+         
         
         
-        categories = db.session.query(Category.name).all()
-        category_lst = [category[0].replace(',', '') for category in categories]
-        category_activities = {}
-        for cat in category_lst:
-            # activities_for_cat = db.session.query(Activity.name).filter_by(category= cat).all()
-            # activites_lst = [activity[0].replace(',', '') for activity in activities_for_cat] 
-            # category_activities[cat] = activites_lst
-            #allows me to get the form data for each category
-            # category_activities[cat] = request.form.get(cat_slider)
-            pass
+        # Return a success response as JSON
+        return jsonify({"message": "POST received", "status": "success"})
 
-        
-        budget_val = request.form.get('budget_slider')
-        beach_water_sports = request.form.get("beach_water_sports")
-        educational_workshops = request.form.get("educational_workshops")
-
-        climate_weight = request.form.get('climate_slider')
-        landmark_weight = request.form.get('landmark_slider')
-        outdoor_exp_weight = request.form.get('outdoor_slider')
-        culinary_weight = request.form.get('food_slider')
-        entertainment_weight = request.form.get('entertainment_slider')
-        relaxation_weight = request.form.get('relaxation_slider')
-
-        user_id = current_user.id
-
-        #Instiance a instance of the user's preferences
-        user_preference = UserPreference(user_id, budget_val, climate_weight, 
-                                        landmark_weight, outdoor_exp_weight, 
-                                        culinary_weight, entertainment_weight,relaxation_weight)
-        
-        db.session.add(user_preference)
-        db.session.commit()
-
-        print("Budget value is: ", budget_val)
-        print("Climate weight is:", climate_weight)
-        print("Landmark weight is:", landmark_weight)
-        print("Outdoor experiences weight is: ", outdoor_exp_weight)
-        print("Food and culinary experiences weight is: ", culinary_weight)
-        print("Entertainment weight is: ", entertainment_weight)
-
-        
-        return redirect(url_for('recommendations'))
-    return render_template('selection_pg/selection_base.html')
 
 @app.route('/details-page')
 def destination_details():
     """Render website's signup quiz page."""
-    return render_template('destinations_pg/destination_details.html')
+    return render_template('recommendations/destination_details.html')

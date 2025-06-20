@@ -15,10 +15,7 @@ from app.models.city import City
 from app.models.hotel import Hotel
 from app.models.activity import Activity
 
-
-def object_as_dict(obj):
-    #print("object_as_dict: ", {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs})
-    return {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs}
+from app.utils.helpers import object_as_dict
 
 
 @app.route('/selection-test', methods=['POST','GET'])
@@ -72,7 +69,7 @@ def selection_test():
             print("categories_result or countries_result error: ", str(e))          
         
         # Render the selection page template with the countries and categories data
-        return render_template('selection_pg/selection_base.html', categories=categories, countries=countries)       
+        return render_template('selection/selection_base.html', categories=categories, countries=countries)       
     
     # Handle POST request from client-side JavaScript
     if request.method == 'POST':
@@ -132,13 +129,12 @@ def selection_test():
         # Return a success response as JSON
         return jsonify({"message": "POST received", "status": "success"})
 
-        
-
 
 @app.route('/recommendations-test')
 def recommendations_test():
     """Render website's preference selection page."""
-    return render_template('destinations_pg/destinations.html')
+    return render_template('recommendations/destinations.html')
+
 
 @app.route('/clear-session')
 def clear_session():

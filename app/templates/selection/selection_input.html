@@ -226,33 +226,37 @@
 </form>
 
 
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/selection/css/selection.css') }}">
+{% endblock %}
+
 {% block js %}   
   <!-- SELECTION UTILITY JAVASCRIPT FUNCTIONS -->
-  <script src="{{ url_for('static', filename='assets/js/selection/selection_utility.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/selection/js/selection_utility.js') }}"></script>
 
   <!-- FEEDBACK HANDLING JAVASCRIPT FUNCTIONS -->
-  <script src="{{ url_for('static', filename='assets/js/selection/selection_feedback.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/selection/js/selection_feedback.js') }}"></script>
 
   <!-- SUBMIT JAVASCRIPT FUNCTIONS -->
-  <script src="{{ url_for('static', filename='assets/js/selection/selection_submit.js') }}"></script>
-
-  <!-- NAVIGATION JAVASCRIPT FUNCTIONS -->
-  <script src="{{ url_for('static', filename='assets/js/selection/selection_navigation.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/selection/js/selection_submit.js') }}"></script>
 
   <!-- SLIDER JAVASCRIPT FUNCTIONS -->
-  <script src="{{ url_for('static', filename='assets/js/selection/selection_sliders.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/selection/js/selection_sliders.js') }}"></script>
 
   <!-- DROPDOWN JAVASCRIPT FUNCTIONS -->
-  <script src="{{ url_for('static', filename='assets/js/selection/selection_dropdowns.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/selection/js/selection_dropdowns.js') }}"></script>  
+  
+  <!-- TAG JAVASCRIPT FUNCTIONS -->
+  <script src="{{ url_for('static', filename='assets/selection/js/selection_tags.js') }}"></script>
 
   <!-- NAVIGATION JAVASCRIPT FUNCTIONS -->
-  <script src="{{ url_for('static', filename='assets/js/selection/selection_navigation.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/selection/js/selection_navigation.js') }}"></script>
 
   <!-- ACTIVITY UTILITY JAVASCRIPT FUNCTIONS -->
-  <script src="{{ url_for('static', filename='assets/js/selection/selection_activity_util.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/selection/js/selection_activity_util.js') }}"></script>
 
   <!-- ERROR HANDLING JAVASCRIPT FUNCTIONS -->
-  <script src="{{ url_for('static', filename='assets/js/selection/selection_error.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/selection/js/selection_error.js') }}"></script>
 
 
   <script> 

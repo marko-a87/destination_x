@@ -56,7 +56,7 @@ function submit_selection_form(form_element) {
         console.log("Submitted: ", data);
 
         // Send the data to the Flask endpoint via a POST request
-        fetch("/selection-test", {
+        fetch("/selection", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"  // Tell the server we’re sending JSON
@@ -130,13 +130,13 @@ function update_country_submit(country_dropdown) {
 
 
 // Function to update category_submit with selected activity and its priority
-function update_activity_submit(slider_element) {
+function update_activity_submit(element) {
 
     // Extract the name of the selected tag from its innerHTML (before the " ×")
     let selected_tag_name = extract_tag_name(current_clicked_tag);
 
     // Find the category the tag belongs to
-    let target_category = find_category(slider_element);
+    let target_category = find_category(element);
 
     if (target_category !== undefined) {
 
@@ -150,7 +150,7 @@ function update_activity_submit(slider_element) {
 
             // Update priority if activity is already present
             if (activity.activityName === selected_tag_name) {
-                activity.activityPriority = slider_element.sliderElement.value;
+                activity.activityPriority = element.sliderElement.value;
             }
 
         } else {
@@ -159,7 +159,7 @@ function update_activity_submit(slider_element) {
             activities_list.push(
                 {
                     activityName: selected_tag_name,
-                    activityPriority: slider_element.sliderElement.value
+                    activityPriority: element.sliderElement.value
                 }
             );
         }
@@ -169,11 +169,11 @@ function update_activity_submit(slider_element) {
         // Category not found — add new category with activity to category_submit
         get_submission_list("category").push(
             {
-                categoryName: slider_element.elementName,
+                categoryName: element.elementName,
                 categoryActivities: [
                     {
                         activityName: selected_tag_name,
-                        activityPriority: slider_element.sliderElement.value
+                        activityPriority: element.sliderElement.value
                     }
                 ]
             }
@@ -183,16 +183,23 @@ function update_activity_submit(slider_element) {
 
     console.log("Add category_submit: ", get_submission_list("category"));
 
-    //format: disable, element, message, message_type
+    //format: disable, element, message, message_type, timeout
     display_message( 
         false, //don't disable display
-        find_element("feedback", slider_element.elementName),
+        find_element("feedback", element.elementName),
         "Priority of the <strong>'" + extract_tag_name(current_clicked_tag) + "'</strong> tag saved!",
-        "success"
+        "success",
+        3000
     ) 
 
     // Unflag any effected actvity sections that had errors
     flag_nav_section();
+
+    // Hide slider UI
+    hide_category_slider(find_element("dropdown", element.elementName), true);
+
+    // Disable currently clicked tag
+    toggle_active_tag(element, current_clicked_tag, extract_tag_name(current_clicked_tag));
 
 }
 
@@ -202,7 +209,7 @@ function update_activity_submit(slider_element) {
 function remove_from_submit(element, tag_element){
 
     // Check to see if we're working with a activity category rather than visa/passport
-    if (element.elementType === "Category") {
+    if (element.elementType === "Activity") {
 
         //console.log(tag_element);
 
@@ -237,7 +244,8 @@ function remove_from_submit(element, tag_element){
             false, //don't disable display
             find_element("feedback", element.elementName),
             "The <strong>'"+ extract_tag_name(current_clicked_tag.parentElement) +"'</strong> tag was successfully removed.",
-            "success"
+            "success",
+            3000
         ) 
 
         // Hide slider UI
@@ -284,10 +292,11 @@ function remove_from_submit(element, tag_element){
             false, //don't disable display
             find_element("feedback", element.elementName),
             "<strong>'"+ country_name + "'</strong> was successfully removed from " + to_title_case(category) + "s.",
-            "success"
+            "success",
+            3000
         ) 
 
-    } // end else for (element.elementType === "Category")
+    } // end else for (element.elementType === "Activity")
 
 
     // Unflag any effected actvity sections that had errors

@@ -7,55 +7,56 @@
     <----------------------------------------------------->        
 */
 
-function flag_nav_section(){
-    //display the icon next to the dropdown button name
-    //run this in submit form()
 
+// Handle flagging navigation section when it has errors
+function flag_nav_section(){
+
+    // Get the error icon element inside the "Preferences" navigation dropdown button
     let pref_error_icon = Array.from(
         find_element("navigation", "Preferences").dropdownButton.children).find(child => 
             child.classList.contains('error-icon'));
 
-    //use hasErrors
-
-    // Search all dropdown element in categories for errors
+    // Loop through all navigation elements
     get_element_list("navigation").forEach(function(element) {
  
+        // Find the error icon element inside the current navigation section
         let nav_error_icon = Array.from(element.dropdownButton.children).find(child => 
             child.classList.contains('error-icon'));
 
+        // If the current element has an error
         if (element.hasErrors) {
 
+            // Show the error icon in the current navigation element
             nav_error_icon.classList.remove('hidden'); 
 
-            if (element.elementType === "Category") {
+            // If the element is of type "Activity", also show the preference error icon
+            if (element.elementType === "Activity") {
 
                 pref_error_icon.classList.remove('hidden'); 
             }
         } else {
-
+            // If no error, and the icon is currently shown, hide it
             if (!nav_error_icon.classList.contains('hidden')) { 
 
                 nav_error_icon.classList.add('hidden'); 
 
-                if (element.elementType === "Category") {
+                // If it's an Activity element, also hide the preference error icon
+                if (element.elementType === "Activity") {
 
                     pref_error_icon.classList.add('hidden'); 
                 }
             }
         }              
         
+        // Debug: Log current nav error icon and pref error icon
         //console.log("nav_error_icon:", nav_error_icon);
-        
         //console.log("pref_error_icon", pref_error_icon);
     });   
 }
 
 
 
-//  <--------------------------------------------------->
-//  <    FUNCTION TO FIND ERRORS IN CATEGORY SECTION    >
-//  <--------------------------------------------------->
-
+// Find errors in the category section
 function find_category_errors() {
 
     let errors_exist = "None";
@@ -64,7 +65,7 @@ function find_category_errors() {
     get_element_list("dropdown").forEach(function(element) {
     
         // Check for category-based dropdowns
-        if (element.elementType === "Category") {
+        if (element.elementType === "Activity") {
 
             // Remove flag to show having errors                
             find_element("navigation", element.elementName).hasErrors = false;   
@@ -111,9 +112,7 @@ function find_category_errors() {
                 }
                  
                 console.log("find errors navigation:", find_element("navigation", element.elementName));  
-
-            });
-            
+            });            
         }        
     });   
 
@@ -130,7 +129,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Make all functions accessible globally
 
-    // find_category_errors() funstion
+    // flag_nav_section() function
+    window.flag_nav_section = flag_nav_section;
+
+    // find_category_errors() function
     window.find_category_errors = find_category_errors;
 
 });

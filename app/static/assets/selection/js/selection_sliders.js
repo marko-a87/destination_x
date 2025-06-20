@@ -18,7 +18,7 @@ function add_static_sliders(slider_element_list){
     slider_element_list.push({
         // Base budget slider and controls
         elementName: "Budget",
-        elementType: "Non-Category",
+        elementType: "Non-Activity",
         sliderElement: document.getElementById("budget-amountSlider"),
         amountValue: document.getElementById("budget-amountValue"),
         increaseBtn: document.getElementById("budget-increaseBtn"),
@@ -37,7 +37,7 @@ function add_dynamic_sliders(category_list, slider_element_list){
         slider_element_list.push(
             {
                 elementName: category.name,
-                elementType: "Category",
+                elementType: "Activity",
                 sliderElement: document.getElementById(format_category_name(category.name) + "-amountSlider"),
                 amountValue: document.getElementById(format_category_name(category.name) + "-amountValue"),
                 increaseBtn: document.getElementById(format_category_name(category.name) + "-increaseBtn"),

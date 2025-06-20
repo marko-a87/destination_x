@@ -18,22 +18,22 @@ function add_static_feedbacks(feedback_element_list){
     feedback_element_list.push(
         {
             elementName: "Form",
-            elementType: "Non-Category",
+            elementType: "Non-Activity",
             feedbackDiv: document.getElementById('form-feedback-div')
         },
         {
             elementName: "Budget",
-            elementType: "Non-Category",
+            elementType: "Non-Activity",
             feedbackDiv: document.getElementById('budget-feedback-div')
         },
         {
             elementName: "Passport",
-            elementType: "Non-Category",
+            elementType: "Non-Activity",
             feedbackDiv: document.getElementById('passport-feedback-div')
         },
         {
             elementName: "Visa",
-            elementType: "Non-Category",
+            elementType: "Non-Activity",
             feedbackDiv: document.getElementById('visa-feedback-div')
         }
     );
@@ -48,7 +48,7 @@ function add_dynamic_feedbacks(category_list, feedback_element_list){
         feedback_element_list.push(
             {          
                 elementName: category.name,
-                elementType: "Category",
+                elementType: "Activity",
                 feedbackDiv: document.getElementById(format_category_name(category.name) + "-feedback-div")
             }
         );
@@ -59,11 +59,19 @@ function add_dynamic_feedbacks(category_list, feedback_element_list){
 
 
 
-//  <-------------------------------------------->
-//  <    FUNCTION TO DISPLAY FEEDBACK TO USER    >
-//  <-------------------------------------------->
+//  <--------------------------------------------->
+//  <    FUNCTIONS TO DISPLAY FEEDBACK TO USER    >
+//  <--------------------------------------------->
 
-function display_message(disable, element, message, message_type) {
+// Timeout display of feedback div
+function timeout_feedback(element, time_ms) {
+      
+    setTimeout(() => {
+        element.feedbackDiv.classList.add("hidden"); 
+    }, time_ms); // eg. 2000ms = 2 seconds
+}
+
+function display_message(disable, element, message, message_type, timeout) {
     // display feedback based on type of message
     // types: error, success, neutral
     // disable: boolean, determines whether a message is being displayed or removed
@@ -147,6 +155,12 @@ function display_message(disable, element, message, message_type) {
 
         // Bring attention to feedback by scrolling it into view
         element.feedbackDiv.scrollIntoView({ behavior: "auto", block: "center" });
+
+        if (timeout !== undefined) {
+            
+            // Timeout feedback if desired
+            timeout_feedback(element, timeout);   
+        }
 
     } else {       
         

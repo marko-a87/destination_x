@@ -7,4 +7,4 @@ from flask import render_template
 @app.route('/')
 def landing():
     """Render website's landing page."""
-    return render_template('landing_pg/landing.html')
+    return render_template('landing/landing.html')

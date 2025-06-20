@@ -81,6 +81,7 @@ def login():
         return jsonify({"Status": 400, "Message": "Incorrect password"})
     return render_template("account_actions/login.html")
 
+
 @login_required
 @app.route('/logout' , methods=['POST'])
 def logout():
