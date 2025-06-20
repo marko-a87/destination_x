@@ -82,11 +82,6 @@ def recommendations():
                     
                         
         #3. Determine the flight cost and hotel cost of the activity
-            
-
-
-
-
            
 
 
@@ -102,6 +97,11 @@ def recommendations():
         #         if iata_code != code.iata_code:
         #             flight_price = recommend_service.recommend_flight(iata_code, code.iata_code, datetime.date.today(), "2025-7-12", 1 )
         #             hotel_price = recommend_service.calculate_hotel_price(hotels_lst[id-1])
+    
+    
+    
+    """Render website's preference selection page."""
+    return render_template('recommendations/recommendation_base.html')
 
 
 #@login_required
