@@ -218,6 +218,7 @@ def selection():
 
 
 @app.route('/details-page')
-def destination_details():
+def recommendation_details():
+    
     """Render website's signup quiz page."""
-    return render_template('recommendations/destination_details.html')
+    return render_template('recommendations/recommendation_details.html')

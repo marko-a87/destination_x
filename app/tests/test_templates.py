@@ -130,10 +130,11 @@ def selection_test():
         return jsonify({"message": "POST received", "status": "success"})
 
 
-@app.route('/recommendations-test')
+@app.route('/recommendation-test')
 def recommendations_test():
+    
     """Render website's preference selection page."""
-    return render_template('recommendations/destinations.html')
+    return render_template('recommendations/recommendation_base.html')
 
 
 @app.route('/clear-session')

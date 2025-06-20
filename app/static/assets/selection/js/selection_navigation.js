@@ -126,50 +126,57 @@ function navigate_to_dropdown(current_element, nav_to_element, skip_element) {
     //console.log("current_element:", current_element);
     //console.log("nav_to_element:", nav_to_element);
 
-    // If a category has unresolved errors
-    if (find_category_errors() !== "None"){
-
-        // Display error informing user to address current errors first
-
-        //format: disable, element, message, message_type
-        display_message( 
-            false, //don't disable display
-            find_element("feedback", current_element.elementName),
-            "Please ensure priorities are set for all selected tags.",
-            "error"
-        ) 
-
-        // Flag the effected categories
-        flag_nav_section();
-    }
 
     // If current element has unresolves errors
-    else if (current_element.hasErrors){
+    if (current_element.hasErrors){
 
         // Display error informing user to address current errors first
 
-        //format: disable, element, message, message_type
+        //format: disable, element, message, message_type, timeout
         display_message( 
             false, //don't disable display
             find_element("feedback", current_element.elementName),
             "Please address all errors in this section.",
-            "error"
+            "error",
+            null
         ) 
 
         // Flag the effected categories
         flag_nav_section();
     }
+    
+    // If a category has unresolved errors
+    else if (find_category_errors() !== "None" && current_element.elementType == "Activity"){
 
+        // Display error informing user to address current errors first
+
+        //format: disable, element, message, message_type, timeout
+        display_message( 
+            false, //don't disable display
+            find_element("feedback", current_element.elementName),
+            "Please ensure priorities are set for all selected tags.",
+            "error",
+            null
+        ) 
+
+        // Flag the effected categories
+        flag_nav_section();
+    }
+    
     else {      
 
-        // Clear feedback if present            
-        //format: disable, element, message, message_type
-        display_message( 
-            true, //disable display
-            find_element("feedback", current_element.elementName),
-            null,
-            null
-        )    
+        if (find_category_errors() === "None") {
+            
+            // Clear feedback if present            
+            //format: disable, element, message, message_type, timeout
+            display_message( 
+                true, //disable display
+                find_element("feedback", current_element.elementName),
+                null,
+                null,
+                null
+            )    
+        }
 
         // Unflag any effected actvity sections that had errors
         flag_nav_section();

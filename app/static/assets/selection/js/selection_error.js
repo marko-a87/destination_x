@@ -15,6 +15,9 @@ function flag_nav_section(){
     let pref_error_icon = Array.from(
         find_element("navigation", "Preferences").dropdownButton.children).find(child => 
             child.classList.contains('error-icon'));
+    
+    // Flag to disable form error if no errors need to be addressed
+    let errors_present = false
 
     // Loop through all navigation elements
     get_element_list("navigation").forEach(function(element) {
@@ -25,6 +28,8 @@ function flag_nav_section(){
 
         // If the current element has an error
         if (element.hasErrors) {
+
+            errors_present = true;
 
             // Show the error icon in the current navigation element
             nav_error_icon.classList.remove('hidden'); 
@@ -46,7 +51,22 @@ function flag_nav_section(){
                     pref_error_icon.classList.add('hidden'); 
                 }
             }
-        }              
+        }     
+        
+        if (!errors_present) {
+            
+            // Remove form error message
+            
+            //format: disable, element, message, message_type, timeout
+            display_message( 
+                true, //disable display
+                find_element("feedback", "Form"),
+                null,
+                null,
+                null
+            ) 
+
+        }
         
         // Debug: Log current nav error icon and pref error icon
         //console.log("nav_error_icon:", nav_error_icon);

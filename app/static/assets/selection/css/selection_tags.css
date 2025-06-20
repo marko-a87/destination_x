@@ -1,0 +1,69 @@
+@import url("base.css");
+
+
+.tag-dropdown {
+  padding: 5px;
+  border: 2px solid black; /* Indigo border */
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 14px;
+  color: black;
+}
+
+
+.tag-selector {
+  width: 100%; 
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.selectedTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 25px;
+}
+
+.selection-tag {
+  background-color: #ffd166;
+  color: black;
+  padding: 3px 17px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+
+.selection-section-content .selection-tag:hover {
+  cursor: pointer;
+}
+
+.selection-subsection-content .selection-tag:hover {
+  outline: 3px solid var(--main-color);
+  cursor: pointer;
+}
+
+.selection-subsection-content .active-tag {
+  outline: 3px solid var(--main-color);
+  color: var(--main-color);
+  font-weight: bold;
+}
+
+.selection-subsection-content .active-tag .remove-tag{
+  font-weight: normal;
+}
+
+
+.selection-tag .remove-tag {
+  margin-left: 8px;
+  cursor: pointer;
+  color: #333;
+  font-size: 25px;
+}
+
+.selection-tag .remove-tag:hover {
+  color: rgb(227, 37, 37);
+}

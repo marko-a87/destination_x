@@ -59,6 +59,12 @@
     </div>
 {% endblock %}
 
+{% block css %}
+  <!-- LOGIN STYLESHEETS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/account_actions/css/login.css') }}">
+{% endblock %}
+
+
 {% block js %}   
   <script>
     let slideIndex = 0;

@@ -6,8 +6,14 @@
         </div>
         <div class="col-lg-4">
           <div class="border-button">
-            <a href="{{ url_for('destination_details') }}">Find Your Destination Now</a>
+            <a href="{{ url_for('recommendation_details') }}">Find Your Destination Now</a>
           </div>
         </div>
     </div>
 </div>
+
+
+{% block css %}
+  <!-- ACTION STYLESHEETS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/landing/css/action.css') }}">  
+{% endblock %}

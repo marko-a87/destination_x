@@ -156,7 +156,7 @@ function display_message(disable, element, message, message_type, timeout) {
         // Bring attention to feedback by scrolling it into view
         element.feedbackDiv.scrollIntoView({ behavior: "auto", block: "center" });
 
-        if (timeout !== undefined) {
+        if (timeout !== null) {
             
             // Timeout feedback if desired
             timeout_feedback(element, timeout);   

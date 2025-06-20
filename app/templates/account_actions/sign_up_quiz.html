@@ -38,6 +38,10 @@
     </div>
   </div>
 
+{% block css %}
+  <!-- QUIZ STYLESHEETS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/account_actions/css/quiz.css') }}">
+{% endblock %}
 
 
 {% block js %}   

@@ -84,13 +84,14 @@ function toggle_active_tag(element, tag_element, tag_value){
 
         // Display message to notify user to click save to set priority
 
-        //format: disable, element, message, message_type
+        //format: disable, element, message, message_type, timeout
         display_message( 
             false, //don't disable display
             find_element("feedback", element.elementName),
             "Click <strong>'Save'</strong> to set the new priority of <strong>'" + 
             extract_tag_name(tag_element) + "'</strong>.",
-            "neutral"
+            "neutral",
+            null
         ) 
 
         // Show slider UI
@@ -117,6 +118,7 @@ function remove_tags(event_element, element) {
         display_message( 
             true, //disable display
             find_element("feedback", element.elementName),
+            null,
             null,
             null
         )    

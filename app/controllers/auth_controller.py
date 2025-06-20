@@ -54,6 +54,7 @@ def signup():
 
         #Redirect user to the quiz page
         return redirect(url_for('login'))
+    
     #render the signup page
     return render_template('account_actions/sign_up_base.html')
         
@@ -79,6 +80,7 @@ def login():
             # return jsonify({"Status": 200, "Message": "User logged in"})
         # return redirect(url_for('selection'))
         return jsonify({"Status": 400, "Message": "Incorrect password"})
+    
     return render_template("account_actions/login.html")
 
 
@@ -87,7 +89,6 @@ def login():
 def logout():
     logout_user()
     return({"Status": 200, "Message": "User logged out"})
-
 
 
 @login_manager.user_loader

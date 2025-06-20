@@ -18,17 +18,18 @@ function submit_selection_form(form_element) {
 
     if (find_category_errors() !== "None") {
 
-        // Flag the effected categories
+        // Flag the effected sections
         flag_nav_section();
 
         // Notify user to address errors first
 
-        //format: disable, element, message, message_type
+        //format: disable, element, message, message_type, timeout
         display_message( 
             false, //don't disable display
             find_element("feedback", "Form"),
             "Please address all errors in the form.",
-            "error"
+            "error",
+            null
         ) 
 
     } else {
@@ -74,12 +75,13 @@ function submit_selection_form(form_element) {
 
         // Display success message
 
-        //format: disable, element, message, message_type
+        //format: disable, element, message, message_type, timeout
         display_message( 
             false, //don't disable display
             find_element("feedback", "Form"),
             "User Preferences Saved!",
-            "success"
+            "success",
+            null
         )     
     }
     
@@ -183,7 +185,7 @@ function update_activity_submit(element) {
 
     console.log("Add category_submit: ", get_submission_list("category"));
 
-    //format: disable, element, message, message_type, timeout
+    //format: disable, element, message, message_type, timeout, timeout
     display_message( 
         false, //don't disable display
         find_element("feedback", element.elementName),
@@ -239,7 +241,7 @@ function remove_from_submit(element, tag_element){
 
         } 
 
-        //format: disable, element, message, message_type
+        //format: disable, element, message, message_type, timeout
         display_message( 
             false, //don't disable display
             find_element("feedback", element.elementName),
@@ -287,7 +289,7 @@ function remove_from_submit(element, tag_element){
 
         // Display successful feedback
         
-        //format: disable, element, message, message_type
+        //format: disable, element, message, message_type, timeout
         display_message( 
             false, //don't disable display
             find_element("feedback", element.elementName),

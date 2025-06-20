@@ -42,7 +42,7 @@
 
 
     <div class="places-list">
-        {% include "recommendations/place_list.html" %}     
+        {% include "recommendations/recommendation_list.html" %}     
     </div>
     
 
@@ -55,3 +55,9 @@
         </div>
     </div>
 </div>
+
+
+{% block css %}
+  <!-- RECOMMENDATIONS STYLESHEETS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/recommendations/css/recommendation_page.css') }}">
+{% endblock %}

@@ -167,6 +167,7 @@ function process_dropdown_selection(element) {
         true, //disable display
         find_element("feedback", element.elementName),
         null,
+        null,
         null
     ) 
 
@@ -185,12 +186,13 @@ function process_dropdown_selection(element) {
 
         // Display error message to notify user of duplicate tags
 
-        //format: disable, element, message, message_type
+        //format: disable, element, message, message_type, timeout
         display_message( 
             false, //don't disable display
             find_element("feedback", element.elementName),
             "<strong>'" + selected_value + "'</strong> was already selected.",
-            "neutral"
+            "neutral",
+            null
         ) 
 
         // Resets dropdown after 2 seconds to allow re-selection
@@ -210,12 +212,13 @@ function process_dropdown_selection(element) {
         // Prevent new tags being selected when one is missing a priority
         //console.log("test2");
 
-        //format: disable, element, message, message_type
+        //format: disable, element, message, message_type, timeout
         display_message( 
             false, //don't disable display
             find_element("feedback", element.elementName),
             "Please click <strong>'" + extract_tag_name(recently_added_tag) + "'</strong> and set the tag priority.",
-            "error"
+            "error",
+            null
         ) 
 
         // Prevent addition of more tags until priority is set
@@ -239,12 +242,13 @@ function process_dropdown_selection(element) {
         console.log("process dropdwon, recently_added_tag: ", recently_added_tag);
 
         // Let user know to click on tags to set priority
-        //format: disable, element, message, message_type
+        //format: disable, element, message, message_type, timeout
         display_message( 
             false, //don't disable display
             find_element("feedback", element.elementName),
             "Click the <strong>'" + extract_tag_name(recently_added_tag) + "'</strong> tag to set priority.",
-            "neutral"
+            "neutral",
+            null
         ) 
     }
 
