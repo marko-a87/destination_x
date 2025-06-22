@@ -24,7 +24,7 @@
                         <h4>Yahalas Valley</h4>
                         <span>Ontario, Canada</span>
                         <div class="main-button">
-                          <a href="{{ url_for('destination_details') }}">Explore More</a>
+                          <a href="{{ url_for('recommendation_details') }}">Explore More</a>
                         </div>
                         <p>A peaceful mountain escape with stunning alpine views and crystal-clear lakes—perfect 
                           for nature lovers and quiet retreats.</p>
@@ -32,7 +32,7 @@
                           <li><i class="fa fa-home"></i> $190.00</li>
                         </ul>
                         <div class="text-button">
-                          <a href="{{ url_for('destination_details') }}">Need Directions ? <i class="fa fa-arrow-right"></i></a>
+                          <a href="{{ url_for('recommendation_details') }}">Need Directions ? <i class="fa fa-arrow-right"></i></a>
                         </div>
                       </div>
                     </div>
@@ -52,14 +52,14 @@
                         <h4>Kingston</h4>
                         <span>Kingston, Jamaica</span>
                         <div class="main-button">
-                          <a href="{{ url_for('destination_details') }}">Explore More</a>
+                          <a href="{{ url_for('recommendation_details') }}">Explore More</a>
                         </div>
                         <p>A lively Caribbean city full of music, waterfalls, and culture—ideal for adventure and good vibes.</p>
                         <ul class="info">
                           <li><i class="fa fa-home"></i> $240.00</li>
                         </ul>
                         <div class="text-button">
-                          <a href="{{ url_for('destination_details') }}">Need Directions ? <i class="fa fa-arrow-right"></i></a>
+                          <a href="{{ url_for('recommendation_details') }}">Need Directions ? <i class="fa fa-arrow-right"></i></a>
                         </div>
                       </div>
                     </div>
@@ -79,7 +79,7 @@
                         <h4>Niagara Falls</h4>
                         <span>Niagra Falls, Canada</span>
                         <div class="main-button">
-                          <a href="{{ url_for('destination_details') }}">Explore More</a>
+                          <a href="{{ url_for('recommendation_details') }}">Explore More</a>
                         </div>
                         <p>An iconic spot with thunderous waterfalls and unforgettable views—great for 
                           first-time visitors and photographers alike.</p>
@@ -87,7 +87,7 @@
                           <li><i class="fa fa-home"></i> $320.00</li>
                         </ul>
                         <div class="text-button">
-                          <a href="{{ url_for('destination_details') }}">Need Directions ? <i class="fa fa-arrow-right"></i></a>
+                          <a href="{{ url_for('recommendation_details') }}">Need Directions ? <i class="fa fa-arrow-right"></i></a>
                         </div>
                       </div>
                     </div>
@@ -119,3 +119,10 @@
         </div>
     </div>
 </div>
+
+
+
+{% block css %}
+  <!-- COUNTRY STYLESHEETS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/landing/css/country.css') }}">  
+{% endblock %}

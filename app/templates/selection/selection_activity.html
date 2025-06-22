@@ -1,0 +1,74 @@
+
+<div class="selection-section">
+    <button type="button" id="activity-section-btn" class="selection-section-btn">
+        <span id="activity-arrow" class="selection-arrow">&#9662;</span> 
+
+        <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon hidden"></i>       
+
+        <i class="fa-solid fa-icons fa-xl"></i>
+        4. PREFERRED ACTIVITIES
+    </button>
+    <div class="selection-section-content hidden" id="activities-content">
+  
+      {% for category in categories %}
+
+      {% set category_firstword = category.name.split(' ')[0] | lower %}
+
+        <div class="selection-section">
+            <button type="button" id="{{ category_firstword }}-subsection-btn" class="selection-subsection-btn">
+                <span id="{{ category_firstword }}-subarrow" class="selection-subarrow">&#9662;</span>    
+
+                <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon hidden"></i>
+
+                <i class="fa-solid fa-heart fa-lg"></i>
+                {{ category.name | upper }} 
+            </button>
+            <div class="selection-subsection-content hidden">          
+
+            <div id="{{ category_firstword }}-input" class="pref-input">
+            
+                <div id="{{ category_firstword }}-feedback-div" class="selection-feedback-div hidden"> </div>
+
+                <div id="{{ category_firstword }}-text" class="pref-text"> Select Your Preferred Activity Tags & Priorities Below</div>
+
+                <div id="{{ category_firstword }}-input-inner" class="pref-selects">
+
+                <div id="{{ category_firstword }}-tag-selector" class="tag-selector">
+                    <select id="{{ category_firstword }}-tagDropdown" class="tag-dropdown">
+                    <option value="" disabled selected>Select a tag</option>
+                    {% for activity in category.activities %}
+                    <option value="{{ activity.name }}">{{ activity.name }}</option>
+                    {% endfor %}
+                    </select>
+
+                    <div id="{{ category_firstword }}-selectedTags" class="selectedTags"></div>
+                </div>      
+                
+                <div id="{{ category_firstword }}-slider-control" class="slider-control" style="display: none;">
+                    <div> <span class="priority-name" id="{{ category_firstword }}-priority-name"></span></div>
+                    <div class="amount-subdisplay"> <span id="{{ category_firstword }}-amountValue">0</span></div>
+
+                    <button type="button" id="{{ category_firstword }}-decreaseBtn" class="decreaseBtn">−</button>
+                        
+                    <input type="range" name="{{ category_firstword }}_slider" id="{{ category_firstword }}-amountSlider" min="0" max="10" value="0" >
+                        
+                    <button type="button" id="{{ category_firstword }}-increaseBtn" class="increaseBtn">+</button>
+
+                    <button type="button" id="{{ category_firstword }}-adjustBtn" class="adjustBtn">Save</button>
+                </div>
+                </div>
+            </div>
+
+            <div class="selection-section-nav">
+                <button type="button" id="{{ category_firstword }}-back" class="selection-back">Back</button>
+                        
+                <button type="button" id="{{ category_firstword }}-next" class="selection-next">Next</button>
+            </div>
+                        
+            </div>
+        </div>
+
+      {% endfor %}
+
+    </div>
+</div> 

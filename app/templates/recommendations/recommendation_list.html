@@ -1,0 +1,117 @@
+<div class="container">
+    <div class="row">    
+            
+        <div class="place-card">
+            <div 
+                class="place-image" 
+                style="background-image:url('static/assets/images/jamaica.jpg');">
+            </div>
+        
+            <div class="place-content">
+                <div class="features">
+                    <h5 id="place-percent"> 91% Match</h5>
+                </div>
+                <h5 class="title">Kingston
+                    <span class="rating">
+                        <i class="fa-solid fa-star" style="color: #f6ce3e;"></i>
+                        4.2
+                    </span>
+                </h5>
+                <div class="features">
+                    <p>Kingston, Jamaica</p>
+                </div>
+                <div class="features">                    
+                    <button class="price">
+                        <i class="fa-solid fa-dollar-sign"></i> 
+                        <span>240.00</span>
+                    </button>             
+                    <button class="climate">
+                        <i class="fa-solid fa-cloud"></i>
+                        <span>Tropical</span>
+                    </button>
+                </div>
+                <div id="1-tag-content" class="place-tag-content"> </div>
+            </div>
+            <div class="add-button-div">
+                <i class="fa-solid fa-plus fa-xl" style="color: #447524;"></i>
+            </div>
+        </div>
+
+        <div class="place-card">
+            <div class="place-image" style="background-image: url('static/assets/images/country-01.jpg');">
+            </div>
+            <div class="place-content">
+                <div class="features">
+                    <h5 id="place-percent"> 87% Match</h5>
+                </div>
+                <h5 class="title">Yahalas Valley 
+                    <span class="rating">
+                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                        4.7
+                    </span>
+                </h5>
+                <div class="features">
+                    <p>Ontario, Canada</p>
+                </div>
+                <div class="features">                     
+                    <button class="price">
+                        <i class="fa-solid fa-dollar-sign"></i> 
+                        <span>190.00</span>
+                    </button>             
+                    <button class="climate">
+                        <i class="fa-solid fa-cloud" ></i>
+                        <span>Temperate</span>
+                    </button>
+                </div>
+                <div id="2-tag-content" class="place-tag-content"> </div>
+            </div>
+            <div class="add-button-div">
+                <i class="fa-solid fa-plus fa-xl" style="color: #447524;"></i>
+            </div>
+        </div>
+
+        <div class="place-card">
+            <div class="place-image" style="background-image: url('static/assets/images/niagara-falls.jpg');">
+            </div>    
+                <div class="place-content">
+                <div class="features">
+                    <h5 id="place-percent"> 83% Match</h5>
+                </div>
+                <h5 class="title">Niagara Falls 
+                    <span class="rating">
+                        <i class="fa-solid fa-star" style="color: #f6ce3e;"></i>
+                        4.5
+                    </span>
+                </h5>
+                <div class="features">
+                    <p>Niagra Falls, Canada</p>
+                </div>
+                <div class="features">                   
+                    <button class="price">
+                        <i class="fa-solid fa-dollar-sign"></i> 
+                        <span>325.00</span>
+                    </button>                  
+                    <button class="climate">
+                        <i class="fa-solid fa-cloud"></i>
+                        <span>Temperate</span>
+                    </button>
+                </div>
+                <div id="3-tag-content" class="place-tag-content"> </div>
+            </div>
+            <div class="add-button-div">
+                <i class="fa-solid fa-plus fa-xl" style="color: #447524;"></i>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% block css %}
+  <!-- RECOMMENDATIONS STYLESHEETS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/recommendations/css/recommendation_list.css') }}">
+{% endblock %}
+
+{% block js %}   
+  <!-- RECOMMENDATIONS JAVASCRIPT FUNCTIONS -->
+  <script src="{{ url_for('static', filename='assets/recommendations/js/recommendation_list.js') }}"></script>
+{% endblock %}

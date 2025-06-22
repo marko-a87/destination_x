@@ -54,6 +54,7 @@ def signup():
 
         #Redirect user to the quiz page
         return redirect(url_for('login'))
+    
     #render the signup page
     return render_template('account_actions/sign_up_base.html')
         
@@ -61,16 +62,17 @@ def signup():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('Username')
+        user_email = request.form.get('Email')
         password = request.form.get('Password')
 
-        if username == None:
+        if user_email == None:
             # return render_template("/login.html")
-            return jsonify({"Status": 400, "Message": "Enter the username"})
+            return jsonify({"Status": 400, "Message": "Enter the email"})
         if password == None:
             return jsonify({"Status": 400, "Message": "Enter the password"})
         
-        user = User.query.filter_by(name=username).first()
+        user = User.query.filter_by(email=user_email).first()
+        print(user)
         bcrypt = Bcrypt()
         check_pass = bcrypt.check_password_hash(user.password_hash, password)
         if user and check_pass:
@@ -79,14 +81,15 @@ def login():
             # return jsonify({"Status": 200, "Message": "User logged in"})
         # return redirect(url_for('selection'))
         return jsonify({"Status": 400, "Message": "Incorrect password"})
+    
     return render_template("account_actions/login.html")
+
 
 @login_required
 @app.route('/logout' , methods=['POST'])
 def logout():
     logout_user()
     return({"Status": 200, "Message": "User logged out"})
-
 
 
 @login_manager.user_loader

@@ -1,0 +1,27 @@
+@import url("base.css");
+
+
+.error-message{
+  outline: 2px solid rgb(207, 63, 63);
+  color: rgb(207, 63, 63);
+}
+
+.success-message{
+  outline: 2px solid rgb(57, 188, 68);
+  color: rgb(57, 188, 68);
+}
+
+.neutral-message{
+  outline: 2px solid var(--main-color);
+  color: var(--main-color);
+}
+
+.error-icon {
+  color: rgb(207, 63, 63);
+  margin-right: -5px;
+}
+
+.error-icon {
+  color: rgb(207, 63, 63);
+  margin-right: -5px;
+}

@@ -1,0 +1,152 @@
+@import url("base.css");
+
+
+.hidden {
+  display: none;
+}
+
+.selection-section {
+  margin-bottom: 10px;
+  overflow: hidden;
+  width: 100%;  
+}
+
+.selection-section-btn, .selection-subsection-btn {
+  width: 100%;  
+  background-color: var(--main-color);
+  color: white;
+  border-radius: 8px;
+  padding: 8px;
+  padding-left: 15px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.selection-section-btn:hover {
+  opacity: 0.9;
+}
+
+.selection-subsection-btn {
+  background-color: white;
+  border: 3px solid var(--main-color);
+  color: var(--main-color);
+  padding: 5px;
+  font-size: 14px;
+}
+
+.selection-subsection-btn:hover {
+  opacity: 0.9;
+}
+
+.selection-section-content, .selection-subsection-content{
+  padding: 15px;
+  font-size: 14px;
+  z-index: 5;
+}
+
+#activities-content{
+  padding: 13px;
+  padding-right: 0px;
+}
+
+.selection-subsection-content{
+  padding-right: 0px;
+  padding-bottom: 30px;
+}
+
+.selection-subarrow {
+  font-size: 18px;
+}
+
+.selection-section i {
+  padding-left: 7px;
+  padding-right: 10px;
+}
+
+.selection-section-nav {
+  display: flex;
+  justify-content: space-evenly;
+  width: 30%;
+  margin: 0 auto;
+}
+
+.selection-section-nav .selection-back, .selection-section-nav .selection-next {  
+  background: var(--main-color);
+  color: white;
+  font-size: 15px;
+  padding: 6px 23px;
+  border-radius: 28px;
+  border: none;
+}
+
+.selection-section-nav .selection-back:hover, .selection-section-nav .selection-next:hover {  
+  opacity: 0.8;
+}
+
+.selection-section-nav .selection-back {  
+  margin-right: 10px;
+}
+
+.selection-feedback-div {
+  border-radius: 9px;
+  padding: 7px;
+  margin-bottom: 25px;
+  margin-right:0px;
+}
+
+#form-feedback-div {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+#form-feedback-div i {
+  padding-left: 7px;
+  padding-right: 10px;
+}
+
+.selection-subsection-content .selection-feedback-div{
+  width: 99%;
+}
+
+
+
+.pref-input{  
+  z-index: 3;
+  padding: 20px 0px 25px 0px;
+  width: 100%;
+}
+
+
+.pref-inner{  
+  display: flex;  
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+}
+
+.pref-selects{   
+  margin: 0px 25px;
+  display: flex;  
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+}
+
+.pref-text{  
+  margin-left: 25px;
+  font-size: 17px;
+  text-align: center;
+  z-index: 2;
+  margin-right: 15px;
+  color: var(--main-color);
+}
+
+.priority-name {
+  font-size: 16px;
+  color: black;  
+}

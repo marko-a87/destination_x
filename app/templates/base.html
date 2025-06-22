@@ -13,24 +13,15 @@
     <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Application CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/other/fontawesome.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/other/owl.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/other/animate.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/other/css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/other/css/owl.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/other/css/animate.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/banner.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/country.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/action.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/footer.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/places.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/place_list.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/selection.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/signup.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/destination_details.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/base/css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/base/css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/base/css/footer.css') }}">
     
     {% block css %} {% endblock%}
 
@@ -75,29 +66,16 @@
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 
-    <script src="{{ url_for('static', filename='assets/js/isotope.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/owl-carousel.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/wow.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/tabs.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/popup.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/custom.js') }}"></script>
-    
+    <script src="{{ url_for('static', filename='assets/other/js/isotope.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/other/js/owl-carousel.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/other/js/tabs.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/other/js/popup.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/other/js/custom.js') }}"></script>
+
     {% block js %}   
-      <script>
-        function bannerSwitcher() {
-          next = $('.sec-1-input').filter(':checked').next('.sec-1-input');
-          if (next.length) next.prop('checked', true);
-          else $('.sec-1-input').first().prop('checked', true);
-        }
-
-        var bannerTimer = setInterval(bannerSwitcher, 5000);
-
-        $('nav .controls label').click(function() {
-          clearInterval(bannerTimer);
-          bannerTimer = setInterval(bannerSwitcher, 5000)
-        });
-      </script>
-    {% endblock%}
+      <!-- BASE JAVASCRIPT FUNCTIONS -->
+      <script src="{{ url_for('static', filename='assets/base/js/base.js') }}"></script>
+    {% endblock %}
 
   </body>
 
