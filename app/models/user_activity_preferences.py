@@ -7,12 +7,14 @@ class UserActivityPreference(db.Model):
     id =  db.Column(db.Integer, primary_key=True)
     user_id     = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),nullable=False)
-    priority    = db.Column(db.Integer, default=1)
+    activity_id = db.Column(db.Integer, db.ForeignKey('activities.id'), nullable=False)
+    priority    = db.Column(db.Integer, default=0)
 
-    user     = db.relationship('User',     back_populates='activity_preferences')
+    user     = db.relationship('User', back_populates='activity_preferences')
 
-    def __init__(self, user_id, category_id, priority):
+    def __init__(self, user_id, category_id, priority,activity_id):
         self.user_id = user_id
         self.category_id = category_id
         self.priority = priority
+        self.activity_id = activity_id
         
