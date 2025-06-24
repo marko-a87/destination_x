@@ -34,16 +34,15 @@
 
                     <div class="divider"> </div>
 
-                      {% include "selection/selection_nonactivity.html" %}
+                      {% include "selection/selection_nonactivity.html" %}                  
 
                       {% include "selection/selection_activity.html" %}
 
                     <div class="divider"> </div>  
-                    
                   
                     <div id="save-input" class="pref-input">
                       <div id="save-input-inner" class="pref-inner">
-                        <button type="button" onclick="submitForm()" class="save">Save Changes</button>    
+                        <button type="button" onclick="submit_selection_form()" class="save">Save Changes</button>    
                       </div>   
                     </div>
 
@@ -60,6 +59,7 @@
 
 
 {% block css %}
+
   <!-- SELECTION STYLESHEETS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/selection/css/selection_page.css') }}">
   
@@ -70,11 +70,17 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/selection/css/selection_feedback.css') }}">
   
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/selection/css/selection_tags.css') }}">
+
 {% endblock %}
 
+
 {% block js %}   
+
   <!-- SELECTION UTILITY JAVASCRIPT FUNCTIONS -->
   <script src="{{ url_for('static', filename='assets/selection/js/selection_utility.js') }}"></script>
+
+  <!-- ACTIVITY JAVASCRIPT FUNCTIONS -->
+  <script src="{{ url_for('static', filename='assets/selection/js/selection_activity_util.js') }}"></script>
 
   <!-- FEEDBACK HANDLING JAVASCRIPT FUNCTIONS -->
   <script src="{{ url_for('static', filename='assets/selection/js/selection_feedback.js') }}"></script>
@@ -94,123 +100,8 @@
   <!-- NAVIGATION JAVASCRIPT FUNCTIONS -->
   <script src="{{ url_for('static', filename='assets/selection/js/selection_navigation.js') }}"></script>
 
-  <!-- ACTIVITY JAVASCRIPT FUNCTIONS -->
-  <script src="{{ url_for('static', filename='assets/selection/js/selection_activity_util.js') }}"></script>
-
   <!-- ERROR HANDLING JAVASCRIPT FUNCTIONS -->
   <script src="{{ url_for('static', filename='assets/selection/js/selection_error.js') }}"></script>
-
-
-  <script> 
-
-    //Stores reference to selection form
-    const selection_form = document.getElementById("selection-form");
-
-    //Stored converted categories passed to template as array of category objects
-    const converted_categories = {{ categories | tojson }};
-    //console.log(converted_categories);
-    
-    // Stores user's selected countries in these categories
-    const passports_submit = [];
-    const visas_submit = [];
-
-    // Stores user's selected categories and activities with priorities
-    const category_submit = [];
-
-    // Stores trackers for feedback logic, globally accessible across files
-    window.current_clicked_tag = null;
-    window.recently_added_tag = null;
-    
-    // Handles data submissions from the form
-    function submitForm() {
-      submit_selection_form(selection_form);
-    }
-
-
-    /*
-      <---------------------------------------------------------------->
-      <  This array holds all slider-related UI elements and settings  >
-      <  for budget and each dynamic category created from backend.    >
-      <---------------------------------------------------------------->
-    */
-    const slider_elements = [];
-
-    // <-- SET UP SLIDER ELEMENTS USING selection_sliders.js FUNCTIONS -->
-
-    // Populate slider elements intially with static elements like Budget
-    add_static_sliders(slider_elements);
-    // Populate slider elements for all categories
-    add_dynamic_sliders(converted_categories, slider_elements);
-    // Bind all slider elements to logic
-    add_slider_listeners(slider_elements);
-
-    // Display slider elements for debugging
-    //console.log("slider_elements: ", slider_elements);
-        
-
-    /*
-      <------------------------------------------------------->
-      <  Manages dropdowns and tag selections for categories  > 
-      <  and special elements like Visa and Passport.         >
-      <------------------------------------------------------->
-    */
-    const dropdown_elements = [];
-
-    // <-- SET UP DROPDOWN ELEMENTS USING selection_dropdowns.js FUNCTIONS -->
-
-    // Populate dropdown elements intially with static elements like Budget
-    add_static_dropdowns(dropdown_elements);
-    // Populate dropdown elements for all categories
-    add_dynamic_dropdowns(converted_categories, dropdown_elements, slider_elements);
-    // Bind all dropdown elements to logic
-    add_dropdown_listeners(dropdown_elements);
-
-    // Display dropdown elements for debugging
-    //console.log("dropdown_elements: ", dropdown_elements);
-   
-
-    /*
-      <-------------------------------------------------------->
-      <  Collapsible UI sections for organizing categories or  >
-      <  groups                                                >
-      <-------------------------------------------------------->
-    */
-    const navigation_elements = [];
-
-    // <-- SET UP NAVIGATION ELEMENTS USING selection_navigation.js FUNCTIONS -->
-
-    // Populate navigation elements intially with static elements like Budget
-    add_static_nav_els(navigation_elements);
-    // Populate navigation elements for all categories
-    add_dynamic_nav_els(converted_categories, navigation_elements);
-    // Bind all navigation elements to logic
-    add_nav_logic(navigation_elements);
-
-    // Display navigation elements for debugging
-    //console.log("navigation elements: ", navigation_elements);
-
-
-
-    /*
-      <--------------------------------------------------------->
-      <  Validates the form and checks for errors and displays  >
-      <  them if found.                                         >
-      <--------------------------------------------------------->
-    */
-    const feedback_elements = [];
-
-    // <-- SET UP FEEDBACK ELEMENTS USING selection_feedback.js FUNCTIONS -->
-
-    // Populate feedback elements intially with static elements like Budget
-    add_static_feedbacks(feedback_elements);
-    // Populate feedback elements for all categories
-    add_dynamic_feedbacks(converted_categories, feedback_elements);
-
-    // Display feedback elements for debugging
-    //console.log("feedback elements: ", feedback_elements);
-
-
-  </script>
 
 {% endblock %}
 

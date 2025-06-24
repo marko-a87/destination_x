@@ -12,56 +12,55 @@
 //  <     FUNCTION TO HANDLE POPULATING FEEDBACK ELEMENTS     >
 //  <--------------------------------------------------------->
 
-// Populate dropdown_elements intially with static elements like Passport
-function add_static_feedbacks(feedback_element_list){    
-    
-    feedback_element_list.push(
-        {
-            elementName: "Form",
-            elementType: "Non-Activity",
-            feedbackDiv: document.getElementById('form-feedback-div')
-        },
-        {
-            elementName: "Budget",
-            elementType: "Non-Activity",
-            feedbackDiv: document.getElementById('budget-feedback-div')
-        },
-        {
-            elementName: "Passport",
-            elementType: "Non-Activity",
-            feedbackDiv: document.getElementById('passport-feedback-div')
-        },
-        {
-            elementName: "Visa",
-            elementType: "Non-Activity",
-            feedbackDiv: document.getElementById('visa-feedback-div')
-        }
-    );
-}
+/*
+    <--------------------------------------------------------->
+    <  Validates the form and checks for errors and displays  >
+    <  them if found.                                         >
+    <--------------------------------------------------------->
+*/
+// Populate dropdown_elements intially with static elements like Passport    
+const feedback_elements = [
+    {
+        elementName: "Form",
+        elementType: "Non-Activity",
+        feedbackDiv: document.getElementById('form-feedback-div')
+    },
+    {
+        elementName: "Budget",
+        elementType: "Non-Activity",
+        feedbackDiv: document.getElementById('budget-feedback-div')
+    },
+    {
+        elementName: "Passport",
+        elementType: "Non-Activity",
+        feedbackDiv: document.getElementById('passport-feedback-div')
+    },
+    {
+        elementName: "Visa",
+        elementType: "Non-Activity",
+        feedbackDiv: document.getElementById('visa-feedback-div')
+    }
+];
 
 
 // Dynamically generate dropdown elements for all categories & populate dropdown element list 
-function add_dynamic_feedbacks(category_list, feedback_element_list){
+get_categories_list().forEach(category => { 
 
-    category_list.forEach(category => { 
-
-        feedback_element_list.push(
-            {          
-                elementName: category.name,
-                elementType: "Activity",
-                feedbackDiv: document.getElementById(format_category_name(category.name) + "-feedback-div")
-            }
-        );
-    });   
-
-    //console.log(feedback_element_list);    
-}
+    feedback_elements.push(
+        {          
+            elementName: category.name,
+            elementType: "Activity",
+            feedbackDiv: document.getElementById(format_category_name(category.name) + "-feedback-div")
+        }
+    );
+});   
 
 
 
 //  <--------------------------------------------->
 //  <    FUNCTIONS TO DISPLAY FEEDBACK TO USER    >
 //  <--------------------------------------------->
+
 
 // Timeout display of feedback div
 function timeout_feedback(element, time_ms) {
@@ -70,6 +69,7 @@ function timeout_feedback(element, time_ms) {
         element.feedbackDiv.classList.add("hidden"); 
     }, time_ms); // eg. 2000ms = 2 seconds
 }
+
 
 function display_message(disable, element, message, message_type, timeout) {
     // display feedback based on type of message
@@ -177,12 +177,6 @@ function display_message(disable, element, message, message_type, timeout) {
 document.addEventListener("DOMContentLoaded", () => {   
 
     // Make all feedback functions accessible globally
-
-    // add_static_feedbacks(feedback_element_list) function
-    window.add_static_feedbacks = add_static_feedbacks;
-
-    // add_dynamic_feedbacks(category_list, feedback_element_list) function
-    window.add_dynamic_feedbacks = add_dynamic_feedbacks;
 
     // display_message(element, message, message_type, disable) function
     window.display_message = display_message;

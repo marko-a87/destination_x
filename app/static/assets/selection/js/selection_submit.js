@@ -11,11 +11,13 @@
     logic to collect data from the form and lists 
     and submit it as a POST request.      
 */
+ //Stores reference to selection form
+const selection_form = document.getElementById("selection-form");
 
-function submit_selection_form(form_element) {
+// Handles data submissions from the form
+function submit_selection_form() {
 
-    // if find_category_errors() returns false, run the rest of this function
-
+    // if find_category_errors() has no errors, run the rest of this function
     if (find_category_errors() !== "None") {
 
         // Flag the effected sections
@@ -35,7 +37,7 @@ function submit_selection_form(form_element) {
     } else {
 
         // Create a FormData object from the form
-        const formData = new FormData(form_element);
+        const formData = new FormData(selection_form);
 
         // Initialize an empty object to hold the cleaned data
         const data = {};

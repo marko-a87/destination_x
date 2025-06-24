@@ -7,6 +7,9 @@
     <--------------------------------------------->        
 */
 
+// Stores trackers for feedback logic, globally accessible across files
+window.current_clicked_tag = null;
+window.recently_added_tag = null;
 
 //  <----------------------------------------------->
 //  <    FUNCTIONS TO HANDLE HANDLE TAG CREATION    >

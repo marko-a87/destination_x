@@ -26,7 +26,23 @@ function to_title_case(string) {
 //  <     FUNCTIONS TO ACCESS DECLARED ENTITIES    >
 //  <---------------------------------------------->
 
-// Get a specific submission list declared in selection_input.html script
+// Access database categories passed into template
+const converted_categories = JSON.parse(document.getElementById("category_values").dataset.json);
+
+function get_categories_list(){
+    //console.log(converted_categories);
+    return converted_categories;
+}
+
+
+// Get a specific submission list 
+// Stores user's selected countries in these categories
+const passports_submit = [];
+const visas_submit = [];
+
+// Stores user's selected categories and activities with priorities
+const category_submit = [];
+
 function get_submission_list(list_type){
 
     switch (list_type) {
@@ -116,11 +132,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // to_title_case(string) function
     window.to_title_case = to_title_case;
 
-    // get_element_list(list_type) function
-    window.get_element_list = get_element_list;
-
 
     // <-- FUNCTIONS TO ACCESS DECLARED ENTITIES -->
+    // get_categories_list() function
+    window.get_categories_list = get_categories_list;
+
     // get_submission_list(list_type) function
     window.get_submission_list = get_submission_list;
 
