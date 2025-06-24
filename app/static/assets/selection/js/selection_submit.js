@@ -11,8 +11,6 @@
     logic to collect data from the form and lists 
     and submit it as a POST request.      
 */
- //Stores reference to selection form
-const selection_form = document.getElementById("selection-form");
 
 // Handles data submissions from the form
 function submit_selection_form() {
@@ -37,7 +35,7 @@ function submit_selection_form() {
     } else {
 
         // Create a FormData object from the form
-        const formData = new FormData(selection_form);
+        const formData = new FormData(get_selection_form());
 
         // Initialize an empty object to hold the cleaned data
         const data = {};

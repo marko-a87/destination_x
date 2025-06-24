@@ -178,6 +178,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Make all feedback functions accessible globally
 
+    // timeout_feedback(element, time_ms) function
+    window.timeout_feedback = timeout_feedback;
+
     // display_message(element, message, message_type, disable) function
     window.display_message = display_message;
 

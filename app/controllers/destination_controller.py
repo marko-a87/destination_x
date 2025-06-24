@@ -100,7 +100,7 @@ def recommendations():
     
     
     
-    """Render website's preference selection page."""
+    """Render website's recommendation page."""
     return render_template('recommendations/recommendation_base.html')
 
 

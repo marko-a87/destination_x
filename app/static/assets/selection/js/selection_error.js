@@ -39,7 +39,9 @@ function flag_nav_section(){
 
                 pref_error_icon.classList.remove('hidden'); 
             }
-        } else {
+        } 
+        else {
+
             // If no error, and the icon is currently shown, hide it
             if (!nav_error_icon.classList.contains('hidden')) { 
 
@@ -109,26 +111,24 @@ function find_category_errors() {
                             
                 } 
                 
-                else {
-                
-                    if (target_category !== undefined) {
+                else {                
 
-                        // Category exists, extract list of activities
-                        let activities_list = target_category.categoryActivities;
+                    // Category exists, extract list of activities
+                    let activities_list = target_category.categoryActivities;
 
-                        // Check if activity is already in the category
-                        let activity = find_activity(extract_tag_name(tag), activities_list);
+                    // Check if activity is already in the category
+                    let activity = find_activity(extract_tag_name(tag), activities_list);
 
-                        if (activity === undefined) {
+                    if (activity === undefined) {
 
-                            errors_exist = "Activity Missing";   
-                            
-                            // Flag dropdown nagivate section as having errors                
-                            find_element("navigation", element.elementName).hasErrors = true;  
-                            
-                            //console.log(find_element("navigation", element.elementName));
-                        }
+                        errors_exist = "Activity Missing";   
+                        
+                        // Flag dropdown nagivate section as having errors                
+                        find_element("navigation", element.elementName).hasErrors = true;  
+                        
+                        //console.log(find_element("navigation", element.elementName));
                     }
+                    
                 }
                  
                 console.log("find errors navigation:", find_element("navigation", element.elementName));  

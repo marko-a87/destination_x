@@ -35,8 +35,7 @@ const dropdown_elements = [
 ];
 
 
-// Dynamically generate dropdown elements for all categories & populate
-// dropdown element list 
+// Dynamically generate dropdown elements for all categories & populate dropdown element list 
 get_categories_list().forEach(category => { 
 
     dropdown_elements.push(
@@ -259,10 +258,10 @@ document.addEventListener("DOMContentLoaded", () => {
     window.reset_dropdown_selection = reset_dropdown_selection;
 
     // hide_category_slider(element, hide) function
-    window.hide_category_slider =  hide_category_slider;
+    window.hide_category_slider = hide_category_slider;
 
     // repopulate_category_slider(element, tag_element) function
-    window.repopulate_category_slider =  repopulate_category_slider;
+    window.repopulate_category_slider = repopulate_category_slider;
 
     // process_dropdown_selection(element) function
     window.process_dropdown_selection = process_dropdown_selection;

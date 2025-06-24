@@ -26,6 +26,15 @@ function to_title_case(string) {
 //  <     FUNCTIONS TO ACCESS DECLARED ENTITIES    >
 //  <---------------------------------------------->
 
+//Stores reference to selection form
+const selection_form = document.getElementById("selection-form");
+
+function get_selection_form(){
+
+    return selection_form;
+}
+
+
 // Access database categories passed into template
 const converted_categories = JSON.parse(document.getElementById("category_values").dataset.json);
 
@@ -134,6 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // <-- FUNCTIONS TO ACCESS DECLARED ENTITIES -->
+    // get_selection_form() function
+    window.get_selection_form = get_selection_form;
+
     // get_categories_list() function
     window.get_categories_list = get_categories_list;
 

@@ -7,7 +7,7 @@
     <--------------------------------------------->        
 */
 
-// Stores trackers for feedback logic, globally accessible across files
+// Stores trackers for logic, globally accessible across files
 window.current_clicked_tag = null;
 window.recently_added_tag = null;
 
@@ -60,6 +60,7 @@ function create_tag_element(element, tag_value) {
     // Return the tag element with the binded logic
     return tag;
 }
+
 
 // Allows for the flagging and removal of selection of tags
 function toggle_active_tag(element, tag_element, tag_value){

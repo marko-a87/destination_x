@@ -197,7 +197,6 @@ function navigate_to_dropdown(current_element, nav_to_element, skip_element) {
     //console.log("current_element:", current_element);
     //console.log("nav_to_element:", nav_to_element);
 
-
     // If current element has unresolves errors
     if (current_element.hasErrors){
 

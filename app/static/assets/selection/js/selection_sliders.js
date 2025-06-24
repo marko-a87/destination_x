@@ -87,9 +87,9 @@ slider_elements.forEach(element => {
 function set_preference_amount(slider_element) {      
     
     display_val = parseInt(slider_element.sliderElement.value);
-    slider_element.amountValue.innerText = display_val;     
-
+    slider_element.amountValue.innerText = display_val;   
 }
+
 
 // Increase slider value using plus button
 function increase_amount(slider_element) { 
@@ -102,8 +102,8 @@ function increase_amount(slider_element) {
 
     slider_element.sliderElement.value = current_val;
     slider_element.amountValue.innerText = current_val;
-
 }
+
 
 // Decrease slider value using minus button
 function decrease_amount(slider_element) { 
@@ -116,7 +116,6 @@ function decrease_amount(slider_element) {
 
     slider_element.sliderElement.value = current_val;
     slider_element.amountValue.innerText = current_val;
-
 }
 
 
@@ -132,8 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // increase_amount(slider_element) function
     window.increase_amount = increase_amount;
 
-    // increase_amount(slider_element) function
-    window.increase_amount = increase_amount;
+    // decrease_amount(slider_element) function
+    window.decrease_amount = decrease_amount;
 
 });
 
