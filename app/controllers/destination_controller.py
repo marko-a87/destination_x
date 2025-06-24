@@ -108,15 +108,12 @@ def recommendations():
 @app.route('/selection', methods=['POST','GET'])
 def selection():
     """Render website's preference selection page."""  
-    
     # Handle GET request to load the selection page
     if request.method == 'GET':
-        
         # Initialize empty lists to store countries, categories, and activities
         categories = []
         countries = []
         activities = []
-        
         try:
             # Fetch all countries and categories from the database
             countries_result = db.session.execute(db.select(Country)).scalars().all()
@@ -164,10 +161,10 @@ def selection():
         data = request.get_json()
         
         # Log received preference data for debugging
-        #print("budget:", data["Budget"])
-        #print("passports:", data["Passports"])
-        #print("visas:", data["Visas"])
-        #print("activities:", data["Activities"])
+        # print("budget:", data["Budget"])
+        # print("passports:", data["Passports"])
+        # print("visas:", data["Visas"])
+        # print("activities:", data["Activities"])
         
         # Expected data format from client:
         """ 
@@ -210,7 +207,26 @@ def selection():
         """
         
         # TODO: Logic here to process and store user preferences in the database...
-         
+        
+        for activity_info in data["Activities"]:
+            try:
+                category_name = activity_info["categoryName"]
+                category_obj = Category.query.filter_by(name=category_name).first()
+                category_id = category_obj.id
+                category_activities = activity_info["categoryActivities"]
+            except Exception as e:
+                print("Category not found")
+            for activity in category_activities:
+                #Gets the activity name selected
+                activity_name = activity["activityName"]
+                activity_obj = Activity.query.filter_by(name=activity_name).first()
+                activity_id = activity_obj.id
+                #Gets the priority associated with the activity selected
+                activity_priority = int(activity["activityPriority"])
+                user_activity_preference = UserActivityPreference(user_id=current_user.id, category_id=category_id, priority=activity_priority,activity_id=activity_id )
+                db.session.add(user_activity_preference)
+        # Adds user preference to database.
+        db.session.commit()
         
         
         # Return a success response as JSON
