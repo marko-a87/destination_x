@@ -187,7 +187,6 @@ function toggle_nav_content(element, collapse) {
             // Bring attention to section by scrolling it into view
             section_content.scrollIntoView({ behavior: "smooth", block: "center" });
         }
-
     }
 }
 
@@ -263,8 +262,12 @@ function navigate_to_dropdown(current_element, nav_to_element, skip_element) {
             toggle_nav_content(skip_element, false);
         }
 
-        // Expand the target section dropdown content
-        toggle_nav_content(nav_to_element, false);
+        // Check if dropdown section is already open, skip this if it is
+        if (nav_to_element.dropdownButton.nextElementSibling.classList.contains('hidden')) {
+
+            // Expand the target section dropdown content
+            toggle_nav_content(nav_to_element, false);
+        }        
     }    
 }
 
