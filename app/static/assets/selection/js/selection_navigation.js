@@ -166,8 +166,15 @@ function toggle_nav_content(element, collapse) {
 
     // Toggle active styling from current button
     element.dropdownButton.classList.toggle('active');
-    // Toggle dropdown section content
-    section_content.classList.toggle('hidden'); 
+
+    // Toggle dropdown section content         
+    section_content.classList.toggle('transition');
+
+    setTimeout(() => {        
+        section_content.classList.toggle('hidden');
+        section_content.classList.toggle('transition'); 
+    },500); // eg. 500ms = 0.5 seconds    
+    
     
     //console.log(section_content.classList);
 
@@ -175,17 +182,19 @@ function toggle_nav_content(element, collapse) {
     if (collapse === true) {
 
         // Set current arrow to down symbol
-        element.dropdownArrow.innerHTML = "&#9662;"; 
+        element.dropdownArrow.innerHTML = "&#9662;";    
     }
     else {
 
         // Set current arrow to up symbol  
-        element.dropdownArrow.innerHTML = "&#9652;";       
+        element.dropdownArrow.innerHTML = "&#9652;";  
 
         if (element.elementName !== "Preferences"){
-            
-            // Bring attention to section by scrolling it into view
-            section_content.scrollIntoView({ behavior: "smooth", block: "center" });
+
+            setTimeout(() => {        
+                // Bring attention to section by scrolling it into view
+                section_content.scrollIntoView({ behavior: "smooth", block: "center" });
+            },500); // eg. 500ms = 0.5 seconds   
         }
     }
 }
