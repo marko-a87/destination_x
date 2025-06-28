@@ -225,7 +225,8 @@ function navigate_to_dropdown(current_element, nav_to_element, skip_element) {
     }
     
     // If a category has unresolved errors
-    else if (find_category_errors() !== "None" && current_element.elementType == "Activity"){
+    else if (find_category_errors() !== "None" && current_element.elementType == "Activity" &&
+        is_error_element(current_element)){
 
         // Display error informing user to address current errors first
 
@@ -254,28 +255,38 @@ function navigate_to_dropdown(current_element, nav_to_element, skip_element) {
                 null,
                 null,
                 null
-            )    
-        }
+            )                
 
-        // Unflag any effected actvity sections that had errors
-        flag_nav_section();
+            // Allows the opening of a subcategory at the same time as main
+            if (skip_element !== undefined){   
+
+                // Expand the sub section dropdown content
+                toggle_nav_content(skip_element, false);
+            }
+
+            // Check if dropdown section is already open, skip this if it is
+            if (nav_to_element.dropdownButton.nextElementSibling.classList.contains('hidden')) {
+
+                // Expand the target section dropdown content
+                toggle_nav_content(nav_to_element, false);
+            }        
+
+        } else {
+
+            // Bring attention to first section with errors by scrolling it into view
+            first_error_element = find_element("navigation", get_error_elements()[0].elementName);
+            console.log(first_error_element);
+
+            first_error_section = first_error_element.dropdownButton.nextElementSibling;
+            
+            first_error_section.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
 
         // Collapse the currently open dropdown
         toggle_nav_content(current_element, true);
 
-        // Allows the opening of a subcategory at the same time as main
-        if (skip_element !== undefined){   
-
-            // Expand the sub section dropdown content
-            toggle_nav_content(skip_element, false);
-        }
-
-        // Check if dropdown section is already open, skip this if it is
-        if (nav_to_element.dropdownButton.nextElementSibling.classList.contains('hidden')) {
-
-            // Expand the target section dropdown content
-            toggle_nav_content(nav_to_element, false);
-        }        
+        // Run flagging section logic (will unflag if no longer has errors)
+        flag_nav_section();        
     }    
 }
 

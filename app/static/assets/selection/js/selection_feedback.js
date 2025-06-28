@@ -108,6 +108,7 @@ function display_message(disable, element, message, message_type, timeout) {
 
                     // Flag dropdown nagivate section as having errors                
                     nav_dropdown.hasErrors = true;
+                    console.log("nav_dropdown:", nav_dropdown)
                 }
             
                 break;

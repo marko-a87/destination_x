@@ -44,6 +44,12 @@ function get_categories_list(){
 }
 
 
+// Access list storing elements with errors
+function get_error_elements(){
+    return error_elements;
+}
+
+
 // Get a specific submission list 
 // Stores user's selected countries in these categories
 const passports_submit = [];
@@ -148,6 +154,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // get_categories_list() function
     window.get_categories_list = get_categories_list;
+
+    // get_error_elements() function
+    window.get_error_elements = get_error_elements;
 
     // get_submission_list(list_type) function
     window.get_submission_list = get_submission_list;
