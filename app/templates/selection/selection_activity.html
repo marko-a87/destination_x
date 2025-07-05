@@ -8,7 +8,10 @@
         <i class="fa-solid fa-icons fa-xl"></i>
         4. PREFERRED ACTIVITIES
     </button>
-    <div class="selection-section-content hidden" id="activities-content">
+    <div class="selection-section-content hidden" id="activities-content">        
+
+      <div type="hidden" id="category_values" data-json='{{ categories | tojson | safe }}'> </div>  
+
   
       {% for category in categories %}
 
@@ -21,6 +24,7 @@
                 <i class="fa-solid fa-circle-exclamation fa-beat fa-lg error-icon hidden"></i>
 
                 <i class="fa-solid fa-heart fa-lg"></i>
+
                 {{ category.name | upper }} 
             </button>
             <div class="selection-subsection-content hidden">          

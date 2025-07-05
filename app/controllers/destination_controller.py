@@ -101,7 +101,8 @@ def recommendations():
         #             hotel_price = recommend_service.calculate_hotel_price(hotels_lst[id-1])
     
     
-    """Render website's preference selection page."""
+    
+    """Render website's recommendation page."""
     return render_template('recommendations/recommendation_base.html')
 
 

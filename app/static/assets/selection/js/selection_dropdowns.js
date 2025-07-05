@@ -8,95 +8,82 @@
 */
 
 
-//  <--------------------------------------------------------->
-//  <     FUNCTION TO HANDLE POPULATING DROPDOWN ELEMENTS     >
-//  <--------------------------------------------------------->
+//  <--------------------------------------------->
+//  <     HANDLE POPULATING DROPDOWN ELEMENTS     >
+//  <--------------------------------------------->
 
+/*
+    <------------------------------------------------------->
+    <  Manages dropdowns and tag selections for categories  > 
+    <  and special elements like Visa and Passport.         >
+    <------------------------------------------------------->
+*/
 // Populate dropdown_elements intially with static elements like Passport
-function add_static_dropdowns(dropdown_element_list){    
-    
-    dropdown_element_list.push(
+const dropdown_elements = [
+    {
+        elementName: "Visa",
+        elementType: "Non-Activity",
+        dropdownElement: document.getElementById('visa-tagDropdown'),
+        selectedTagsContainer: document.getElementById('visa-selectedTags')
+    },
+    {
+        elementName: "Passport",
+        elementType: "Non-Activity",
+        dropdownElement: document.getElementById('passport-tagDropdown'),
+        selectedTagsContainer: document.getElementById('passport-selectedTags')
+    }   
+];
+
+
+// Dynamically generate dropdown elements for all categories & populate dropdown element list 
+get_categories_list().forEach(category => { 
+
+    dropdown_elements.push(
         {
-            elementName: "Visa",
-            elementType: "Non-Activity",
-            dropdownElement: document.getElementById('visa-tagDropdown'),
-            selectedTagsContainer: document.getElementById('visa-selectedTags')
-        },
-        {
-            elementName: "Passport",
-            elementType: "Non-Activity",
-            dropdownElement: document.getElementById('passport-tagDropdown'),
-            selectedTagsContainer: document.getElementById('passport-selectedTags')
-        }   
+            elementName: category.name,
+            elementType: "Activity",
+            dropdownElement: document.getElementById(format_category_name(category.name) + "-tagDropdown"),
+            selectedTagsContainer: document.getElementById(format_category_name(category.name) + "-selectedTags"),
+            priorityName: document.getElementById(format_category_name(category.name) + "-priority-name"),
+            sliderDiv: document.getElementById(format_category_name(category.name) + "-slider-control"),
+            sliderListElement: find_element("slider", category.name)
+        }
     );
-
-}
-
-// Dynamically generate dropdown elements for all categories & populate
-// dropdown element list 
-function add_dynamic_dropdowns(category_list, dropdown_element_list, slider_element_list){
-
-    category_list.forEach(category => { 
-
-        dropdown_element_list.push(
-            {
-                elementName: category.name,
-                elementType: "Activity",
-                dropdownElement: document.getElementById(format_category_name(category.name) + "-tagDropdown"),
-                selectedTagsContainer: document.getElementById(format_category_name(category.name) + "-selectedTags"),
-                priorityName: document.getElementById(format_category_name(category.name) + "-priority-name"),
-                sliderDiv: document.getElementById(format_category_name(category.name) + "-slider-control"),
-                sliderListElement: slider_element_list.find(element => element.elementName === category.name)
-            }
-        );
-
-    });   
-
-    //console.log(dropdown_element_list);
-    
-}
+});   
 
 
+//  <------------------------------>
+//  <    ADD DROPDOWN LISTENERS    >
+//  <------------------------------>
 
-//  <------------------------------------------>
-//  <    FUNCTION TO ADD DROPDOWN LISTENERS    >
-//  <------------------------------------------>
+// Bind all dropdowns and tag containers to logic
+dropdown_elements.forEach(element => {
 
-// Bind all dropdown elements to logic
-function add_dropdown_listeners(dropdown_element_list) {
+    // Common between Static dropdowns like Visa/Passport & Category-based dropdowns
 
-    //console.log(dropdown_element_list);
-
-    // Bind all dropdowns and tag containers to logic
-    dropdown_element_list.forEach(element => {
-
-        // Common between Static dropdowns like Visa/Passport & Category-based dropdowns
-
-        element.dropdownElement.addEventListener('change', () => {
-            process_dropdown_selection(element);    
-            
-            // Resets dropdown after 2 seconds
-            reset_dropdown_selection(element, 2000);        
-        });
-
-        element.selectedTagsContainer.addEventListener('click', (event_element) => {          
-            remove_tags(event_element, element);
-        });
-
-        if (element.elementType === "Activity") {   
-
-            // Binding logic to Adjust/"Save" button for category-based dropdowns
-
-            // On Adjust/"Save" button click, update the data structure
-            element.sliderListElement.adjustBtn.addEventListener("click", () => {
-                update_activity_submit(element.sliderListElement);
-            });           
-
-        } 
-
+    element.dropdownElement.addEventListener('change', () => {
+        process_dropdown_selection(element);    
+        
+        // Resets dropdown after 2 seconds
+        reset_dropdown_selection(element, 2000);        
     });
 
-}
+    element.selectedTagsContainer.addEventListener('click', (event_element) => {          
+        remove_tags(event_element, element);
+    });
+
+    if (element.elementType === "Activity") {   
+
+        // Binding logic to Adjust/"Save" button for category-based dropdowns
+
+        // On Adjust/"Save" button click, update the data structure
+        element.sliderListElement.adjustBtn.addEventListener("click", () => {
+            update_activity_submit(element.sliderListElement);
+        });         
+    } 
+});
+
+
 
 
 //  <------------------------------------------------------->
@@ -267,23 +254,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Make all dropdown functions accessible globally
 
-    // add_static_dropdowns(dropdown_element_list) function
-    window.add_static_dropdowns = add_static_dropdowns;
-
-    // add_dynamic_dropdowns(category_list, dropdown_element_list, slider_element_list) function
-    window.add_dynamic_dropdowns = add_dynamic_dropdowns;
-
-    // add_dropdown_listeners(dropdown_element_list) function
-    window.add_dropdown_listeners = add_dropdown_listeners;
-
     // reset_dropdown_selection(element, time_ms) function
     window.reset_dropdown_selection = reset_dropdown_selection;
 
     // hide_category_slider(element, hide) function
-    window.hide_category_slider =  hide_category_slider;
+    window.hide_category_slider = hide_category_slider;
 
     // repopulate_category_slider(element, tag_element) function
-    window.repopulate_category_slider =  repopulate_category_slider;
+    window.repopulate_category_slider = repopulate_category_slider;
 
     // process_dropdown_selection(element) function
     window.process_dropdown_selection = process_dropdown_selection;

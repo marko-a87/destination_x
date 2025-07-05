@@ -16,12 +16,12 @@ function format_category_name(category_name){
     return category_name.split(' ')[0].toLowerCase();
 }
 
+
 // Take name from tag element by extracting text before the span element starts (" <")
 // from the tag element's inner HTML
 function extract_tag_name(tag) {
 
     //console.log(tag);
-
     return tag.innerHTML.slice(0, tag.innerHTML.indexOf(" <"));
 }
 

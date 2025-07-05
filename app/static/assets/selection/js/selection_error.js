@@ -7,6 +7,15 @@
     <----------------------------------------------------->        
 */
 
+// Stores elements with elements in them
+let error_elements = [];
+
+
+// Check if element in list storing elements with errors
+function is_error_element(target_element){
+    //console.log(converted_categories);
+    return error_elements.find(element => element.elementName === target_element.elementName) !== undefined;
+}
 
 // Handle flagging navigation section when it has errors
 function flag_nav_section(){
@@ -27,7 +36,9 @@ function flag_nav_section(){
             child.classList.contains('error-icon'));
 
         // If the current element has an error
-        if (element.hasErrors) {
+        if (element.hasErrors) {            
+
+            //console.log(element);
 
             errors_present = true;
 
@@ -39,7 +50,9 @@ function flag_nav_section(){
 
                 pref_error_icon.classList.remove('hidden'); 
             }
-        } else {
+        } 
+        else {
+
             // If no error, and the icon is currently shown, hide it
             if (!nav_error_icon.classList.contains('hidden')) { 
 
@@ -79,6 +92,7 @@ function flag_nav_section(){
 // Find errors in the category section
 function find_category_errors() {
 
+    error_elements = []; // reset error elements stored
     let errors_exist = "None";
 
     // Search all dropdown element in categories for errors
@@ -90,54 +104,61 @@ function find_category_errors() {
             // Remove flag to show having errors                
             find_element("navigation", element.elementName).hasErrors = false;   
 
-            Array.from(element.selectedTagsContainer.children).forEach(function(tag) {        
+            Array.from(element.selectedTagsContainer.children).forEach(function(tag) {    
                 
                 // Check for the presence of a tag or its category
 
                 // Find the category the tag belongs to
-                let target_category = find_category(element, get_submission_list("category"));
-                
-                //console.log(target_category);
+                let target_category = find_category(element, get_submission_list("category"));               
 
                 // Neither the tag or its category is in the submission list
                 if (target_category === undefined) {
 
                     errors_exist = "Category Missing";     
 
+                    //console.log("find cat:", element);
+
                     // Flag dropdown nagivate section as having errors                
-                    find_element("navigation", element.elementName).hasErrors = true;     
+                    find_element("navigation", element.elementName).hasErrors = true; 
+
+                    console.log("find errors navigation:", find_element("navigation", element.elementName)); 
+
+                    error_elements.push(element);    
                             
                 } 
                 
-                else {
-                
-                    if (target_category !== undefined) {
+                else if (target_category !== undefined)  {           
+                    console.log("else target_category === undefined:", element);     
 
-                        // Category exists, extract list of activities
-                        let activities_list = target_category.categoryActivities;
+                    // Category exists, extract list of activities
+                    let activities_list = target_category.categoryActivities;
 
-                        // Check if activity is already in the category
-                        let activity = find_activity(extract_tag_name(tag), activities_list);
+                    // Check if activity is already in the category
+                    let activity = find_activity(extract_tag_name(tag), activities_list);
 
-                        if (activity === undefined) {
+                    console.log("activity:", activity);
 
-                            errors_exist = "Activity Missing";   
-                            
-                            // Flag dropdown nagivate section as having errors                
-                            find_element("navigation", element.elementName).hasErrors = true;  
-                            
-                            //console.log(find_element("navigation", element.elementName));
-                        }
+                    if (activity === undefined) {
+
+                        errors_exist = "Activity Missing";   
+                        
+                        // Flag dropdown nagivate section as having errors                
+                        find_element("navigation", element.elementName).hasErrors = true;  
+
+                        error_elements.push(element);    
+
                     }
-                }
+                    
+                }                 
                  
-                console.log("find errors navigation:", find_element("navigation", element.elementName));  
             });            
         }        
     });   
 
+   
 
     console.log("errors_exist: ", errors_exist);
+    //console.log("error_elements: ", error_elements);
     
     return errors_exist;
 }
@@ -148,6 +169,9 @@ function find_category_errors() {
 document.addEventListener("DOMContentLoaded", () => {   
 
     // Make all functions accessible globally
+
+    // is_error_element(target_element) function
+    window.is_error_element = is_error_element;
 
     // flag_nav_section() function
     window.flag_nav_section = flag_nav_section;
