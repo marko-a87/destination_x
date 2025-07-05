@@ -16,7 +16,7 @@ from .recommendation import Recommendation
 from .hotel_amentity import hotel_amenities
 from .user_activity_preferences import UserActivityPreference
 from .user_amenity_preference import UserAmenityPreference
-from .user_preference import UserPreference
+from .user_budgets import UserBudget
 
 
 

@@ -18,6 +18,6 @@ def main():
     add_visas()
     add_airports()
     generate_users()
-    generate_user_preferences()
+    # generate_user_preferences()
 if __name__=="__main__":
     main()

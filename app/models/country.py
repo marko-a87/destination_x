@@ -21,7 +21,7 @@ class Country(db.Model):
     destinations    = db.relationship('Destination', back_populates='country')
     recommendations = db.relationship('Recommendation', back_populates='country')
 
-    def __init__(self, name:str, demonym:str, iso_code:str, continent:str, continent_code:str, img:str):
+    def __init__(self, name:str, demonym:str, iso_code:str, continent:str, continent_code:str , img:str):
         self.name = name
         self.demonym = demonym
         self.iso_code = iso_code

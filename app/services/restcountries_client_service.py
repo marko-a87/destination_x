@@ -8,7 +8,7 @@ from requests.exceptions import RequestException
 from typing import List, Dict
 
 class RestCountriesClient:
-    BASE_URL = "https://restcountries.com/v3.1/all"
+    BASE_URL = "https://restcountries.com/v3.1/all?fields=name,demonyms,cca2,continents"
     continent_code_map = {
         "Africa":         "AF",
         "Antarctica":     "AN",

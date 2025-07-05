@@ -12,7 +12,7 @@ from typing import Optional, Union, List, Dict
 from sqlalchemy import or_
 from .. import db
 from app.models.user import User
-from app.models.user_preference import UserPreference
+from app.models.user_budgets import UserBudget
 from app.models.country import Country
 from app.models.city import City
 from app.models.hotel import Hotel

@@ -6,6 +6,7 @@ from app.models.user import User
 from app.services.reccommendation_service import RecommendationService
 
 from app.models.user_activity_preferences import UserActivityPreference
+from app.models.user_budgets import UserBudget
 from app.models.categories import Category
 from app.models.airport import Airport
 from app.models.country import Country
@@ -21,10 +22,11 @@ from flask_login import login_user,logout_user,login_required,current_user
 ###
 # Routing for your application.
 ###
-
+@login_required
 @app.route('/recommendations', methods=['GET', 'POST'])
 def recommendations():
     """Render website's destinations page."""
+    print("WENT HERE")
     if request.method == "POST":
         """Instantiate the recommendation service"""
         recommend_service = RecommendationService()
@@ -99,12 +101,14 @@ def recommendations():
         #             hotel_price = recommend_service.calculate_hotel_price(hotels_lst[id-1])
     
     
-    
     """Render website's preference selection page."""
     return render_template('recommendations/recommendation_base.html')
 
 
-#@login_required
+
+
+
+@login_required
 @app.route('/selection', methods=['POST','GET'])
 def selection():
     """Render website's preference selection page."""  
@@ -159,12 +163,14 @@ def selection():
     if request.method == 'POST':
         # Parse incoming JSON data sent via fetch
         data = request.get_json()
+        budget = UserBudget(user_id=current_user.id, budget=data["Budget"])
+        db.session.add(budget)
         
         # Log received preference data for debugging
-        # print("budget:", data["Budget"])
-        # print("passports:", data["Passports"])
-        # print("visas:", data["Visas"])
-        # print("activities:", data["Activities"])
+        print("budget:", data["Budget"])
+        print("passports:", data["Passports"])
+        print("visas:", data["Visas"])
+        print("activities:", data["Activities"])
         
         # Expected data format from client:
         """ 
@@ -206,16 +212,12 @@ def selection():
         ] 
         """
         
-        # TODO: Logic here to process and store user preferences in the database...
-        
+        # Todo: Logic here to process and store user preferences in the database...
         for activity_info in data["Activities"]:
-            try:
-                category_name = activity_info["categoryName"]
-                category_obj = Category.query.filter_by(name=category_name).first()
-                category_id = category_obj.id
-                category_activities = activity_info["categoryActivities"]
-            except Exception as e:
-                print("Category not found")
+            category_name = activity_info["categoryName"]
+            category_obj = Category.query.filter_by(name=category_name).first()
+            category_id = category_obj.id
+            category_activities = activity_info["categoryActivities"]
             for activity in category_activities:
                 #Gets the activity name selected
                 activity_name = activity["activityName"]
@@ -227,10 +229,9 @@ def selection():
                 db.session.add(user_activity_preference)
         # Adds user preference to database.
         db.session.commit()
-        
-        
         # Return a success response as JSON
-        return jsonify({"message": "POST received", "status": "success"})
+        return redirect(url_for('recommendations'))
+        # return jsonify({"message": "POST received", "status": "success"})
 
 
 @app.route('/details-page')

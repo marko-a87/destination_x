@@ -86,10 +86,11 @@ def login():
 
 
 @login_required
-@app.route('/logout' , methods=['POST'])
+@app.route('/logout' , methods=['GET','POST'])
 def logout():
     logout_user()
-    return({"Status": 200, "Message": "User logged out"})
+    # return({"Status": 200, "Message": "User logged out"})
+    return redirect(url_for('landing'))
 
 
 @login_manager.user_loader

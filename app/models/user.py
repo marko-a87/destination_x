@@ -18,9 +18,9 @@ class User(db.Model):
     port_of_origin = db.Column(db.String(64))
     country_residence = db.Column(db.String(64))
 
-    preferences = db.relationship(
-        'UserPreference', back_populates='user', uselist=False
-    )
+    # user_budget = db.relationship(
+    #     'UserBudget', back_populates='user', uselist=False
+    # )
 
     activity_preferences = db.relationship(
         'UserActivityPreference', back_populates='user', cascade='all, delete-orphan'
