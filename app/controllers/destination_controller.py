@@ -1,5 +1,5 @@
 from app import app, db,login_manager
-from flask import render_template, request, redirect, url_for, flash,jsonify
+from flask import render_template, request, redirect, url_for, flash,jsonify, make_response, after_this_request
 from flask_bcrypt import Bcrypt
 import datetime
 from app.models.user import User
@@ -27,6 +27,7 @@ from flask_login import login_user,logout_user,login_required,current_user
 def recommendations():
     """Render website's destinations page."""
     print("WENT HERE")
+    
     if request.method == "POST":
         """Instantiate the recommendation service"""
         recommend_service = RecommendationService()
@@ -119,6 +120,7 @@ def selection():
         categories = []
         countries = []
         activities = []
+        
         try:
             # Fetch all countries and categories from the database
             countries_result = db.session.execute(db.select(Country)).scalars().all()
@@ -162,10 +164,11 @@ def selection():
     
     # Handle POST request from client-side JavaScript
     if request.method == 'POST':
+            
         # Parse incoming JSON data sent via fetch
         data = request.get_json()
-        budget = UserBudget(user_id=current_user.id, budget=data["Budget"])
-        db.session.add(budget)
+        #budget = UserBudget(user_id=current_user.id, budget=data["Budget"])
+        #db.session.add(budget)
         
         # Log received preference data for debugging
         print("budget:", data["Budget"])
@@ -215,24 +218,35 @@ def selection():
         
         # Todo: Logic here to process and store user preferences in the database...
         for activity_info in data["Activities"]:
+            
             category_name = activity_info["categoryName"]
             category_obj = Category.query.filter_by(name=category_name).first()
             category_id = category_obj.id
             category_activities = activity_info["categoryActivities"]
+            
             for activity in category_activities:
-                #Gets the activity name selected
+                
+                # Gets the activity name selected
                 activity_name = activity["activityName"]
                 activity_obj = Activity.query.filter_by(name=activity_name).first()
                 activity_id = activity_obj.id
-                #Gets the priority associated with the activity selected
+                
+                # Gets the priority associated with the activity selected
                 activity_priority = int(activity["activityPriority"])
                 user_activity_preference = UserActivityPreference(user_id=current_user.id, category_id=category_id, priority=activity_priority,activity_id=activity_id )
+                
                 db.session.add(user_activity_preference)
+
+        
         # Adds user preference to database.
         db.session.commit()
-        # Return a success response as JSON
+
         return redirect(url_for('recommendations'))
-        # return jsonify({"message": "POST received", "status": "success"})
+                    
+        
+            
+        
+        
 
 
 @app.route('/details-page')

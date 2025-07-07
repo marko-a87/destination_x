@@ -64,25 +64,67 @@ function submit_selection_form() {
             },
             body: JSON.stringify(data)  // Convert the data object to a JSON string
         })
+
         .then(response => {
             // Check if the response was successful
-            if (!response.ok) throw new Error("Network response was not ok");
-            return response.json();  // Parse the response as JSON
+            if (!response.ok) {
+
+                // Display error message
+
+                //format: disable, element, message, message_type, timeout
+                display_message( 
+                    false, //don't disable display
+                    find_element("feedback", "Form"),
+                    "There was an internal error. Please try again later.",
+                    "error",
+                    null
+                )
+
+                throw new Error("Network response was not ok");
+            } 
+            else {
+
+                // Display success message
+
+                //format: disable, element, message, message_type, timeout
+                display_message( 
+                    false, //don't disable display
+                    find_element("feedback", "Form"),
+                    "User Preferences Saved! Redirecting to Destinations..." + 
+                    '<strong> <i class="fa-solid fa-spinner fa-spin fa-lg"></i> </strong>',
+                    "success",
+                    null
+                )    
+            }            
+
+            if (response.redirected) {
+
+                let url = response.url;  // Parse the url from response
+
+                setTimeout(() => {
+                    window.location.replace(url); 
+                }, 5000); // 5000ms = 5 secs
+                
+                // creates the second request, and change the content
+                return;
+            }
         })
-        .then(data => console.log('Response:', data))  // Log the server's response
-        .catch(err => console.error('Error:', err));  // Handle any errors
+                
+        .catch(err => {
+            
+            console.error('Error:', err)
 
+            // Display error message
 
-        // Display success message
-
-        //format: disable, element, message, message_type, timeout
-        display_message( 
-            false, //don't disable display
-            find_element("feedback", "Form"),
-            "User Preferences Saved!",
-            "success",
-            null
-        )     
+            //format: disable, element, message, message_type, timeout
+            display_message( 
+                false, //don't disable display
+                find_element("feedback", "Form"),
+                "There was an internal error. Please try again later.",
+                "error",
+                null
+            )
+        });  // Handle any errors 
     }
     
 

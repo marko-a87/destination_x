@@ -9,7 +9,6 @@ Footer Style
 footer {
   background-color: var(--main-color);
   text-align: center;
-  padding: 25px 0px;
 }
 
 #footer-div {

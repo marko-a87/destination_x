@@ -74,6 +74,8 @@ get_categories_list().forEach(category => {
     );
 });  
 
+//console.log(navigation_elements);
+
 
 
 //  <---------------------------------------->
@@ -100,6 +102,7 @@ navigation_elements.forEach(function (element, index, array) {
     } 
     // Hide the next button for the last element
     else if (next === undefined) {
+        //console.log(element);
         element.nextButton.style.display = "none";  // Disables the button
     }          
 
