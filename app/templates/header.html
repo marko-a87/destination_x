@@ -22,8 +22,8 @@
 
                     {% if current_user.is_authenticated %}
                         <li><a id="profile-name" href="{{ url_for('landing') }}">
-                            <img id="profile-pic" src="{{ url_for('static', filename='assets/images/portrait.jpg') }}" alt="">
-                            Hi, Jane
+                            <img id="profile-pic" src="{{ url_for('static', filename='assets/images/default_portrait.png') }}" alt="portrait">
+                            Hi, {{ current_user.name.split(' ')[0] }}!
                         </a>
                         </li>                    
                         <li>

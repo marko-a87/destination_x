@@ -56,7 +56,7 @@ def signup():
         return redirect(url_for('login'))
     
     #render the signup page
-    return render_template('account_actions/sign_up_base.html')
+    return render_template('account_actions/signup.html')
         
 
 @app.route('/login', methods=['POST', 'GET'])

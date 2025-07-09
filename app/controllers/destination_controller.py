@@ -253,7 +253,7 @@ def recommendation_details():
             
         
 @app.route('/details-page/<destinationid>')
-def recommendation_details():
+def recommendation_details2():
     
     """Render website's recommendation details page."""
     return render_template('recommendations/recommendation_details.html')

@@ -1,10 +1,10 @@
 @import url("base.css");
 
-.login-slideshow-container {
-  height: 850px;
+.signup-slideshow-container {
+  height: 1050px;
 }
 
-.login-text-div {
+.signup-text-div {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,17 +15,18 @@
   margin-top: 145px;
 }
 
-#login-text {
+#signup-text {
   color: rgb(232, 232, 232);
   font-size: 29px;
 }
 
-#login-text em {
+#signup-text em {
   font-style: normal;
   color: #ffd166;
 }
 
-.login-form { 
+
+.signup-form { 
   position: absolute;
   margin-top: 270px;
   height: 70px;
@@ -33,20 +34,20 @@
   z-index: 5;
 }
 
-.login-form #login-form {
+.signup-form #signup-form {
   padding: 65px 70px 55px 70px;
   background-color: #f9f9f9;
   border-radius: 23px;
   width: 70vw;
 }
 
-.login-form #login-form label {
+.signup-form #signup-form label {
   font-size: 15px;
   color: black;
 }
 
-.login-form #login-form input,
-.login-form #login-form select {
+.signup-form #signup-form input,
+.signup-form #signup-form select {
   width: 100%;
   height: 46px;
   background-color: transparent;
@@ -57,11 +58,11 @@
   margin-bottom: 30px;
 }
 
-.login-form #login-form input.date {
+.signup-form #signup-form input.date {
   color: #aaa;
 }
 
-.login-form #login-form button {
+.signup-form #signup-form button {
   font-size: 14px;
   color: #fff;
   background-color: var(--main-color);
@@ -80,37 +81,35 @@
   width: 70%;
 }
 
-.login-form #login-form button:hover {
+.signup-form #signup-form button:hover {
   opacity: 0.8;
 }
 
 
-.login-form #login-question-text {
+.signup-form #signup-question-text {
   color: rgb(232, 232, 232);
   text-align: center;
   margin-top: 20px;
 }
 
-.login-form #login-question-text em {
+.signup-form #signup-question-text em {
   font-style: normal;
   text-decoration: underline;
   color: #ffd166;
 }
 
-.login-form #login-question-text a:link {
+.signup-form #signup-question-text a:link {
   color: #ffd166;
 }
 
-.login-form #login-question-text a:visited {
+.signup-form #signup-question-text a:visited {
   color: #ffd166;
 }
 
-.login-form #login-question-text a:hover {
+.signup-form #signup-question-text a:hover {
   color: rgb(232, 232, 232);
 }
 
-.login-form #login-question-text a:active {
+.signup-form #signup-question-text a:active {
   color: rgb(232, 232, 232);
 }
-
-
