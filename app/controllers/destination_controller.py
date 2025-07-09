@@ -114,6 +114,7 @@ def recommendations():
 @app.route('/selection', methods=['POST','GET'])
 def selection():
     """Render website's preference selection page."""  
+    
     # Handle GET request to load the selection page
     if request.method == 'GET':
         # Initialize empty lists to store countries, categories, and activities
@@ -243,14 +244,26 @@ def selection():
 
         return redirect(url_for('recommendations'))
                     
-        
-            
-        
-        
-
 
 @app.route('/details-page')
 def recommendation_details():
     
-    """Render website's signup quiz page."""
+    """Render website's recommendation details page."""
+    return render_template('recommendations/recommendation_details.html')        
+            
+        
+@app.route('/details-page/<destinationid>')
+def recommendation_details():
+    
+    """Render website's recommendation details page."""
     return render_template('recommendations/recommendation_details.html')
+
+
+"""
+@app.route('/properties/<propertyid>')
+def view_property(propertyid):
+    Render the website's page that displays a selected property's details.    
+    property = db.get_or_404(PropertyInfo, propertyid)
+    print(property)    
+    return render_template('property.html', property=property)
+"""
