@@ -31,7 +31,7 @@ def create_app():
     # Make sure all models are loaded:
     from app.models import Activity,City,Country,User, VisaPolicy,Airport,Destination,Category,FlightPrice,Hotel,\
         Recommendation, hotel_amenities,UserActivityPreference,\
-        UserAmenityPreference,UserBudget
+        UserAmenityPreference,UserBudget, UserVisa, UserPassPort
     
 
 

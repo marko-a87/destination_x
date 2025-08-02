@@ -13,6 +13,8 @@ from app.models.country import Country
 from app.models.city import City
 from app.models.hotel import Hotel
 from app.models.activity import Activity
+from app.models.user_passports import UserPassPort
+from app.models.user_visas import UserVisa
 
 from app.utils.helpers import object_as_dict
 
@@ -26,57 +28,63 @@ from flask_login import login_user,logout_user,login_required,current_user
 @app.route('/recommendations', methods=['GET', 'POST'])
 def recommendations():
     """Render website's destinations page."""
-    print("WENT HERE")
-    
-    if request.method == "POST":
-        """Instantiate the recommendation service"""
-        recommend_service = RecommendationService()
+    # if request.method == "POST":
+    #     """Instantiate the recommendation service"""
+    #     recommend_service = RecommendationService()
+    #     #1. Get the user preferences.
+    #     user_preferences= UserActivityPreference.query.all()
+    #     countries=  Country.query.all()
+    #     city_list = []
+    #     activity_list = []
+    #     hotel_list = []
+    #     airport_list = []
+    #     for country in countries:
+    #         if not country:
+    #             continue
+    #         else:
+    #             cid = country.id
+    #             city_objs = City.query.filter_by(country_id=cid).all()
         
-        #1. Get the user preferences.
-        user_preferences= UserActivityPreference.query.all()
-
-        countries=  Country.query.all()
-        for country in countries:
-            if not country:
-                continue
-            else:
-                cid = country.id
-                city_objs = City.query.filter_by(country_id=cid).all()
-                city_list = []
-                for city in city_objs:
-                    activities = Activity.query.filter_by(city_id=city.id).all()
-                    hotels =  Hotel.query.filter_by(city_id = city.id).all()
-                    airports = Airport.query.filter_by(city_id = city.id).all()
-                    city_list.append({'city': city.name, 'activities': activities, "hotels":hotels, "airports":airports })
-        
+    #             for city in city_objs:
+    #                 activities = Activity.query.filter_by(city_id=city.id).all()
+    #                 for activity in activities:
+    #                     activity_list.append(activity.name)
+    #                 hotels =  Hotel.query.filter_by(city_id = city.id).all()
+    #                 for hotel in hotels:
+    #                     hotel_list.append(hotel.name)
+    #                 airports = Airport.query.filter_by(city_id = city.id).all()
+    #                 for airport in airports:
+    #                     airport_list.append(airport.name)
+    #                 city_list.append({'city': city.name, 'activities': activity_list, "hotels":hotel_list, "airports":airport_list })
+    #     print(city_list)  
         #2. Get the activity name and the weight assigned
-        for preference in user_preferences:
-            weight = preference.priority
-            category_obj =  Category.query.filter_by(id=preference.category_id).first()
-            activity_name = category_obj.name
-            user_airport_code = "YVR"
-            user_hotel = "Grand Gardens"           
-            for city in city_list:
-                flight_price = 0
-                hotel_price = 0
-                activity_price = 0
-                activity_lst = [activity.name for activity in city["activities"]]
-                hotel_lst = [hotel.name for hotel in city_list["hotels"]]
-                if activity_name in activity_lst:
-                    activity_obj = Activity.query.filter_by(name= activity_name).first()
-                    activity_price=  activity_obj.price
-                    if user_hotel in city_list["hotel_lst"]:
-                            hotel = Hotel.query.filter_by(name = user_hotel).first()
-                            hotel_price = recommend_service.calculate_hotel_price(hotel.id, 5, datetime.date.today(), "2025-7-11")
-                            iata_code_lst = [airport.iata_code for airport in city_list["airports"]]
-                            for iata_code in iata_code_lst:
-                                if user_airport_code != iata_code:
-                                    flight_price = recommend_service.recommend_flight(user_airport_code, iata_code,  datetime.date.today(), "2025-7-12", 1)
-                                total_price = flight_price + activity_price + hotel_price
+        # for preference in user_preferences:
+        #     weight = preference.priority
+        #     category_obj =  Category.query.filter_by(id=preference.category_id).first()
+        #     activity_name = category_obj.name
+        #     user_airport_code = "YVR"
+        #     user_hotel = "Grand Gardens"           
+        #     for city in city_list:
+        #         flight_price = 0
+        #         hotel_price = 0
+        #         activity_price = 0
+        #         activity_lst = [activity.name for activity in city["activities"]]
+        #         hotel_lst = [hotel.name for hotel in city_list["hotels"]]
+        #         if activity_name in activity_lst:
+        #             activity_obj = Activity.query.filter_by(name= activity_name).first()
+        #             activity_price=  activity_obj.price
+        #             if user_hotel in city_list["hotel_lst"]:
+        #                     hotel = Hotel.query.filter_by(name = user_hotel).first()
+        #                     hotel_price = recommend_service.calculate_hotel_price(hotel.id, 5, datetime.date.today(), "2025-7-11")
+        #                     iata_code_lst = [airport.iata_code for airport in city_list["airports"]]
+        #                     for iata_code in iata_code_lst:
+        #                         if user_airport_code != iata_code:
+        #                             flight_price = recommend_service.recommend_flight(user_airport_code, iata_code,  datetime.date.today(), "2025-7-12", 1)
+        #                         total_price = flight_price + activity_price + hotel_price
 
-                                budget_ratio = budget/ total_price
-                                if budget_ratio > 1:
-                                    budget_ratio = 1
+        #                         budget_ratio = budget/ total_price
+        #                         if budget_ratio > 1:
+        #                             budget_ratio = 1
 
 
                                 
@@ -100,14 +108,57 @@ def recommendations():
         #         if iata_code != code.iata_code:
         #             flight_price = recommend_service.recommend_flight(iata_code, code.iata_code, datetime.date.today(), "2025-7-12", 1 )
         #             hotel_price = recommend_service.calculate_hotel_price(hotels_lst[id-1])
-    
-    
-    
+    #1. Get the user preferences.
+    user_preferences = UserActivityPreference.query.all()
+    countries=  Country.query.all()
+    city_list = []
+    activity_list = []
+    hotel_list = []
+    airport_list = []
+    preference_lst = []
+
+    for country in countries:
+        if not country:
+            continue
+        else:
+            cid = country.id
+            city_objs = City.query.filter_by(country_id=cid).all()
+            activity_list = []
+            hotel_list = []
+            airport_list = []
+            for city in city_objs:
+                activities = Activity.query.filter_by(city_id=city.id).all()
+                for activity in activities:
+                    activity_list.append(activity.name)
+                hotels =  Hotel.query.filter_by(city_id = city.id).all()
+                for hotel in hotels:
+                    hotel_list.append(hotel.name)
+                airports = Airport.query.filter_by(city_id = city.id).all()
+                for airport in airports:
+                    airport_list.append(airport.name)
+                city_list.append({'city': city.name, 'activities': activity_list, "hotels":hotel_list, "airports":airport_list })
+    # print(city_list)
+    for preference in user_preferences:
+        Activity_obj =  Activity.query.filter_by(id=preference.activity_id).first()
+        activity_name = Activity_obj.name 
+        for city_info in city_list:
+            if activity_name in city_info["activities"]:
+                weight = preference.priority
+                preference_lst.append((city_info['city'], [activity_name,weight], city_info["hotels"], city_info["airports"]))
+                
+        pass
+
+
+    print(preference_lst)
+
+
+
     """Render website's recommendation page."""
     return render_template('recommendations/recommendation_base.html')
 
 
-
+def calculate_hotel_and_flight_prices():
+    
 
 
 @login_required
@@ -168,9 +219,23 @@ def selection():
             
         # Parse incoming JSON data sent via fetch
         data = request.get_json()
-        #budget = UserBudget(user_id=current_user.id, budget=data["Budget"])
-        #db.session.add(budget)
+
+        #Budget of the user is being added to database
+        budget = UserBudget(user_id=current_user.id, budget=data["Budget"])
+        db.session.add(budget)
+
+        #Passport of the user is being added to database
+        for passport in data["Passports"]:
+            user_passport = UserPassPort(current_user.id, passport)
+            db.session.add(user_passport)
+
         
+        #Visa of the user is being added to database
+        for visa in data["Visas"]:
+            user_visas = UserVisa(current_user.id, visa)
+            db.session.add(user_visas)
+
+
         # Log received preference data for debugging
         print("budget:", data["Budget"])
         print("passports:", data["Passports"])
@@ -252,11 +317,11 @@ def recommendation_details():
     return render_template('recommendations/recommendation_details.html')        
             
         
-@app.route('/details-page/<destinationid>')
-def recommendation_details():
+# @app.route('/details-page/<destinationid>')
+# def recommendation_details():
     
-    """Render website's recommendation details page."""
-    return render_template('recommendations/recommendation_details.html')
+#     """Render website's recommendation details page."""
+#     return render_template('recommendations/recommendation_details.html')
 
 
 """
