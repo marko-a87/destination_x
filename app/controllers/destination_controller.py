@@ -138,6 +138,8 @@ def recommendations():
                     airport_list.append(airport.name)
                 city_list.append({'city': city.name, 'activities': activity_list, "hotels":hotel_list, "airports":airport_list })
     # print(city_list)
+
+    #This section of code creates a list of the activity and weight, as well as the city and its associated hotels and airports in which activity can be done.
     for preference in user_preferences:
         Activity_obj =  Activity.query.filter_by(id=preference.activity_id).first()
         activity_name = Activity_obj.name 
@@ -145,20 +147,33 @@ def recommendations():
             if activity_name in city_info["activities"]:
                 weight = preference.priority
                 preference_lst.append((city_info['city'], [activity_name,weight], city_info["hotels"], city_info["airports"]))
-                
         pass
+    
+    # print(preference_lst)
+    hotel_dict = {}
+    airport_dict = {}
+    for preference in preference_lst:
+        airport_name = preference[3]
+        hotel_name = preference[2]
 
-
-    print(preference_lst)
-
-
-
+        # print(f"Airport:{airport_name}")
+        # print(f"Hotel:{hotel_name}")
+        hotels_price_dict = calculate_hotel_price(hotel_list=hotel_name, dict=hotel_dict)
+        #flight_cost = recommend_service.recommend_flight()
+        print(hotels_price_dict)
+        
+        pass
     """Render website's recommendation page."""
     return render_template('recommendations/recommendation_base.html')
 
-
-def calculate_hotel_and_flight_prices():
-    
+def calculate_hotel_price(hotel_list, dict):
+    recommendation_service = RecommendationService()
+    for hotel in hotel_list:
+        if hotel not in dict:
+            hotel_obj = Hotel.query.filter_by(name =hotel ).first()
+            hotel_id = hotel_obj.id
+            dict[hotel] = recommendation_service.calculate_hotel_price(hotel_id, 5, datetime.date.today(), "2025-09-02" )
+    return dict
 
 
 @login_required
